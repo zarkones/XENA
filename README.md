@@ -9,15 +9,15 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 
 xena-apep
 > cd xena-apep
-> go run main.go http://127.0.0.1:60666
+> && go run main.go http://127.0.0.1:60666
 
 xena-atila
 > cd xena-atila
-> yarn
-> node ace migration:run
-> yarn dev
+> && yarn
+> && node ace migration:run
+> && yarn dev
 
 xena-face
 > cd xena-face
-> yarn
-> yarn dev
+> && yarn
+> && yarn dev
