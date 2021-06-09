@@ -1,0 +1,26 @@
+{
+  "name": "open-interface",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/auth-next": "5.0.0-1616003482.75c20e6",
+    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "chart.js": "^2.9.4",
+    "core-js": "^3.6.5",
+    "mqtt": "^4.2.6",
+    "nuxt": "^2.14.5"
+  },
+  "devDependencies": {
+    "@nuxt/types": "2.13.2",
+    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/vuetify": "^1.11.2",
+    "@types/node": "^15.12.1"
+  }
+}
