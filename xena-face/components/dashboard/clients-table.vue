@@ -6,11 +6,11 @@
     item-key = 'id'
     :search = 'search'
     color = 'rgba(189, 147, 249, 1)'
-    style = 'height: 100%'
     flat
     show-select
     v-model = 'selected'
     @input = 'interactionDialogUpdateClients'
+    :single-select = 'true'
   >
     <template
       v-slot:top
@@ -25,9 +25,9 @@
           mx-4
         '
       ></v-text-field>
-      
-      <InteractionDialog />
     </template>
+
+    <!--  -->
 
     <template
       v-slot:footer
@@ -38,9 +38,10 @@
 
 <script lang = 'ts'>
 import Vue from 'vue'
-import InteractionDialog from '@/components/deshboard/interaction-dialog.vue'
-import EventBus from '@/src/EventBus'
 
+import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
+
+import EventBus from '@/src/EventBus'
 import * as Service from '@/src/services'
 
 export default Vue.extend({
@@ -61,9 +62,11 @@ export default Vue.extend({
   methods: {
     interactionDialogUpdateClients () {
       EventBus.$emit('interactionDialogUpdateClients', this.selected)
+      if (this.selected.length)
+        EventBus.$emit(`interactionDialogUpdateSelectedClient`, this.selected[0].id)
     },
 
-    async table_update (targetPlatform?: string) {
+    async tableUpdate (targetPlatform?: string) {
       const clients = await Service.Atila.getClients(this.$axios)
       if (clients)
         this.clients = clients
@@ -71,13 +74,12 @@ export default Vue.extend({
   },
 
   mounted () {
-    this.table_update()
+    this.tableUpdate()
 
-    EventBus.$on('clients_table_update', async (targetPlatform: string) => await this.table_update(targetPlatform))
+    EventBus.$on('clientsTableUpdate', async (targetPlatform: string) => await this.tableUpdate(targetPlatform))
   },
 })
 </script>
 
 <style lang = 'css' scoped>
-
 </style>

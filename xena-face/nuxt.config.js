@@ -33,7 +33,7 @@ export default {
     redirect: {
       login: '/login',
       logout: '/login',
-      home: '/analytics',
+      home: '/index',
     },
   },
 

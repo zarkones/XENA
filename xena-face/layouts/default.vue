@@ -56,9 +56,7 @@
 
     <!-- Pages -->
     <v-main>
-      <!--v-container-->
-        <nuxt />
-      <!--/v-container-->
+      <nuxt />
     </v-main>
 
     <!--v-footer
@@ -80,14 +78,19 @@ export default {
       items: [
         {
           icon: 'mdi-chart-box',
-          title: 'Analytics',
-          to: '/analytics'
+          title: 'Dashboard',
+          to: '/dashboard'
+        },
+        {
+          icon: 'mdi-chart-box',
+          title: 'Author Studio',
+          to: '/author'
         },
       ],
       miniVariant: true,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'XENA'
     }
   }
 }
