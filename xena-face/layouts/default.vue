@@ -37,23 +37,6 @@
       </v-list>
     </v-navigation-drawer>
 
-
-    <!--v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop = 'drawer = !drawer' />
-
-      <h2
-        class = '
-          logo
-        '
-      >
-        XENA
-      </h2>
-    </v-app-bar-->
-
     <!-- Pages -->
     <v-main>
       <nuxt />
@@ -77,14 +60,19 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-chart-box',
+          icon: 'mdi-console',
           title: 'Dashboard',
           to: '/dashboard'
         },
         {
-          icon: 'mdi-chart-box',
+          icon: 'mdi-cube-outline',
           title: 'Author Studio',
           to: '/author'
+        },
+        {
+          icon: 'mdi-wrench',
+          title: 'Settings',
+          to: '/settings'
         },
       ],
       miniVariant: true,
