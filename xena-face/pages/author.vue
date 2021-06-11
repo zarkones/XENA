@@ -6,8 +6,10 @@
       </v-card-title>
 
       <v-card-text>
-        Here you'll be able to manage the bot build profiles.
+        Here you'll be able to manage encoding and building of software binaries.
       </v-card-text>
+
+      
 
       <div
         class = '

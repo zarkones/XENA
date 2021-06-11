@@ -24,6 +24,33 @@
           >
             File System
           </v-btn>
+
+          <v-btn
+            text
+            tile
+            small
+            color = 'rgba(189, 147, 249, 1)'
+          >
+            Gallery
+          </v-btn>
+
+          <v-btn
+            text
+            tile
+            small
+            color = 'rgba(189, 147, 249, 1)'
+          >
+            System Monitor
+          </v-btn>
+
+          <v-btn
+            text
+            tile
+            small
+            color = 'rgba(189, 147, 249, 1)'
+          >
+            Details
+          </v-btn>
         </v-toolbar-title>
       </v-toolbar>
 

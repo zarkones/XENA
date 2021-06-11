@@ -1,0 +1,25 @@
+{
+  "name": "xena-pyramid",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node ace build --production",
+    "start": "node server.js",
+    "dev": "node ace serve --watch"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^5.0.0",
+    "adonis-preset-ts": "^2.1.0",
+    "pino-pretty": "^5.0.2",
+    "typescript": "~4.2",
+    "youch": "^2.2.2",
+    "youch-terminal": "^1.1.1"
+  },
+  "dependencies": {
+    "@adonisjs/core": "^5.1.0",
+    "@adonisjs/repl": "^3.0.0",
+    "proxy-addr": "^2.0.7",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19"
+  }
+}
