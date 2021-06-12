@@ -5,6 +5,8 @@ type Configuration = {
   shell?: string
 }
 
+type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
+
 export default class BuildProfile extends BaseModel {
   @column({ isPrimary: true })
   public id: string
@@ -20,6 +22,9 @@ export default class BuildProfile extends BaseModel {
   
   @column()
   public config: Configuration
+
+  @column()
+  public status: ProfileStatus
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

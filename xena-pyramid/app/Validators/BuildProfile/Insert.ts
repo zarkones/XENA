@@ -25,7 +25,10 @@ export default class {
 	 *    ```
 	 */
   public schema = schema.create({
-		id: schema.string({}, [ rules.uuid({ version: 4 }) ]),
+		name: schema.string({ escape: true }, [ rules.maxLength(255) ]),
+		description: schema.string.optional({ escape: true }, [ rules.maxLength(4096) ]),
+		gitUrl: schema.string({}, [ rules.maxLength(2000) ]),
+		config: schema.object().anyMembers(),
 		status: schema.enum([ 'ENABLED', 'DISABLED', 'DELETED' ] as const),
   })
 

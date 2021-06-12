@@ -30,14 +30,21 @@ export default class buildProfilesController {
   }
 
   public insert = async ({ request, response }: HttpContextContract) => {
-    const { id, status } = await request.validate(Validator.BuildProfile.Insert)
+    const {
+      name,
+      description,
+      gitUrl,
+      config,
+      status,
+    } = await request.validate(Validator.BuildProfile.Insert)
 
-    const maybeBuildProfile = await Repo.BuildProfile.get({ id })
-    if (maybeBuildProfile)
-      return response.conflict({ success: false, message: 'buildProfile ID has been taken.' })
-
-    const buildProfile = await Repo.BuildProfile.insert(Domain.BuildProfile.fromJSON({ id, status }))
-      .then(buildProfile => Domain.BuildProfile.fromJSON(buildProfile))
+    const buildProfile = await Repo.BuildProfile.insert( Domain.BuildProfile.fromJSON({
+      name,
+      description,
+      gitUrl,
+      config,
+      status,
+    })).then(buildProfile => Domain.BuildProfile.fromJSON(buildProfile))
 
     return response.ok(buildProfile)
   }

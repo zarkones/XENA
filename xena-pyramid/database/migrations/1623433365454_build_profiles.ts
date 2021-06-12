@@ -22,6 +22,9 @@ export default class BuildProfiles extends BaseSchema {
       table.json('config')
         .notNullable()
 
+      table.enum('status', [ 'ENABLED', 'DISABLED', 'DELETED' ])
+        .notNullable()
+
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
