@@ -20,6 +20,13 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
+Route.group(() => {
+  
+  Route.group(() => {
+    Route.get('/', 'BuildProfilesController.getMultiple')
+    Route.post('/', 'BuildProfilesController.insert')
+  })
+    .prefix('build-profiles')
+
 })
+  .prefix('v1')
