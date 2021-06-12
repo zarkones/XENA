@@ -142,7 +142,7 @@ export default {
   background-color: #282a36 !important;
 }
 .theme--dark.v-application {
-  background-color: #44475a !important;
+  background-color: #282a36 !important;
 }
 .theme--dark.v-card {
   background-color: #282a36 !important;
