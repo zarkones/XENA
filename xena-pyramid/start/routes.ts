@@ -28,8 +28,10 @@ Route.group(() => {
   }).prefix('build-profiles')
 
   Route.group(() => {
-    Route.get('/', 'BuildsController.getMultiple')
-    Route.post('/', 'BuildsController.insert')
+    Route.get('/list', 'BuildsController.getMultiple')
+    // This is a state changin route, but we're assigning GET method,
+    // For reasons of pure convenience.
+    Route.get('/', 'BuildsController.insert')
   }).prefix('builds')
 
 }).prefix('v1')

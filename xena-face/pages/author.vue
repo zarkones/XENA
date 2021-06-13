@@ -24,7 +24,37 @@
         color = 'rgba(189, 147, 249, 1)'
       ></v-text-field>
 
-      <v-list dense>
+      <v-text-field
+        dense
+        v-model = 'build.description'
+        label = 'Description'
+        color = 'rgba(189, 147, 249, 1)'
+      ></v-text-field>
+
+      <v-text-field
+        dense
+        v-model = 'build.gitUrl'
+        label = 'Git URL'
+        :placeholder = 'build.gitUrl'
+        color = 'rgba(189, 147, 249, 1)'
+      ></v-text-field>
+
+      <v-btn
+        @click = 'insertBuildProfile'
+        text
+        tile
+        small
+        color = 'rgba(189, 147, 249, 1)'
+        class = '
+          mb-4
+        '
+      >
+        Create
+      </v-btn>
+
+      <!-- Encoding - Not yet ready. -->
+      
+      <!--v-list dense>
         <v-subheader> Encoding Type </v-subheader>
 
         <v-list-item-group
@@ -50,7 +80,7 @@
         v-model = 'build.encodingIterations'
         label = 'Encoding Iterations'
         color = 'rgba(189, 147, 249, 1)'
-      ></v-text-field>
+      ></v-text-field-->
     </div>
 
     <v-divider></v-divider>
@@ -76,6 +106,10 @@ import Vue from 'vue'
 
 import BuildProfiles from '@/components/author/build-profiles.vue'
 
+import * as Service from '@/src/services'
+
+import EventBus from '@/src/EventBus'
+
 export default Vue.extend({
   components: {
     BuildProfiles,
@@ -84,6 +118,8 @@ export default Vue.extend({
   data: () => ({
     build: {
       name: '',
+      description: null,
+      gitUrl: 'https://bitbucket.org/ZarkonesXena/xena.git',
       encoding: '',
       encodingIterations: 1,
     },
@@ -97,6 +133,14 @@ export default Vue.extend({
   }),
 
   methods: {
+    async insertBuildProfile () {
+      const newBuildProfile = await Service.Pyramid.insertBuildProfile(
+        this.$axios,
+        this.build.name,
+        this.build.description?.length ? this.build.description : null,
+        this.build.gitUrl,
+      ).then(() => EventBus.$emit('updateBuildProfiles'))
+    }
   },
 
   mounted () {

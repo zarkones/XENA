@@ -19,7 +19,7 @@ export default class BuildsController {
 
     const build = Domain.Build.fromJSON(maybeBuild)
     
-    return response.ok(build)
+    return response.ok(build.toBinary)
   }
 
   public getMultiple = async ({ request, response }: HttpContextContract) => {

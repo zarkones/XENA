@@ -18,11 +18,25 @@
       </v-expansion-panel-header>
 
       <v-expansion-panel-content>
-        Gir: {{ buildProfile.gitUrl }}
+        Git: {{ buildProfile.gitUrl }}
+        <br>
+        Description: {{ buildProfile.description }}
         <br>
         Status: {{ buildProfile.status }}
         <br>
-        Description: {{ buildProfile.description }}
+
+        <v-btn
+          @click = 'downloadBuild(buildProfile.id)'
+          text
+          tile
+          small
+          color = 'rgba(189, 147, 249, 1)'
+          class = '
+            mt-4
+          '
+        >
+          Download
+        </v-btn>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -32,6 +46,8 @@
 import Vue from 'vue'
 
 import BuildProfiles from '@/components/author/build-profiles.vue'
+
+import EventBus from '@/src/EventBus'
 
 import * as Service from '@/src/services'
 
@@ -50,10 +66,19 @@ export default Vue.extend({
       if (builldProfiles)
         this.builldProfiles = builldProfiles
     },
+
+    downloadBuild (buildProfileId: string) {
+      window.open(
+        `${process.env.XENA_PYRAMID_HOST}/builds?buildProfileId=${buildProfileId}`,
+        '_blank',
+      )
+    }
   },
 
   async mounted () {
     await this.getBuildProfiles()
+
+    EventBus.$on('updateBuildProfiles', async () => await this.getBuildProfiles())
   },
 })
 </script>

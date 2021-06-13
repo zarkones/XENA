@@ -18,9 +18,18 @@
       '
     >
       <v-text-field
+        disabled
         dense
         v-model = 'atilaHost'
         label = 'Atila host'
+        color = 'rgba(189, 147, 249, 1)'
+      ></v-text-field>
+
+      <v-text-field
+        disabled
+        dense
+        v-model = 'pyramidHost'
+        label = 'Pyramid host'
         color = 'rgba(189, 147, 249, 1)'
       ></v-text-field>
     </div>
@@ -37,6 +46,7 @@ export default Vue.extend({
 
   data: () => ({
     atilaHost: '',
+    pyramidHost: '',
   }),
 
   methods: {

@@ -8,6 +8,16 @@
       justify = 'center'
     >
       <v-col>
+        <!-- Logo -->
+        <v-img
+          src = 'xena-logo.png'
+          contain
+          max-height = '186px'
+          class = '
+            logo
+          '
+        ></v-img>
+
         <v-card
           max-width = '800px'
           class = '
@@ -106,3 +116,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+.logo {
+  margin-bottom: 56px;
+}
+</style>
