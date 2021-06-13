@@ -8,6 +8,16 @@
       justify = 'center'
     >
       <v-col>
+        <!-- Logo -->
+        <v-img
+          src = 'xena-logo.png'
+          contain
+          max-height = '186px'
+          class = '
+            logo
+          '
+        ></v-img>
+
         <v-card
           max-width = '800px'
           class = '
@@ -82,7 +92,6 @@
 
 <script lang = 'ts'>
 import Vue from 'vue'
-import AuthRepo from '@/src/api/auth'
 
 export default Vue.extend({
   data: () => ({
@@ -97,19 +106,19 @@ export default Vue.extend({
 
   methods: {
     async login () {
-      // const response = await AuthRepo.login(this.$axios, this.username, this.password)
-      // if (!response) {
-      //   this.auth_msg = true
-      //   return
-      // }
-
       this.$auth.loginWith('local', {
         username: this.username,
         password: this.password,
       })
 
-      this.$router.push('/analytics')
+      this.$router.push('/dashboard')
     },
   },
 })
 </script>
+
+<style scoped>
+.logo {
+  margin-bottom: 56px;
+}
+</style>

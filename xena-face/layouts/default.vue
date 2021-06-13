@@ -37,28 +37,9 @@
       </v-list>
     </v-navigation-drawer>
 
-
-    <!--v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop = 'drawer = !drawer' />
-
-      <h2
-        class = '
-          logo
-        '
-      >
-        XENA
-      </h2>
-    </v-app-bar-->
-
     <!-- Pages -->
     <v-main>
-      <!--v-container-->
-        <nuxt />
-      <!--/v-container-->
+      <nuxt />
     </v-main>
 
     <!--v-footer
@@ -79,15 +60,25 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-chart-box',
-          title: 'Analytics',
-          to: '/analytics'
+          icon: 'mdi-console',
+          title: 'Dashboard',
+          to: '/dashboard'
+        },
+        {
+          icon: 'mdi-cube-outline',
+          title: 'Author Studio',
+          to: '/author'
+        },
+        {
+          icon: 'mdi-wrench',
+          title: 'Settings',
+          to: '/settings'
         },
       ],
       miniVariant: true,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'XENA'
     }
   }
 }
@@ -151,7 +142,7 @@ export default {
   background-color: #282a36 !important;
 }
 .theme--dark.v-application {
-  background-color: #44475a !important;
+  background-color: #282a36 !important;
 }
 .theme--dark.v-card {
   background-color: #282a36 !important;
