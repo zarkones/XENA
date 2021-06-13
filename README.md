@@ -7,12 +7,18 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 
 ### RUN STEPES ###
 
+xena-atila
+> cd xena-atila
+> && yarn
+> && node ace migration:run
+> && yarn dev
+
 xena-apep
 > cd xena-apep
 > && go run main.go http://127.0.0.1:60666
 
-xena-atila
-> cd xena-atila
+xena-pyramid
+> cd xena-pyramid
 > && yarn
 > && node ace migration:run
 > && yarn dev
