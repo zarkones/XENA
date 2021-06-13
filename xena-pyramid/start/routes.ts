@@ -25,8 +25,11 @@ Route.group(() => {
   Route.group(() => {
     Route.get('/', 'BuildProfilesController.getMultiple')
     Route.post('/', 'BuildProfilesController.insert')
-  })
-    .prefix('build-profiles')
+  }).prefix('build-profiles')
 
-})
-  .prefix('v1')
+  Route.group(() => {
+    Route.get('/', 'BuildsController.getMultiple')
+    Route.post('/', 'BuildsController.insert')
+  }).prefix('builds')
+
+}).prefix('v1')

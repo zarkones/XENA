@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",
+    "@types/url-parse": "^1.4.3",
     "@types/uuid": "^8.3.0",
     "adonis-preset-ts": "^2.1.0",
     "pino-pretty": "^5.0.2",
@@ -25,6 +26,7 @@
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.19",
+    "url-parse": "^1.5.1",
     "uuid": "^8.3.2"
   }
 }

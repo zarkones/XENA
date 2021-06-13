@@ -32,16 +32,16 @@ class Database {
     .select('*')
     .if(id, builder => builder.where('id', id as BuildProfileId))
     .first()
-    .then(client => client?.serialize())
+    .then(buildProfile => buildProfile?.serialize())
   
   public getMultiple = ({ page }: GetMultiple) => BuildProfile.query()
     .select('*')
     .if(page, builder => builder.offset(page as number * 10))
     .if(page, builder => builder.limit(page as number * 10))
     .exec()
-    .then(clients => clients.map(client => client.serialize()))
+    .then(buildProfiles => buildProfiles.map(buildProfile => buildProfile.serialize()))
   
-  public insert = (payload: Insert) => BuildProfile.create(payload).then(client => client.serialize())
+  public insert = (payload: Insert) => BuildProfile.create(payload).then(buildProfile => buildProfile.serialize())
 }
 
 export default new Database()

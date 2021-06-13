@@ -8,7 +8,7 @@ type Configuration = {
 }
 
 export default class BuildProfile {
-  public readonly id: string | null
+  public readonly id: string
   public readonly name: string
   public readonly description: string | null
   public readonly gitUrl: string
@@ -23,7 +23,7 @@ export default class BuildProfile {
     config: Configuration,
     status: ProfileStatus,
   ) {
-    this.id = validString(id ?? uuidv4(), 'BAD_BUILD_ID', 'NON_EMPTY')
+    this.id = validString(id ?? uuidv4(), 'BAD_BUILD_PROFILE_ID', 'NON_EMPTY')
     this.name = validString(name, 'BAD_BUILD_PROFILE_NAME', 'NON_EMPTY')
     this.description = description ? validString(description, 'BAD_BUILD_PROFILE_DESCRIPTION', 'NON_EMPTY') : null
     this.gitUrl = validString(gitUrl, 'BAD_BUILD_PROFILE_GIT_URL', 'NON_EMPTY')
