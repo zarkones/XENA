@@ -30,7 +30,7 @@ xena-face
 
 ### DESCRIPTION ###
 
-> Xena-Apep
+> Xena-Face
 
 Web user interface powered by Nuxt.ts and TypeScript. The reason I’ve chosen the web is pure convenience. If a user has to download binaries, that would take some time, I needed the tool to be accessible instantaneously.
 Plus that way no traces are left onto the machine while performing a penetration campaign, AND it is available through the Tor browser, what more could we ask for?
