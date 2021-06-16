@@ -21,7 +21,13 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
+
   Route.group(() => {
     Route.post('/', 'ReadersController.get')
   }).prefix('readers')
+
+  Route.group(() => {
+    Route.get('/', 'MachinesController.details')
+  }).prefix('machines')
+
 }).prefix('v1')
