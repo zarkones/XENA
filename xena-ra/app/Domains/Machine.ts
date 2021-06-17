@@ -1,4 +1,5 @@
 import sysinfo from 'systeminformation'
+import isDocker from 'is-docker'
 
 export default class Machine {
   public static cpu = async () => {
@@ -16,4 +17,6 @@ export default class Machine {
   public static battery = () => sysinfo.battery()
 
   public static time = () => sysinfo.time()
+
+  public static isDocker = () => isDocker()
 }

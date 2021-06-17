@@ -22,6 +22,7 @@
     "@types/systeminformation": "^3.54.1",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
+    "is-docker": "^2.2.1",
     "keyword-extractor": "^0.0.20",
     "libphonenumber-js": "^1.9.19",
     "proxy-addr": "^2.0.7",
