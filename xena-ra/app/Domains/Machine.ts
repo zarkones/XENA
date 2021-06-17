@@ -1,5 +1,6 @@
 import sysinfo from 'systeminformation'
 import isDocker from 'is-docker'
+import isWSL from 'is-wsl'
 
 export default class Machine {
   public static cpu = async () => {
@@ -21,4 +22,9 @@ export default class Machine {
   public static isDocker = () => isDocker()
 
   public static isRoot = () => process.getuid && process.getuid() === 0
+
+  /**
+   * Detects Windows Subsystem for Linux.
+   */
+  public static isWSL = () => isWSL
 }

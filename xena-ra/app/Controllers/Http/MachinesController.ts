@@ -7,6 +7,7 @@ export default class MachinesController {
     const details = {
       isRoot: Domain.Machine.isRoot(),
       isDocker: Domain.Machine.isDocker(),
+      isWSL: Domain.Machine.isWSL(),
       time: await Domain.Machine.time(),
       curentSpeed: await Domain.Machine.time(),
       battery: await Domain.Machine.battery(),
