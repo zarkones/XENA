@@ -19,4 +19,6 @@ export default class Machine {
   public static time = () => sysinfo.time()
 
   public static isDocker = () => isDocker()
+
+  public static isRoot = () => process.getuid && process.getuid() === 0
 }
