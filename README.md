@@ -8,25 +8,19 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 ### RUN STEPES ###
 
 xena-atila
-> cd xena-atila
-> && yarn
-> && node ace migration:run
-> && yarn dev
+> cd xena-atila && yarn && node ace migration:run && yarn dev
 
 xena-apep
-> cd xena-apep
-> && go run main.go http://127.0.0.1:60666
+> cd xena-apep && go run main.go http://127.0.0.1:60666
 
 xena-pyramid
-> cd xena-pyramid
-> && yarn
-> && node ace migration:run
-> && yarn dev
+> cd xena-pyramid && yarn && node ace migration:run && yarn dev
+
+xena-ra
+> cd xena-ra && yarn && yarn dev
 
 xena-face
-> cd xena-face
-> && yarn
-> && yarn dev
+> cd xena-face && yarn && yarn dev
 
 ### DESCRIPTION ###
 
@@ -44,6 +38,13 @@ Adonis provides support for PostgreSQL, MySQL, MSSQL, MariaDB and SQLite out of 
 > Xena-Apep 
 
 The bot client written in Golang. Why Golang you might be asking, well, cross-platform + the convenience of development. Keep in mind that I do not use Go in the professional capacity, so the code can and will be improved a lot.
+This can be used to drop other clients onto the environment.
+
+> Xena-Ra
+
+The bot client written in Adonis.ts and TypeScript.
+Has ability to detect machine's environment and hardware.
+Able to detects if it's running as Windows Subsystem for Linux, as root user, and recognize Docker containers.
 
 > Xena-Pyramid
 
