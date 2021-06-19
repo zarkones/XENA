@@ -4,16 +4,8 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MachinesController {
   public details = async ({ response }: HttpContextContract) => {
-    const details = {
-      isRoot: Domain.Machine.isRoot(),
-      isDocker: Domain.Machine.isDocker(),
-      isWSL: Domain.Machine.isWSL(),
-      time: await Domain.Machine.time(),
-      curentSpeed: await Domain.Machine.time(),
-      battery: await Domain.Machine.battery(),
-      cpu: await Domain.Machine.cpu(),
-    }
+    const machine = await Domain.Machine.serialize()
 
-    return response.ok(details)
+    return response.ok(machine)
   }
 }

@@ -21,4 +21,16 @@ export default class Machine {
    * Detects Windows Subsystem for Linux.
    */
   public static isWSL = () => isWSL
+
+  public static serialize = async () => {
+    return {
+      isRoot: Machine.isRoot(),
+      isDocker: Machine.isDocker(),
+      isWSL: Machine.isWSL(),
+      time: await Machine.time(),
+      curentSpeed: await Machine.time(),
+      battery: await Machine.battery(),
+      cpu: await Machine.cpu(),
+    }
+  } 
 }
