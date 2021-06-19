@@ -58,20 +58,44 @@ export default class BuildsController {
     if (repositoryStatus != 'CLONED')
       return response.internalServerError({ success: true, message: 'Failed to clone the repository.' })
 
-    // Shell instruction is the only way at the moment.
-    if (!buildProfile.config.shell)
-      return response.unprocessableEntity({ success: false, message: 'Build configuration requires the shell instruction.' })
+    switch (buildProfile.config.template) {
+      case 'XENA_RA':
+        const ra = await this.buildRa(buildId, buildProfileId)
+        return ra == 'ERROR'
+          ? response.internalServerError({ success: false, message: 'Failed to build.' })
+          : response.ok(ra)
+      case 'XENA_APEP':
+        const apep = await this.buildApep(buildId, buildProfileId)
+        return apep == 'ERROR'
+          ? response.internalServerError({ success: false, message: 'Failed to build.' })
+          : response.ok(apep)
+      default:
+        return response.unprocessableEntity({ success: false, message: 'Unrecognized build template.' })
+    }
+  }
 
-    // Build the binary.
+  public update = async ({}: HttpContextContract) => {
+    // todo
+  }
+
+  public delete = async ({}: HttpContextContract) => {
+    // todo
+  }
+
+  private buildApep = async (buildId: string, buildProfileId: string) => {
+     // Build the binary.
     const buildOutput = (() => {
       try {
-        return Helper.Shell.exe(`${buildProfile.config.shell} -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep/main.go`)
+        return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep/main.go`)
       } catch (e) {
         console.warn(e)
         return 'ERROR'
       }
     })()
-    
+
+    if (buildOutput == 'ERROR')
+      throw Error('Unable to clone Git repository.')
+
     // Repo cleaning.
     try {
       Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
@@ -91,14 +115,10 @@ export default class BuildsController {
     })).then(build => Domain.Build.fromJSON(build))
 
     // Return the build binary.
-    return response.ok(build.toBinary)
+    return build.toBinary
   }
 
-  public update = async ({}: HttpContextContract) => {
-    // todo
-  }
-
-  public delete = async ({}: HttpContextContract) => {
-    // todo
+  private buildRa = async (buildId: string, buildProfileId: string) => {
+    return 'ERROR'
   }
 }

@@ -22,6 +22,8 @@
         <br>
         Description: {{ buildProfile.description }}
         <br>
+        Build template: {{ buildProfile.config.template }} 
+        <br>
         Status: {{ buildProfile.status }}
         <br>
 

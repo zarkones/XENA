@@ -39,6 +39,14 @@
         color = 'rgba(189, 147, 249, 1)'
       ></v-text-field>
 
+      <v-select
+        :items = 'buildTemplates'
+        label = 'Build templates'
+        outlined
+        dense
+        v-model = 'buildTemplate'
+      ></v-select>
+
       <v-btn
         @click = 'insertBuildProfile'
         text
@@ -130,6 +138,12 @@ export default Vue.extend({
         name: 'Shikata Ga Nai'
       },
     ] as const,
+
+    buildTemplate: '',
+    buildTemplates: [
+      'XENA_RA',
+      'XENA_APEP',
+    ],
   }),
 
   methods: {
@@ -139,6 +153,7 @@ export default Vue.extend({
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,
+        this.buildTemplate,
       ).then(() => EventBus.$emit('updateBuildProfiles'))
     }
   },

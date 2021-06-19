@@ -1,14 +1,6 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
-type Message = {
-  id: string
-  from: string | null
-  to: string | null
-  subject: string
-  content: string
-  replyTo: string | null
-  replies: Message[]
-}
+export type BuildTemplate = 'XENA_APEP' | 'XENA_RA'
 
 class Pyramid {
   public readonly axios: NuxtAxiosInstance
@@ -34,6 +26,7 @@ class Pyramid {
     name: string,
     description: string | null,
     gitUrl: string,
+    template: BuildTemplate,
   ) => {
     return axios({
       method: 'POST',
@@ -43,7 +36,7 @@ class Pyramid {
         description,
         gitUrl,
         config: {
-          shell: 'go build'
+          template,
         },
         status: 'ENABLED'
       },

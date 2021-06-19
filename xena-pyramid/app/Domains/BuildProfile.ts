@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
 type Configuration = {
-  shell?: string
+  template: 'XENA_RA' | 'XENA_APEP'
 }
 
 export default class BuildProfile {
