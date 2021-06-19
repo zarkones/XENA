@@ -29,9 +29,9 @@
 
         <v-btn
           @click = 'downloadBuild(buildProfile.id)'
-          text
           tile
           small
+          light
           color = 'rgba(189, 147, 249, 1)'
           class = '
             mt-4

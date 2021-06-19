@@ -159,4 +159,7 @@ export default {
 .v-icon {
   color: #bd93f9 !important;
 }
+.theme--light.v-btn {
+  color: #282a36 !important;
+}
 </style>

@@ -49,9 +49,9 @@
 
       <v-btn
         @click = 'insertBuildProfile'
-        text
         tile
         small
+        light
         color = 'rgba(189, 147, 249, 1)'
         class = '
           mb-4
