@@ -36,6 +36,7 @@
           class = '
             mt-4
           '
+          width = '100%'
         >
           Download
         </v-btn>

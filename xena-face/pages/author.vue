@@ -56,6 +56,7 @@
         class = '
           mb-4
         '
+        width = '100%'
       >
         Create
       </v-btn>
