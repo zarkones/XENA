@@ -40,11 +40,11 @@
       ></v-text-field>
 
       <v-select
+        v-model = 'buildTemplate'
         :items = 'buildTemplates'
         label = 'Build templates'
         outlined
         dense
-        v-model = 'buildTemplate'
       ></v-select>
 
       <v-btn

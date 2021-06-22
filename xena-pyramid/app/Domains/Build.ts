@@ -34,7 +34,7 @@ export default class Build {
     }
   }
 
-  public static getBinary = (id: string) => readFile(`${Env.get('BUILD_DESTINATION')}${id}`, { encoding: 'base64' })
+  public static getBinary = (buildPath: string) => readFile(buildPath, { encoding: 'base64' })
 
   get toBinary () {
     return Buffer.from(this.data, 'base64')

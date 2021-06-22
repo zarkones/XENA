@@ -2,6 +2,7 @@
   <v-expansion-panels
     if = 'buildProfiles.length'
     accordion
+    tile
   >
     <v-expansion-panel
       v-for = '(buildProfile, buildProfileIndex) in builldProfiles'

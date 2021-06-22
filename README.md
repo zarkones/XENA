@@ -1,3 +1,11 @@
+### CONTENT MAP ###
+
+1. DISCLAIMER
+2. DESCRIPTION
+3. RUN STEPES
+4. BUILD STEPS
+5. DEVELOPMENT LOGS
+
 ### DISCLAIMER ###
 
 You bear the full responsibility of your actions.
@@ -5,24 +13,9 @@ This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
 This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
 
-### RUN STEPES ###
-
-xena-atila
-> cd xena-atila && yarn && node ace migration:run && yarn dev
-
-xena-apep
-> cd xena-apep && go run main.go http://127.0.0.1:60666
-
-xena-pyramid
-> cd xena-pyramid && yarn && node ace migration:run && yarn dev
-
-xena-ra
-> cd xena-ra && yarn && yarn dev
-
-xena-face
-> cd xena-face && yarn && yarn dev
-
 ### DESCRIPTION ###
+
+The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
 
 > Xena-Face
 
@@ -50,3 +43,33 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
+
+### RUN STEPES ###
+
+xena-atila
+> cd xena-atila && yarn && node ace migration:run && yarn dev
+
+xena-apep
+> cd xena-apep && go run main.go http://127.0.0.1:60666
+
+xena-pyramid
+> cd xena-pyramid && yarn && node ace migration:run && yarn dev
+
+xena-ra
+> cd xena-ra && yarn && yarn dev
+
+xena-face
+> cd xena-face && yarn && yarn dev
+
+### BUILD STEPS ###
+
+Give me a bit more time, I'm implementing build support via Xena-Pyramid.
+A user should not be bothered to do this manually.
+I needs to be available through the web UI. (Xena-Face)
+
+...we can learn some things from the cloud. :)
+
+### DEVELOPMENT LOGS ###
+
+#1 - Baby steps.
+https://zarkones-xena.medium.com/xena-r-a-t-devlog-1-7010468588b9

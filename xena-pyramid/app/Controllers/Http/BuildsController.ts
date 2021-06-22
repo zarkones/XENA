@@ -105,7 +105,7 @@ export default class BuildsController {
     }
 
     // Base64 binary.
-    const base64Binary = await Domain.Build.getBinary(buildId)
+    const base64Binary = await Domain.Build.getBinary(`${Env.get('BUILD_DESTINATION')}${buildId}`)
 
     // Store the build.
     const build = await Repo.Build.insert( Domain.Build.fromJSON({
@@ -119,6 +119,39 @@ export default class BuildsController {
   }
 
   private buildRa = async (buildId: string, buildProfileId: string) => {
-    return 'ERROR'
+    // Build the binary.
+    const buildOutput = (() => {
+      try {
+        return Helper.Shell.exe(`cd ${Service.Git.pathPrefix}${buildId}/xena-ra && yarn && yarn build`)
+      } catch (e) {
+        console.warn('Unable to build the binary output.')
+        console.warn(e)
+        return 'ERROR'
+      }
+    })()
+  
+    if (buildOutput == 'ERROR')
+      throw Error('Unable to clone Git repository.')
+    
+    // Repo cleaning.
+    // try {
+    //   Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
+    // } catch (e) {
+    //   console.warn(e)
+    //   return 'ERROR'
+    // }
+
+    // Base64 binary.
+    const base64Binary = await Domain.Build.getBinary(`${Env.get('BUILD_DESTINATION')}${buildId}`)
+
+    // Store the build.
+    const build = await Repo.Build.insert( Domain.Build.fromJSON({
+      id: buildId,
+      buildProfileId, 
+      data: base64Binary,
+    })).then(build => Domain.Build.fromJSON(build))
+
+    // Return the build binary.
+    return build.toBinary
   }
 }

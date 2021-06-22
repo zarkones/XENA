@@ -1,9 +1,11 @@
 import * as Helper from 'App/Helpers'
 
+import Env from '@ioc:Adonis/Core/Env'
+
 import Url from 'url-parse'
 
 class Git {
-  public readonly pathPrefix = '../xena-pyramid-software-build-'
+  public readonly pathPrefix = '../xena-pyramid-software-builds/'
 
   public clone = (maybeUrl: string, buildId: string) => {
     const url = new Url(maybeUrl)
@@ -15,7 +17,7 @@ class Git {
       Helper.Shell.exe(`rm -r ${buildPath}`)
     } catch (e) {}
 
-    const repoCloningOutput = Helper.Shell.exe(`git clone ${url.protocol}//${url.hostname}${url.pathname} ${buildPath}`)
+    const repoCloningOutput = Helper.Shell.exe(`git clone ${ Env.get('NODE_ENV') == 'development' ? '-b stagging' : '' } ${url.protocol}//${url.hostname}${url.pathname} ${buildPath}`)
 
     if (repoCloningOutput.endsWith('not an empty directory.'))
       return 'ALREADY_CLONED'
