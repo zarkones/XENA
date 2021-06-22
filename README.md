@@ -65,7 +65,7 @@ xena-face
 
 Give me a bit more time, I'm implementing build support via Xena-Pyramid.
 A user should not be bothered to do this manually.
-I needs to be available through the web UI. (Xena-Face)
+It needs to be available through the web UI. (Xena-Face)
 
 ...we can learn some things from the cloud. :)
 
