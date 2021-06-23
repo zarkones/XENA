@@ -60,10 +60,11 @@ export default class BuildsController {
 
     switch (buildProfile.config.template) {
       case 'XENA_RA':
-        const ra = await this.buildRa(buildId, buildProfileId)
-        return ra == 'ERROR'
-          ? response.internalServerError({ success: false, message: 'Failed to build.' })
-          : response.ok(ra)
+        // const ra = await this.buildRa(buildId, buildProfileId)
+        // return ra == 'ERROR'
+        //   ? response.internalServerError({ success: false, message: 'Failed to build.' })
+        //   : response.ok(ra)
+        return response.internalServerError({ success: false, message: 'Not yet implemented.' })
       case 'XENA_APEP':
         const apep = await this.buildApep(buildId, buildProfileId)
         return apep == 'ERROR'
@@ -86,7 +87,7 @@ export default class BuildsController {
      // Build the binary.
     const buildOutput = (() => {
       try {
-        return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep/main.go`)
+        return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep`)
       } catch (e) {
         console.warn(e)
         return 'ERROR'

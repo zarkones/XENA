@@ -52,7 +52,7 @@ xena-atila
 > cd xena-atila && yarn && node ace migration:run && yarn dev
 
 xena-apep
-> cd xena-apep && go run main.go http://127.0.0.1:60666
+> cd xena-apep && go run *.go http://127.0.0.1:60666
 
 xena-pyramid
 > cd xena-pyramid && yarn && node ace migration:run && yarn dev
