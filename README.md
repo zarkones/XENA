@@ -1,3 +1,5 @@
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/xena-face/static/xena-logo.png)
+
 ### CONTENT MAP ###
 
 1. DISCLAIMER
