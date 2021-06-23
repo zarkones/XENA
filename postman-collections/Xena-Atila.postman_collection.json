@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "c41947df-2e9e-4705-a1bf-dceed2ecf091",
+		"name": "Xena-Atila",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clients",
+			"item": [
+				{
+					"name": "Read Clients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{xena-atila-url}}/v1/clients",
+							"host": [
+								"{{xena-atila-url}}"
+							],
+							"path": [
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert a Client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"fa5925ec-9883-4574-8ce7-b3d6622d86c7\",\n    \"status\": \"ALIVE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{xena-atila-url}}/v1/clients",
+							"host": [
+								"{{xena-atila-url}}"
+							],
+							"path": [
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Read Messages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{xena-atila-url}}/v1/messages?clientId=50617f2d-85a5-42aa-8f9e-c4f9157c8da0&withReplies=true",
+							"host": [
+								"{{xena-atila-url}}"
+							],
+							"path": [
+								"v1",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "50617f2d-85a5-42aa-8f9e-c4f9157c8da0"
+								},
+								{
+									"key": "withReplies",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert a Message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"to\": \"50617f2d-85a5-42aa-8f9e-c4f9157c8da0\",\n    \"from\": null,\n    \"subject\": \"shell\",\n    \"content\": \"bHMK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{xena-atila-url}}/v1/messages",
+							"host": [
+								"{{xena-atila-url}}"
+							],
+							"path": [
+								"v1",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

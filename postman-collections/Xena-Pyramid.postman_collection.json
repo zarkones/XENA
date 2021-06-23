@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "bc8eae45-c1e9-4b4a-b247-c9501c6a89c1",
+		"name": "Xena-Pyramid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Build Profiles",
+			"item": [
+				{
+					"name": "Get build profiles.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{xena-pyrmid-url}}/v1/build-profiles",
+							"host": [
+								"{{xena-pyrmid-url}}"
+							],
+							"path": [
+								"v1",
+								"build-profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert a build profile.",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Xena-Apep-Alpha-0-0-1\",\n    \"description\": \"Initial testing.\",\n    \"gitUrl\": \"https://github.com/zarkones/XENA.git\",\n    \"config\": {\n        \"template\": \"XENA_APEP\"\n    },\n    \"status\": \"ENABLED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{xena-pyrmid-url}}/v1/build-profiles",
+							"host": [
+								"{{xena-pyrmid-url}}"
+							],
+							"path": [
+								"v1",
+								"build-profiles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Builder",
+			"item": [
+				{
+					"name": "Get a specific build.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{xena-pyrmid-url}}/v1/builds?id",
+							"host": [
+								"{{xena-pyrmid-url}}"
+							],
+							"path": [
+								"v1",
+								"builds"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get builds.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{xena-pyrmid-url}}/v1/builds",
+							"host": [
+								"{{xena-pyrmid-url}}"
+							],
+							"path": [
+								"v1",
+								"builds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download a build.",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Xena-Apep-Alpha-0-0-1\",\n    \"description\": \"Initial testing.\",\n    \"gitUrl\": \"https://github.com/zarkones/XENA.git\",\n    \"config\": {\n        \"template\": \"XENA_APEP\"\n    },\n    \"status\": \"ENABLED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{xena-pyrmid-url}}/v1/builds?buildProfileId=d4e94178-628d-4480-9179-ac56c0873c40",
+							"host": [
+								"{{xena-pyrmid-url}}"
+							],
+							"path": [
+								"v1",
+								"builds"
+							],
+							"query": [
+								{
+									"key": "buildProfileId",
+									"value": "d4e94178-628d-4480-9179-ac56c0873c40"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

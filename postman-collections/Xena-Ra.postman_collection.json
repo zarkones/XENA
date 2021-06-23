@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "6df22cc2-672d-4c6c-9732-b08b60322511",
+		"name": "Xena-Ra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Readers.get | Extract information from a webpage.",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": \"example123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/readers",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"readers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Machines.details | Details about env. & hardware.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/machines",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"machines"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File-Systems.read | Read files.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/file-systems",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"file-systems"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
