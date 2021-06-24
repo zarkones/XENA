@@ -1,0 +1,1 @@
+Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless. I intent this to also be used for building of other kind of software.
