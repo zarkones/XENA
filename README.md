@@ -19,6 +19,7 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 ### DESCRIPTION ###
 
 The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
+For any questions or help, reach out to me at zarkones.xena@gmail.com
 
 > Xena-Face
 
@@ -50,7 +51,6 @@ I intent this to also be used for building of other kind of software.
 ### POSTMAN COLLECTIONS ###
 
 I’ve exported my collections from postman which I use for development purpose. That should allow you to better understand how to create your own bot for XENA platform. You can read Xena-Apep for reference, but Apep isn’t complete yet, I’ll probably focus on it in the following development logs. So, until then, feel free to reach out to me at zarkones.xena@gmail.com.
-Contributors are always welcome.
 
 Collections may be found in a JSON format under ./postman-collections
 
