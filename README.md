@@ -50,6 +50,11 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
 
+
+Now when you've got a bit more familiar with the ecosystem, let's dive into a hypotetical visualization of what needs to be implemented. 
+
+![Diagram of the network](https://miro.medium.com/max/875/1*LRCSF5nna9FhVm77Oc1Q7Q.jpeg)
+
 ### POSTMAN COLLECTIONS ###
 
 I’ve exported my collections from postman which I use for development purpose. That should allow you to better understand how to create your own bot for XENA platform. You can read Xena-Apep for reference, but Apep isn’t complete yet, I’ll probably focus on it in the following development logs. So, until then, feel free to reach out to me at zarkones.xena@gmail.com.
