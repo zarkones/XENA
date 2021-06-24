@@ -4,9 +4,10 @@
 
 1. DISCLAIMER
 2. DESCRIPTION
-3. RUN STEPES
-4. BUILD STEPS
-5. DEVELOPMENT LOGS
+3. POSTMAN COLLECTIONS
+4. RUN STEPES
+5. BUILD STEPS
+6. DEVELOPMENT LOGS
 
 ### DISCLAIMER ###
 
@@ -45,6 +46,13 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
+
+### POSTMAN COLLECTIONS ###
+
+I’ve exported my collections from postman which I use for development purpose. That should allow you to better understand how to create your own bot for XENA platform. You can read Xena-Apep for reference, but Apep isn’t complete yet, I’ll probably focus on it in the following development logs. So, until then, feel free to reach out to me at zarkones.xena@gmail.com.
+Contributors are always welcome.
+
+Collections may be found in a JSON format under ./postman-collections
 
 ### RUN STEPES ###
 
