@@ -1,1 +1,1 @@
-# Apep, the Apophis.
+The bot client written in Golang. Why Golang you might be asking, well, cross-platform + the convenience of development. Keep in mind that I do not use Go in the professional capacity, so the code can and will be improved a lot. This can be used to drop other clients onto the environment.
