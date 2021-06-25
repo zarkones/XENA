@@ -19,7 +19,7 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 
 ### SUPPORT MY RESEARCH ###
 
-Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my research.
+Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my blackouts.
 
 Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ**
 
