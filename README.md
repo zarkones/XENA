@@ -3,10 +3,12 @@
 ### CONTENT MAP ###
 
 1. DISCLAIMER
-2. DESCRIPTION
-3. RUN STEPES
-4. BUILD STEPS
-5. DEVELOPMENT LOGS
+2. SUPPORT MY RESEARCH
+3. DESCRIPTION
+4. POSTMAN COLLECTIONS
+5. RUN STEPES
+6. BUILD STEPS
+7. DEVELOPMENT LOGS
 
 ### DISCLAIMER ###
 
@@ -15,9 +17,18 @@ This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
 This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
 
+### SUPPORT MY RESEARCH ###
+
+Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my research.
+
+Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ**
+
 ### DESCRIPTION ###
 
+XENA is the managed remote administration platform. Aiming to create an ecosystem which provides logistical support to the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol and other fallback channels. Goal is to have everything be a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
+
 The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
+For any questions or help, reach out to me at zarkones.xena@gmail.com
 
 > Xena-Face
 
@@ -46,6 +57,17 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
 
+
+Now when you've got a bit more familiar with the ecosystem, let's dive into a hypotetical visualization of what needs to be implemented. 
+
+![Diagram of the network](https://miro.medium.com/max/875/1*LRCSF5nna9FhVm77Oc1Q7Q.jpeg)
+
+### POSTMAN COLLECTIONS ###
+
+I’ve exported my collections from postman which I use for development purpose. That should allow you to better understand how to create your own bot for XENA platform. You can read Xena-Apep for reference, but Apep isn’t complete yet, I’ll probably focus on it in the following development logs. So, until then, feel free to reach out to me at zarkones.xena@gmail.com.
+
+Collections may be found in a JSON format under ./postman-collections
+
 ### RUN STEPES ###
 
 xena-atila
@@ -72,6 +94,9 @@ It needs to be available through the web UI. (Xena-Face)
 ...we can learn some things from the cloud. :)
 
 ### DEVELOPMENT LOGS ###
+
+#2 - Back to the future.
+https://zarkones-xena.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
 
 #1 - Baby steps.
 https://zarkones-xena.medium.com/xena-r-a-t-devlog-1-7010468588b9
