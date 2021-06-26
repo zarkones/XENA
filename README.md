@@ -19,7 +19,7 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 
 ### SUPPORT MY RESEARCH ###
 
-Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my research.
+Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my blackouts.
 
 Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ**
 
@@ -96,7 +96,7 @@ It needs to be available through the web UI. (Xena-Face)
 ### DEVELOPMENT LOGS ###
 
 #2 - Back to the future.
-https://zarkones-xena.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
+https://zarkones.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
 
 #1 - Baby steps.
-https://zarkones-xena.medium.com/xena-r-a-t-devlog-1-7010468588b9
+https://zarkones.medium.com/xena-r-a-t-devlog-1-7010468588b9
