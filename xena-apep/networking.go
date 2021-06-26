@@ -1,4 +1,4 @@
-package main
+package xena
 
 import (
 	"encoding/json"
@@ -40,9 +40,9 @@ func globalRequestHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	// Store the message.
-	messages[messageJson.Id] = messageJson
+	Messages[messageJson.Id] = messageJson
 
 	fmt.Println(messageJson.Subject)
 
-	fmt.Fprintf(response, "%+v", messages)
+	fmt.Fprintf(response, "%+v", Messages)
 }

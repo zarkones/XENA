@@ -1,4 +1,4 @@
-package main
+package xena
 
 import (
 	"encoding/json"

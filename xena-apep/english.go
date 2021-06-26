@@ -1,4 +1,4 @@
-package main
+package xena
 
 var EnglishCommon []string = []string{
 	"the",

