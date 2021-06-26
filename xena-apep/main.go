@@ -3,14 +3,13 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/google/uuid"
 )
 
 // Xena-Atila.
-var centralizedHost string = os.Args[1] // "http://127.0.0.1:60666"
+var centralizedHost string = "http://127.0.0.1:60666" // os.Args[1]
 
 // Used for authentication.
 // var privateKey = generatePrivateKey()
@@ -19,7 +18,7 @@ var centralizedHost string = os.Args[1] // "http://127.0.0.1:60666"
 var id uuid.UUID = uuid.New()
 
 func main() {
-	// test := NaturalTrafficOut(time.Now().UnixNano(), `SomeTextVeryImportantData,UseBASE64Here!`)
+	// test := NaturalTrafficOut(time.Now().UnixNano(), "YXNkaGlhaGlkaHNpdWhnZjdkODR0ODdnd2lyZ3NrN2dpa3c4czdndDNpdWdyZnNranVnZWlrODdmZ2VrOGlncmk4NDVnZnVzZWZ0cnVrc2dmODR0ZW9mZ2t1Zmdza2VyZ3N0a2V0c2U0a3Rna3czaGs5Mjh5a2V3Z3Rrcmd0YWdlZGlrYXRnd2kzazg1a3J3dWd0a2F1Z2VydGtpenNhd2VoZ3Rhc2h0b3NhN3dlMzV5YTg0NzNnNWE4N3I4c293Z3J6aXRsZHZqYmcseGhqZGJnLHhqa2Jkcmxpc3R1Z2hrbGlydXRoZ2xza2llcmd0a2llcnN1Cg==")
 	// insertionPayload, marshalErr := json.Marshal(test)
 	// if marshalErr != nil {
 	// 	fmt.Println(marshalErr.Error())
