@@ -14,6 +14,7 @@ type GetMultiple = {
 
 type Insert = {
   id: string
+  identificationKey: string
   status: ClientStatus
 }
 
@@ -31,7 +32,7 @@ class Database {
     .whereNot('status', 'BANNED')
     .if(status, builder => builder.where('status', status as ClientStatus))
     .if(page, builder => builder.offset(page as number * 10))
-    .if(page, builder => builder.limit(page as number * 10))
+    .if(page, builder => builder.limit(10))
     .exec()
     .then(clients => clients.map(c => c.serialize()))
   

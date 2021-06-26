@@ -4,6 +4,9 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 export default class Client extends BaseModel {
   @column({ isPrimary: true })
   public id: string
+
+  @column()
+  public identificationKey: string
   
   @column()
   public status: 'ALIVE' | 'DEAD' | 'BANNED'

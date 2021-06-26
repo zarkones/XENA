@@ -40,7 +40,7 @@ class Database {
     .if(clientId, builder => builder.where('to', clientId as ClientId))
     .if(status, builder => builder.where('status', status as MessageStatus))
     .if(page, builder => builder.offset(page as number * 10))
-    .if(page, builder => builder.limit(page as number * 10))
+    .if(page, builder => builder.limit(10))
     .if(!replyTo, builder => builder.whereNull('reply_to'))
     .if(replyTo, builder => builder.where('reply_to', replyTo as MessageId))
     // .orWhereNull('to') Doesn't work with: .if(!replyTo, builder => builder.whereNull('reply_to'))

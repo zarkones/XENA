@@ -30,7 +30,7 @@ class Database {
     .select('*')
     .if(banned, builder => builder.where('banned', banned as boolean))
     .if(page, builder => builder.offset(page as number * 10))
-    .if(page, builder => builder.limit(page as number * 10))
+    .if(page, builder => builder.limit(10))
     .exec()
     .then(clients => clients.map(c => c.serialize()))
   

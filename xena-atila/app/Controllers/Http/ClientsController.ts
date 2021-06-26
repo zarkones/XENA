@@ -30,13 +30,13 @@ export default class ClientsController {
   }
 
   public insert = async ({ request, response }: HttpContextContract) => {
-    const { id, status } = await request.validate(Validator.Client.Insert)
+    const { id, identificationKey, status } = await request.validate(Validator.Client.Insert)
 
     const maybeClient = await Repo.Client.get({ id })
     if (maybeClient)
       return response.conflict({ success: false, message: 'Client ID has been taken.' })
 
-    const client = await Repo.Client.insert(Domain.Client.fromJSON({ id, status }))
+    const client = await Repo.Client.insert(Domain.Client.fromJSON({ id, identificationKey, status }))
       .then(client => Domain.Client.fromJSON(client))
 
     return response.ok(client)

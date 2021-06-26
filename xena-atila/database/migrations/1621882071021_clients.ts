@@ -10,6 +10,9 @@ export default class Clients extends BaseSchema {
         .unique()
         .primary()
 
+      table.string('indetification_key', 4096)
+        .notNullable()
+
       // Client's state.
       table.enum('status', ['ALIVE', 'DEAD', 'BANNED'])
         .notNullable()
