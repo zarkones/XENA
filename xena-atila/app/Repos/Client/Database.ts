@@ -36,10 +36,7 @@ class Database {
     .exec()
     .then(clients => clients.map(c => c.serialize()))
   
-  public insert = ({ id, status }: Insert) => Client.create({
-    id,
-    status,
-  }).then(client => client.serialize())
+  public insert = (payload: Insert) => Client.create(payload).then(client => client.serialize())
 }
 
 export default new Database()

@@ -35,7 +35,7 @@ export default class ClientsController {
     const maybeClient = await Repo.Client.get({ id })
     if (maybeClient)
       return response.conflict({ success: false, message: 'Client ID has been taken.' })
-
+    
     const client = await Repo.Client.insert(Domain.Client.fromJSON({ id, identificationKey, status }))
       .then(client => Domain.Client.fromJSON(client))
 

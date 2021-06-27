@@ -87,7 +87,7 @@ export default class BuildsController {
     // Build the binary.
     const buildOutput = (() => {
       try {
-        return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep`)
+        return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD ${Service.Git.pathPrefix}${buildId}/xena-apep`)
       } catch (e) {
         console.warn(e)
         return 'ERROR'
@@ -106,7 +106,7 @@ export default class BuildsController {
     }
 
     // Base64 binary.
-    const base64Binary = await Domain.Build.getBinary(`${Env.get('BUILD_DESTINATION')}${buildId}`)
+    const base64Binary = await Domain.Build.getBinary(`${Env.get('BUILD_DESTINATION')}${buildId}_BUILD`)
 
     // Store the build.
     const build = await Repo.Build.insert( Domain.Build.fromJSON({

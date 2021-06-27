@@ -10,7 +10,7 @@ export default class Clients extends BaseSchema {
         .unique()
         .primary()
 
-      table.string('indetification_key', 4096)
+      table.string('identification_key', 4096)
         .notNullable()
 
       // Client's state.
