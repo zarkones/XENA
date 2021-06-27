@@ -5,7 +5,11 @@ import Env from '@ioc:Adonis/Core/Env'
 import Url from 'url-parse'
 
 class Git {
-  public readonly pathPrefix = '../xena-pyramid-software-builds/'
+  public readonly pathPrefix: string
+
+  constructor () {
+    this.pathPrefix = Env.get('BUILD_DESTINATION')
+  }
 
   public clone = (maybeUrl: string, buildId: string) => {
     const url = new Url(maybeUrl)

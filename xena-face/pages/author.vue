@@ -128,7 +128,7 @@ export default Vue.extend({
     build: {
       name: '',
       description: null,
-      gitUrl: 'https://bitbucket.org/ZarkonesXena/xena.git',
+      gitUrl: 'https://github.com/zarkones/XENA.git',
       encoding: '',
       encodingIterations: 1,
     },

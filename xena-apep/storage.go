@@ -1,4 +1,4 @@
-package xena
+package main
 
 /* Internet Address. x, y, z, w; make a complate internet addres. Examples: 127.0.0.1, 168.168.1.1, 255.255.255.255, etc... */
 type InternetAddress struct {

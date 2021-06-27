@@ -67,7 +67,7 @@ export default class BuildsController {
         return response.internalServerError({ success: false, message: 'Not yet implemented.' })
       case 'XENA_APEP':
         const apep = await this.buildApep(buildId, buildProfileId)
-        return apep == 'ERROR'
+        return !apep
           ? response.internalServerError({ success: false, message: 'Failed to build.' })
           : response.ok(apep)
       default:
@@ -84,7 +84,7 @@ export default class BuildsController {
   }
 
   private buildApep = async (buildId: string, buildProfileId: string) => {
-     // Build the binary.
+    // Build the binary.
     const buildOutput = (() => {
       try {
         return Helper.Shell.exe(`go build -o ${Env.get('BUILD_DESTINATION')}${buildId} ${Service.Git.pathPrefix}${buildId}/xena-apep`)
@@ -93,9 +93,9 @@ export default class BuildsController {
         return 'ERROR'
       }
     })()
-
+    
     if (buildOutput == 'ERROR')
-      throw Error('Unable to clone Git repository.')
+      throw Error('Unable to build.')
 
     // Repo cleaning.
     try {

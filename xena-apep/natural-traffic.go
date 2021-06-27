@@ -1,4 +1,4 @@
-package xena
+package main
 
 import (
 	"math"
