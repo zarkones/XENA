@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@adonisjs/core": "^5.1.0",
+    "@adonisjs/redis": "^7.0.6",
     "@adonisjs/repl": "^3.0.0",
+    "axios": "^0.21.1",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.19"

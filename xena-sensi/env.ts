@@ -20,4 +20,14 @@ export default Env.rules({
 	APP_KEY: Env.schema.string(),
 	APP_NAME: Env.schema.string(),
 	NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
+
+	// OpenAI configuration.
+	OPEN_AI_HOST: Env.schema.string(),
+	OPEN_AI_KEY: Env.schema.string(),
+
+	// Redis configuration.
+	REDIS_CONNECTION: Env.schema.enum(['local'] as const),
+  REDIS_HOST: Env.schema.string({ format: 'host' }),
+  REDIS_PORT: Env.schema.number(),
+  REDIS_PASSWORD: Env.schema.string.optional(),
 })

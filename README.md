@@ -5,6 +5,7 @@
 1. DISCLAIMER
 2. SUPPORT MY RESEARCH
 3. DESCRIPTION
+4. REQUIREMENTS
 4. POSTMAN COLLECTIONS
 5. RUN STEPES
 6. BUILD STEPS
@@ -16,6 +17,9 @@ You bear the full responsibility of your actions.
 This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
 This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
+This software is not allowed to be used for political purpose.
+This software is not allowed to be used in a commercial purpose of any kind, shape or form without a written permission.
+Selling and redistributing this software is not permited without a written permission.
 
 ### SUPPORT MY RESEARCH ###
 
@@ -61,6 +65,13 @@ I intent this to also be used for building of other kind of software.
 Now when you've got a bit more familiar with the ecosystem, let's dive into a hypotetical visualization of what needs to be implemented. 
 
 ![Diagram of the network](https://miro.medium.com/max/875/1*LRCSF5nna9FhVm77Oc1Q7Q.jpeg)
+
+### REQUIREMENT ###
+
+Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra.
+Golang for running Xena-Apep. (tested with golang version 1.15.9)
+
+And a Linux operating system.
 
 ### POSTMAN COLLECTIONS ###
 
