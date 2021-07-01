@@ -26,7 +26,7 @@ Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9Qw
 
 ### DESCRIPTION ###
 
-XENA is the managed remote administration platform. Aiming to create an ecosystem which provides logistical support to the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol and other fallback channels. Goal is to have everything be a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
+XENA is the managed remote administration platform. Aiming to create an ecosystem which provides logistical support to the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
 
 The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
 For any questions or help, reach out to me at zarkones.xena@gmail.com
@@ -58,6 +58,18 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
 
+> **Xena-Anaconda** [coming soon]
+
+Post exploitation bot client written in Python3 (typed, but can be improved for sure). Code is there, I'm just not realising it now. Which can also be said for the following service bellow. Now, back to the topic. Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
+
+> **Xena-Axe** [coming soon]
+
+Oh, boy... Where to begin. Let me first introduce you to Haxe. An open source high-level strictly-typed programming language with a fast optimizing cross-compiler. It transpiles to: JavaScript, HashLink, Eval, JVM, PHP7, C, Lua, C++, Python, Java, Flash, Neko, ActionScript, PHP5.
+With that all covered, I'm not sure which machine cannot run at least one bot clinet of this framework.
+
+> **Xena-Sensi** [coming soon]
+
+Sensi, polite and brilient assistent. It there to supervise the network and protect it. Utilizes GPT-2 and GPT-3, if you have a key.
 
 Now when you've got a bit more familiar with the ecosystem, let's dive into a hypotetical visualization of what needs to be implemented. 
 
