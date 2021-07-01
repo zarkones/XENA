@@ -84,8 +84,11 @@ Collections may be found in a JSON format under ./postman-collections
 Environment veriables:
 
 xena-atila-url  ===  http://127.0.0.1:60666
+
 xena-pyrmid-url  ===  http://127.0.0.1:60667
+
 xena-ra-url  ===  http://127.0.0.1:60696
+
 xena-sensi-url  ===  http://127.0.0.1:60699
 
 ### RUN STEPES ###
