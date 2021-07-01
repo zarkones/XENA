@@ -9,13 +9,14 @@
 5. RUN STEPES
 6. BUILD STEPS
 7. DEVELOPMENT LOGS
+8. WHOAMI?
 
 ### DISCLAIMER ###
 
 You bear the full responsibility of your actions.
 This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
-This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
+This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice. 
 
 ### SUPPORT MY RESEARCH ###
 
@@ -68,6 +69,13 @@ I’ve exported my collections from postman which I use for development purpose.
 
 Collections may be found in a JSON format under ./postman-collections
 
+Environment veriables:
+
+xena-atila-url  ===  http://127.0.0.1:60666
+xena-pyrmid-url  ===  http://127.0.0.1:60667
+xena-ra-url  ===  http://127.0.0.1:60696
+xena-sensi-url  ===  http://127.0.0.1:60699
+
 ### RUN STEPES ###
 
 xena-atila
@@ -100,3 +108,9 @@ https://zarkones.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
 
 #1 - Baby steps.
 https://zarkones.medium.com/xena-r-a-t-devlog-1-7010468588b9
+
+### WHOAMI? ###
+
+Zarkones. Full-stack software developer with an accent on back-end services.
+Current solutions are overpriced, when it comes to red-team software.
+I need to understand the topic and share my knowladge in a appropriate manner.
