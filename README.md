@@ -24,6 +24,8 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 
 Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ**
 
+Or you can Star this project. It is free to do so.
+
 ### DESCRIPTION ###
 
 XENA is the managed remote administration platform. Aiming to create an ecosystem which provides logistical support to the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
