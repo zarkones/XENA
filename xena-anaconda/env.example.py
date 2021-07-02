@@ -14,9 +14,9 @@ def Env() -> dict:
     #   name => Class name inside the file specified in path variable.
     #   path => Path to the module script, relative to the project root.
     'MODULES': {
-      'xena-atila': {
-        'name': 'XenaAtila',
-        'path': 'modules.xena-atila',
+      'hello-world': {
+        'name': 'HelloWorld',
+        'path': 'modules.hello-world',
       }
     }
   }
