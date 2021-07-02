@@ -5,6 +5,7 @@
 1. DISCLAIMER
 2. SUPPORT MY RESEARCH
 3. DESCRIPTION
+4. REQUIREMENTS
 4. POSTMAN COLLECTIONS
 5. RUN STEPES
 6. BUILD STEPS
@@ -16,7 +17,10 @@
 You bear the full responsibility of your actions.
 This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
-This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice. 
+This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
+This software is not allowed to be used for political purpose.
+This software is not allowed to be used in a commercial purpose of any kind, shape or form without a written permission.
+Selling and redistributing this software is not permited without a written permission.
 
 ### SUPPORT MY RESEARCH ###
 
@@ -60,9 +64,9 @@ Able to detects if it's running as Windows Subsystem for Linux, as root user, an
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
 
-> **Xena-Anaconda** [coming soon]
+> **Xena-Anaconda**
 
-Post exploitation bot client written in Python3 (typed, but can be improved for sure). Code is there, I'm just not realising it now. Which can also be said for the following service bellow. Now, back to the topic. Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
+Post exploitation bot client written in Python3 (typed, but can be improved for sure). Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
 
 > **Xena-Axe** [coming soon]
 
@@ -73,9 +77,17 @@ With that all covered, I'm not sure which machine cannot run at least one bot cl
 
 Sensi, polite and brilient assistent. It there to supervise the network and protect it. Utilizes GPT-2 and GPT-3, if you have a key.
 
-Now when you've got a bit more familiar with the ecosystem, let's dive into a hypotetical visualization of what needs to be implemented. 
+At the moment GPT-2 is not released, it needs some work and training. Thus it requires more time, but I would rather focus on Xena-Axe. You can utilize GPT-3 in the current version, but I'll still mark this one as "coming soon". 
 
-![Diagram of the network](https://miro.medium.com/max/875/1*LRCSF5nna9FhVm77Oc1Q7Q.jpeg)
+### REQUIREMENT ###
+
+- Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra.
+
+- Golang for running Xena-Apep. (tested with golang version 1.15.9)
+
+- Python version 3.9.2 is recommended.
+
+And a Linux operating system.
 
 ### POSTMAN COLLECTIONS ###
 
@@ -104,8 +116,14 @@ xena-apep
 xena-pyramid
 > cd xena-pyramid && yarn && node ace migration:run && yarn dev
 
+xena-sensi
+> cd xena-sensi && yarn && yarn dev
+
 xena-ra
 > cd xena-ra && yarn && yarn dev
+
+xena-anaconda
+> cd xena-anaconda && python3 main.py
 
 xena-face
 > cd xena-face && yarn && yarn dev

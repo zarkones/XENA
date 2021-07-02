@@ -1,0 +1,26 @@
+def Usernames_Top_25() -> list[str]:
+  return [
+    'admin',
+    'root',
+    'toor',
+    'administrator',
+    'linux',
+    'windows',
+    'password',
+    'demo',
+    'test',
+    'sql',
+    'user',
+    'guest',
+    '123456',
+    'none',
+    'telecomadmin',
+    'telecom',
+    'home',
+    'admin123',
+    'admin1234',
+    'superadmin',
+    'super',
+    'superuser',
+    'adminpldt'
+  ]
