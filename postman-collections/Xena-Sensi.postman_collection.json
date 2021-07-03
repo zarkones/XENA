@@ -1,0 +1,36 @@
+{
+	"info": {
+		"_postman_id": "bde7d4f3-89ad-437e-b77a-1e3a1a1a9595",
+		"name": "Xena-Sensi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"prompt\": \"1 + 1?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-sensi-url}}/v1/dialogs",
+					"host": [
+						"{{xena-sensi-url}}"
+					],
+					"path": [
+						"v1",
+						"dialogs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
