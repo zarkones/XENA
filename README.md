@@ -8,7 +8,7 @@
 4. REQUIREMENTS
 5. GALLERY
 6. POSTMAN COLLECTIONS
-7. RUN STEPES
+7. RUN STEPS
 8. BUILD STEPS
 9. DEVELOPMENT LOGS
 10. WHOAMI?
@@ -118,7 +118,7 @@ xena-ra-url  ===  http://127.0.0.1:60696
 
 xena-sensi-url  ===  http://127.0.0.1:60699
 
-### RUN STEPES ###
+### RUN STEPS ###
 
 xena-atila
 > cd xena-atila && yarn && node ace migration:run && yarn dev
