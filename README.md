@@ -146,6 +146,6 @@ https://zarkones.medium.com/xena-r-a-t-devlog-1-7010468588b9
 
 ### WHOAMI? ###
 
-Zarkones. Full-stack software developer with an accent on back-end services.
+Zarkones. Software developer with an accent on back-end services.
 Current solutions are overpriced, when it comes to red-team software.
 I need to understand the topic and share my knowladge in a appropriate manner.
