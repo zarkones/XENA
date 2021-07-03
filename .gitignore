@@ -3,8 +3,10 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+rnd
+
 # Temp
-gpt-2
+xena-axe
 
 # Node artifact files
 node_modules/

@@ -1,4 +1,4 @@
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/xena-face/static/xena-logo.png)
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/common-point-services/xena-face/static/xena-logo.png)
 
 ### CONTENT MAP ###
 
@@ -6,11 +6,12 @@
 2. SUPPORT MY RESEARCH
 3. DESCRIPTION
 4. REQUIREMENTS
-4. POSTMAN COLLECTIONS
-5. RUN STEPES
-6. BUILD STEPS
-7. DEVELOPMENT LOGS
-8. WHOAMI?
+5. GALLERY
+6. POSTMAN COLLECTIONS
+7. RUN STEPES
+8. BUILD STEPS
+9. DEVELOPMENT LOGS
+10. WHOAMI?
 
 ### DISCLAIMER ###
 
@@ -88,6 +89,18 @@ At the moment GPT-2 is not released, it needs some work and training. Thus it re
 - Python version 3.9.2 is recommended.
 
 And a Linux operating system.
+
+### GALLERY ###
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/login-page.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/disabled-functionality.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/interaction-with-bot-clients.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/author-studio-aka-bot-builder.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/settings-page.png)
 
 ### POSTMAN COLLECTIONS ###
 
