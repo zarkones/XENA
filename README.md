@@ -120,26 +120,26 @@ xena-sensi-url  ===  http://127.0.0.1:60699
 
 ### RUN STEPS ###
 
-xena-atila
-> cd xena-atila && yarn && node ace migration:run && yarn dev
+xena-face
+> cd common-point-services/xena-face && yarn && yarn dev
 
-xena-apep
-> cd xena-apep && go run *.go http://127.0.0.1:60666
+xena-atila
+> cd common-point-services/xena-atila && yarn && node ace migration:run && yarn dev
 
 xena-pyramid
-> cd xena-pyramid && yarn && node ace migration:run && yarn dev
+> cd common-point-services/xena-pyramid && yarn && node ace migration:run && yarn dev
 
 xena-sensi
-> cd xena-sensi && yarn && yarn dev
+> cd common-point-services/xena-sensi && yarn && yarn dev
 
-xena-ra
-> cd xena-ra && yarn && yarn dev
+xena-apep
+> cd bot-clients/xena-apep && go run *.go http://127.0.0.1:60666
 
 xena-anaconda
-> cd xena-anaconda && python3 main.py
+> cd bot-clients/xena-anaconda && python3 main.py
 
-xena-face
-> cd xena-face && yarn && yarn dev
+xena-ra
+> cd bot-clients/xena-ra && yarn && yarn dev
 
 ### BUILD STEPS ###
 
