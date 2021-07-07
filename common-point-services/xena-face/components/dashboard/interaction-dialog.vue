@@ -2,92 +2,70 @@
   <v-card
     tile
   >
-    <div>
-      <v-toolbar
-        dense
+    <v-tabs
+      v-model = 'selectedTab'
+    >
+      <v-tab
+        v-for = 'item in tabItems'
+        :key = 'item.tab'
       >
-        <v-toolbar-title>
-          <v-btn
-            text
-            tile
-            small
-            color = 'rgba(189, 147, 249, 1)'
-          >
-            Shell
-          </v-btn>
+        {{ item.tab }}
+      </v-tab>
+    </v-tabs>
 
-          <v-btn
-            text
-            tile
-            small
-            color = 'rgba(189, 147, 249, 1)'
-          >
-            File System
-          </v-btn>
-
-          <v-btn
-            text
-            tile
-            small
-            color = 'rgba(189, 147, 249, 1)'
-          >
-            Gallery
-          </v-btn>
-
-          <v-btn
-            text
-            tile
-            small
-            color = 'rgba(189, 147, 249, 1)'
-          >
-            System Monitor
-          </v-btn>
-
-          <v-btn
-            text
-            tile
-            small
-            color = 'rgba(189, 147, 249, 1)'
-          >
-            Details
-          </v-btn>
-        </v-toolbar-title>
-      </v-toolbar>
-
-      <v-card-text
-        v-if = '!clients.length'
-        class = '
-          ma-4
-        '
+    <v-tabs-items v-model = 'selectedTab'>
+      <v-tab-item
+        v-for = 'item in tabItems'
+        :key = 'item.tab'
       >
-        Please, select at least one client.
-      </v-card-text>
-
-      <!--
-        We should ask the user to select clients.
-      -->
-      <div
-        v-if = 'clients.length'
-        class = '
-          ml-4
-          mr-4
-          mt-4
-        '
-      >
-        <div
-          v-for = 'message in messages'
-          :key = 'message.id'
+        <v-card
+          v-if = 'item.content == `SHELL`'
+          flat
         >
-          <MessageDisplay
-            :message = 'message'
-          />
-        </div>
+          <v-card-text
+            v-if = '!clients.length'
+            class = '
+              ma-4
+            '
+          >
+            Please, select at least one client.
+          </v-card-text>
 
-        <Shell
-          :clients = 'clients'
-        />
-      </div>
-    </div>
+          <!--
+            We should ask the user to select clients.
+          -->
+          <div
+            v-if = 'clients.length'
+            class = '
+              ml-4
+              mr-4
+              mt-4
+            '
+          >
+            <div
+              v-for = 'message in messages'
+              :key = 'message.id'
+            >
+              <MessageDisplay
+                :message = 'message'
+              />
+            </div>
+
+            <Shell
+              :clients = 'clients'
+            />
+          </div>
+        </v-card>
+
+        <v-card
+          v-if = 'item.content == `SYSTEM_MONITOR`'
+          flat
+        >
+          It ain't done. <br>
+          # Insert the just do it meme here.
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
 
   </v-card>
 </template>
@@ -108,6 +86,12 @@ export default Vue.extend({
   },
 
   data: () => ({
+    selectedTab: 0,
+    tabItems: [
+      { tab: 'Shell', content: 'SHELL' },
+      { tab: 'System Monitor', content: 'SYSTEM_MONITOR' },
+    ],
+
     enabled: false,
     clients: [] as any[],
     messages: [] as any[],
@@ -117,6 +101,10 @@ export default Vue.extend({
   methods: {
     interactionDialog () {
       this.enabled = !this.enabled
+    },
+
+    selectTab (tabName: string) {
+      this.selectedTab = tabName
     },
 
     async fetchMessagesWithReplies () {
