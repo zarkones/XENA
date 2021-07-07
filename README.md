@@ -167,8 +167,17 @@ https://zarkones.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
 #1 - Baby steps.
 https://zarkones.medium.com/xena-r-a-t-devlog-1-7010468588b9
 
+#0 - Botnets, design & implementation.
+https://www.youtube.com/watch?v=24hGJjgRfUI
+
 ### WHOAMI? ###
 
 Zarkones. Software developer with an accent on back-end services.
 Current solutions are overpriced, when it comes to red-team software.
 I need to understand the topic and share my knowladge in a appropriate manner.
+
+Social links:
+1. https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug
+2. https://medium.com/@zarkones
+3. https://github.com/zarkones
+4. r/xenarat
