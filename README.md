@@ -74,7 +74,7 @@ Post exploitation bot client written in Python3 (typed, but can be improved for 
 > **Xena-Axe** [coming soon]
 
 Oh, boy... Where to begin. Let me first introduce you to Haxe. An open source high-level strictly-typed programming language with a fast optimizing cross-compiler. It transpiles to: JavaScript, HashLink, Eval, JVM, PHP7, C, Lua, C++, Python, Java, Flash, Neko, ActionScript, PHP5.
-With that all covered, I'm not sure which machine cannot run at least one bot clinet of this framework.
+With that all covered, I don't know which machine cannot run at least one of the bot client of this framework.
 
 > **Xena-Sensi** [coming soon]
 
