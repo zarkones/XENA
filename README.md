@@ -84,13 +84,19 @@ At the moment GPT-2 is not released, it needs some work and training. Thus it re
 
 ### REQUIREMENTS ###
 
-- Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra.
+- Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra, Xena-Pyramid.
 
 - Golang for running Xena-Apep. (tested with golang version 1.15.9)
 
-- Python version 3.9.2 is recommended.
+- Python version 3.9.2 is recommended, because of Xena-Anaconda.
 
-And a Linux operating system.
+And an operating system of your choice. The framework is fully cross-platform.
+
+- Windows can support everything native or through WSL support.
+- Linux distributions can easily meet all requirements. This is the recommended environment, but it's not a requirement.
+- MacOS is a capable Unix family member, I've never used it, but I assume the platform should run without a major issue.
+- FreeBSD's story goes the same way as for MacOS, never used it, but I do not see a reason why it couldn't support the framework.
+ 
 
 ### GALLERY ###
 
@@ -119,6 +125,8 @@ xena-pyrmid-url  ===  http://127.0.0.1:60667
 xena-ra-url  ===  http://127.0.0.1:60696
 
 xena-sensi-url  ===  http://127.0.0.1:60699
+
+xena-apep-url === Unknow, but can be predicted, it uses the time in order to pick a different port every day.
 
 ### RUN STEPS ###
 
