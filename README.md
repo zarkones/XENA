@@ -82,7 +82,7 @@ Sensi, polite and brilient assistent. It there to supervise the network and prot
 
 At the moment GPT-2 is not released, it needs some work and training. Thus it requires more time, but I would rather focus on Xena-Axe. You can utilize GPT-3 in the current version, but I'll still mark this one as "coming soon". 
 
-### REQUIREMENT ###
+### REQUIREMENTS ###
 
 - Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra.
 
