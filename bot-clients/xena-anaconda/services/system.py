@@ -86,7 +86,8 @@ class System:
     return local_env
 
   # Execute a command onto the system.
-  def do(self, command: str) -> str:
+  @staticmethod
+  def do(command: str) -> str:
     logging.info('[+] Executing subprocess call: ' + command)
 
     try:
