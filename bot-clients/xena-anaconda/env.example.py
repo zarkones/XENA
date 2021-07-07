@@ -21,6 +21,7 @@ def Env() -> dict:
         'name': 'HelloWorld',
         'path': 'modules.hello-world',
       },
+      
       'xena-atila': {
         'name': 'XenaAtila',
         'path': 'modules.xena-atila',
