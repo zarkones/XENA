@@ -8,4 +8,6 @@ There is a "HelloWorld" module which runs by typing into your terminal: python m
 Or: python3 main.py
 Depending on your environment.
 
-I'm soon creating a code responsible for message exchange with Xena-Atila and Xena-Apep.
+Modules included:
+1. Hello World
+2. Xena-Atila
