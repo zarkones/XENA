@@ -147,6 +147,12 @@ export default {
 .theme--dark.v-card {
   background-color: #282a36 !important;
 }
+.theme--dark.v-window {
+  background-color: #282a36 !important;
+}
+.theme--dark.v-slide-group {
+  background-color: #282a36 !important;
+}
 .theme--dark.v-navigation-drawer {
   background-color: #282a36 !important;
 }

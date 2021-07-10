@@ -40,6 +40,9 @@ XENA is the managed remote administration platform for botnet creation & develop
 The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
 For any questions or help, reach out to me at zarkones.xena@gmail.com
 
+Bot clients are very diverse, powered by Golang, TypeScript, Haxe and Python3.
+With this in mind, I'm confident that the framework covers a large surface area.
+
 > **Xena-Face**
 
 Web user interface powered by Nuxt.ts and TypeScript. The reason I’ve chosen the web is pure convenience. If a user has to download binaries, that would take some time, I needed the tool to be accessible instantaneously.
@@ -71,6 +74,13 @@ I intent this to also be used for building of other kind of software.
 
 Post exploitation bot client written in Python3 (typed, but can be improved for sure). Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
 
+> **Xena-Varvara**
+
+Bot client powered by Haxe language. It which drops other bot clients provided by Xena-Pyramid. It makes them persistent, but the mechanism is super simple. It modifies the .bashrc file.
+Feel free to open a Pull-Request in order to add other persistency methods.
+
+Haxe transpiles to other languages, of which at the moment are tested C++, C#, Python3.
+
 > **Xena-Axe** [coming soon]
 
 Oh, boy... Where to begin. Let me first introduce you to Haxe. An open source high-level strictly-typed programming language with a fast optimizing cross-compiler. It transpiles to: JavaScript, HashLink, Eval, JVM, PHP7, C, Lua, C++, Python, Java, Flash, Neko, ActionScript, PHP5.
@@ -89,6 +99,8 @@ At the moment GPT-2 is not released, it needs some work and training. Thus it re
 - Golang for running Xena-Apep. (tested with golang version 1.15.9)
 
 - Python version 3.9.2 is recommended, because of Xena-Anaconda.
+
+- Haxe for Xena-Varvara, recommended version 4.1.5.
 
 And an operating system of your choice. The framework is fully cross-platform.
 
@@ -148,14 +160,18 @@ xena-apep
 xena-anaconda
 > cd bot-clients/xena-anaconda && python3 main.py
 
+xena-varvara
+> cd bot-clients/xena-varvara && sh run.sh
+
 xena-ra
 > cd bot-clients/xena-ra && yarn && yarn dev
 
 ### BUILD STEPS ###
 
-Give me a bit more time, I'm implementing build support via Xena-Pyramid.
-A user should not be bothered to do this manually.
-It needs to be available through the web UI. (Xena-Face)
+Build support is provided by Xena-Pyramid.
+You can interact with it by Xena-Face. (web user interface)
+
+Bare in mind that this feature is still work in progress.
 
 ...we can learn some things from the cloud. :)
 
