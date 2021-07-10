@@ -2,16 +2,16 @@
 
 ### CONTENT MAP ###
 
-1. DISCLAIMER
-2. SUPPORT MY RESEARCH
-3. DESCRIPTION
-4. REQUIREMENTS
-5. GALLERY
-6. POSTMAN COLLECTIONS
-7. RUN STEPS
-8. BUILD STEPS
-9. DEVELOPMENT LOGS
-10. WHOAMI?
+1. [DISCLAIMER](#disclaimer)
+2. [SUPPORT MY RESEARCH](#support-my-research)
+3. [DESCRIPTION](#description)
+4. [REQUIREMENTS](#requirements)
+5. [GALLERY](#gallery)
+6. [POSTMAN COLLECTIONS](#postman-collections)
+7. [RUN STEPS](#run-steps)
+8. [BUILD STEPS](#build-steps)
+9. [DEVELOPMENT LOGS](#development-logs)
+10. [WHOAMI?](#whoami)
 
 ### DISCLAIMER ###
 
@@ -29,11 +29,13 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 
 Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ**
 
+Etherium: **0x787Ba8EF8d75489160C6687296839F947DC62736**
+
 Or you can Star this project. It is free to do so.
 
 ### DESCRIPTION ###
 
-XENA is the managed remote administration platform. Aiming to create an ecosystem which provides logistical support to the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
+XENA is the managed remote administration platform for botnet creation & development. Aiming to provide an ecosystem which serves the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
 
 The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
 For any questions or help, reach out to me at zarkones.xena@gmail.com
@@ -72,7 +74,7 @@ Post exploitation bot client written in Python3 (typed, but can be improved for 
 > **Xena-Axe** [coming soon]
 
 Oh, boy... Where to begin. Let me first introduce you to Haxe. An open source high-level strictly-typed programming language with a fast optimizing cross-compiler. It transpiles to: JavaScript, HashLink, Eval, JVM, PHP7, C, Lua, C++, Python, Java, Flash, Neko, ActionScript, PHP5.
-With that all covered, I'm not sure which machine cannot run at least one bot clinet of this framework.
+With that all covered, I don't know which machine cannot run at least one of the bot client of this framework.
 
 > **Xena-Sensi** [coming soon]
 
@@ -80,15 +82,21 @@ Sensi, polite and brilient assistent. It there to supervise the network and prot
 
 At the moment GPT-2 is not released, it needs some work and training. Thus it requires more time, but I would rather focus on Xena-Axe. You can utilize GPT-3 in the current version, but I'll still mark this one as "coming soon". 
 
-### REQUIREMENT ###
+### REQUIREMENTS ###
 
-- Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra.
+- Node.js >= 14.15.4 for running Xena-Atila, Xena-Sensi, Xena-Ra, Xena-Pyramid.
 
 - Golang for running Xena-Apep. (tested with golang version 1.15.9)
 
-- Python version 3.9.2 is recommended.
+- Python version 3.9.2 is recommended, because of Xena-Anaconda.
 
-And a Linux operating system.
+And an operating system of your choice. The framework is fully cross-platform.
+
+- Windows can support everything native or through WSL support.
+- Linux distributions can easily meet all requirements. This is the recommended environment, but it's not a requirement.
+- MacOS is a capable Unix family member, I've never used it, but I assume the platform should run without a major issue.
+- FreeBSD's story goes the same way as for MacOS, never used it, but I do not see a reason why it couldn't support the framework.
+ 
 
 ### GALLERY ###
 
@@ -117,6 +125,8 @@ xena-pyrmid-url  ===  http://127.0.0.1:60667
 xena-ra-url  ===  http://127.0.0.1:60696
 
 xena-sensi-url  ===  http://127.0.0.1:60699
+
+xena-apep-url === Unknow, but can be predicted, it uses the time in order to pick a different port every day.
 
 ### RUN STEPS ###
 
@@ -157,8 +167,18 @@ https://zarkones.medium.com/xena-devlog-2-back-to-the-future-866fe6f23ad6
 #1 - Baby steps.
 https://zarkones.medium.com/xena-r-a-t-devlog-1-7010468588b9
 
+#0 - Botnets, design & implementation.
+https://www.youtube.com/watch?v=24hGJjgRfUI
+
 ### WHOAMI? ###
 
 Zarkones. Software developer with an accent on back-end services.
 Current solutions are overpriced, when it comes to red-team software.
 I need to understand the topic and share my knowladge in a appropriate manner.
+
+Social links:
+1. [YouTube](https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug)
+2. [Medium](https://medium.com/@zarkones)
+3. [GitHub](https://github.com/zarkones)
+4. [Reddit](https://www.reddit.com/r/xenarat)
+5. [Twitter](https://twitter.com/zarkones)
