@@ -43,6 +43,8 @@ For any questions or help, reach out to me at zarkones.xena@gmail.com
 Bot clients are very diverse, powered by Golang, TypeScript, Haxe and Python3.
 With this in mind, I'm confident that the framework covers a large surface area.
 
+**SERVCES & BOT CLIENTS**
+
 > **Xena-Face**
 
 Web user interface powered by Nuxt.ts and TypeScript. The reason I’ve chosen the web is pure convenience. If a user has to download binaries, that would take some time, I needed the tool to be accessible instantaneously.
