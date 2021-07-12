@@ -43,7 +43,7 @@ export default {
     title: 'open-interface',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.25' },
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
@@ -88,7 +88,7 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
+          primary: '#bd93f9',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

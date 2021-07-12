@@ -3,10 +3,8 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+# Everything meant to be in a pre-publish phase should go in-here.
 rnd
-
-# Temp
-xena-axe
 
 # Node artifact files
 node_modules/
