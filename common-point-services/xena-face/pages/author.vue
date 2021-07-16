@@ -3,105 +3,112 @@
     tile
     flat
   >
-    <v-card-title>
+    <v-card-title
+      class = '
+        purple-color
+      '
+    >
       Author Studio
     </v-card-title>
 
     <v-card-text>
-      Here you'll be able to manage encoding and building of software binaries.
+      Xena-Pyramid provides you with cloud build functionality. Meaning that you can create build profiles, which are used
+      for creation of bot clients and other software. 
     </v-card-text>
 
-    <div
-      class = '
-        pt-4
-        mx-4
-      '
-    >
-      <v-text-field
-        dense
-        v-model = 'build.name'
-        label = 'Name'
-        color = 'rgba(189, 147, 249, 1)'
-      ></v-text-field>
+    <div class = 'ma-4'>
+      <v-expansion-panels>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            Create a build profile.
+          </v-expansion-panel-header>
 
-      <v-text-field
-        dense
-        v-model = 'build.description'
-        label = 'Description'
-        color = 'rgba(189, 147, 249, 1)'
-      ></v-text-field>
+          <v-expansion-panel-content>
+            <div>
+              <v-text-field
+                dense
+                v-model = 'build.name'
+                label = 'Name'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field>
 
-      <v-text-field
-        dense
-        v-model = 'build.gitUrl'
-        label = 'Git URL'
-        :placeholder = 'build.gitUrl'
-        color = 'rgba(189, 147, 249, 1)'
-      ></v-text-field>
+              <v-text-field
+                dense
+                v-model = 'build.description'
+                label = 'Description'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field>
 
-      <v-select
-        v-model = 'buildTemplate'
-        :items = 'buildTemplates'
-        label = 'Build templates'
-        outlined
-        dense
-      ></v-select>
+              <v-text-field
+                dense
+                v-model = 'build.gitUrl'
+                label = 'Git URL'
+                :placeholder = 'build.gitUrl'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field>
 
-      <v-btn
-        @click = 'insertBuildProfile'
-        tile
-        small
-        light
-        color = 'rgba(189, 147, 249, 1)'
-        class = '
-          mb-4
-        '
-        width = '100%'
-      >
-        Create
-      </v-btn>
+              <v-select
+                v-model = 'buildTemplate'
+                :items = 'buildTemplates'
+                label = 'Build templates'
+                outlined
+                dense
+              ></v-select>
 
-      <!-- Encoding - Not yet ready. -->
-      
-      <!--v-list dense>
-        <v-subheader> Encoding Type </v-subheader>
+              <v-btn
+                @click = 'insertBuildProfile'
+                tile
+                small
+                light
+                color = 'rgba(189, 147, 249, 1)'
+                class = '
+                  mb-4
+                '
+                width = '100%'
+              >
+                Create
+              </v-btn>
 
-        <v-list-item-group
-          v-model = 'item'
-          class = '
-            mb-4
-          '
-        >
-          <v-list-item
-            v-for = '(encoding, i) in encodings'
-            :key = 'i'
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text = 'encoding.name'></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+              <!-- Encoding - Not yet ready. -->
+              
+              <!--v-list dense>
+                <v-subheader> Encoding Type </v-subheader>
 
-        </v-list-item-group>
-      </v-list>
+                <v-list-item-group
+                  v-model = 'item'
+                  class = '
+                    mb-4
+                  '
+                >
+                  <v-list-item
+                    v-for = '(encoding, i) in encodings'
+                    :key = 'i'
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title v-text = 'encoding.name'></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
 
-      <v-text-field
-        dense
-        v-model = 'build.encodingIterations'
-        label = 'Encoding Iterations'
-        color = 'rgba(189, 147, 249, 1)'
-      ></v-text-field-->
+                </v-list-item-group>
+              </v-list>
+
+              <v-text-field
+                dense
+                v-model = 'build.encodingIterations'
+                label = 'Encoding Iterations'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field-->
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </div>
 
     <v-divider></v-divider>
 
-    <v-card-subtitle>
-      Build Profiles
-    </v-card-subtitle>
     <div
-      style = '
-        margin-left: 16px;
-        margin-right: 16px;
-        padding-bottom: 16px;
+      class = '
+        ma-4
       '
     >
       <BuildProfiles />

@@ -1,70 +1,117 @@
 <template>
-  <div>
-    <InteractionDialog 
-      style = '
-        margin-right: 408px;
-      '
-    />
-
-    <v-navigation-drawer
-      v-model = 'clientsTable'
-      :right = 'true'
-      fixed
-      :clipped = 'true'
-      :mini-variant = 'false'
-      width = '408'
+  <div
+    class = '
+      ma-4
+    '
+  >
+    <v-row
+      dense    
     >
-      <ClientsTable />
-    </v-navigation-drawer>
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphLine
+          title = 'All platforms'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphLine
+          title = 'Windows'
+          targetPlatform = 'Windows'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphLine
+          title = 'Linux'
+          targetPlatform = 'Linux'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphLine
+          title = 'Mac'
+          targetPlatform = 'MacOS'
+        />
+      </v-col>
+    </v-row>
+    
+    <v-row
+      dense
+    >
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphPolarArea
+          title = 'All platforms'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphPolarArea
+          title = 'Windows'
+          targetPlatform = 'Windows'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphPolarArea
+          title = 'Linux'
+          targetPlatform = 'Linux'
+        />
+      </v-col>
+
+      <v-col
+        cols = '12'
+        sm = '3'
+      >
+        <GraphPolarArea
+          title = 'Mac'
+          targetPlatform = 'MacOS'
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script lang = 'ts'>
 import Vue from 'vue'
 
-import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
-import ClientsTable from '@/components/dashboard/clients-table.vue'
+import GraphPolarArea from '~/components/analytics/graph-polar.vue'
+import GraphLine from '@/components/analytics/graph-line.vue'
 
 export default Vue.extend({
   components: {
-    ClientsTable,
-    InteractionDialog,
+    GraphPolarArea,
+    GraphLine,
   },
 
   mounted: () => {
   },
 
   data: () => ({
-    clientsTable: true,
+
   }),
 })
 </script>
 
-<style lang = 'css'>
-.view {
-  min-width: 100% !important;
-  min-height: 100% !important;
-}
-
-.zombie-view {
-  min-height: 100%;
-  background-color: red;
-}
-
-.tool-title {
-  padding-left: 32px;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.panel-title {
-  padding-left: 32px;
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 0px !important;
-}
-
-.tool-col {
-  padding-top: 0px;
-}
+<style lang = 'css' scoped>
 </style>

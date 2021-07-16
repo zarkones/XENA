@@ -90,6 +90,7 @@
               v-model = 'privateKey'
               dense
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'setPrivateKey'
             ></v-text-field>
           </div>
         </v-card>
@@ -122,6 +123,9 @@ export default Vue.extend({
   }),
 
   methods: {
+    setPrivateKey () {
+      this.$store.dispatch('setPrivateKey', this.privateKey)
+    }
   },
 
   mounted () {
