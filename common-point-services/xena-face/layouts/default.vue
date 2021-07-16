@@ -60,9 +60,14 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-console',
+          icon: 'mdi-view-dashboard',
           title: 'Dashboard',
           to: '/dashboard'
+        },
+        {
+          icon: 'mdi-console',
+          title: 'Interaction',
+          to: '/interaction'
         },
         {
           icon: 'mdi-cube-outline',
@@ -129,6 +134,16 @@ export default {
   background-color: #282a36 !important;
 }
 
+
+/* 
+  Personalization of vuetify.
+ */
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none !important;
+}
+.v-expansion-panel::before {
+  box-shadow: none !important;
+}
 .v-data-table {
   background-color: #282a36 !important;
 }
@@ -160,12 +175,15 @@ export default {
   color: #bd93f9 !important;
 }
 .theme--dark.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: #6272a4 !important;
+  color: #bd93f9 !important;
 }
 .v-icon {
   color: #bd93f9 !important;
 }
 .theme--light.v-btn {
   color: #282a36 !important;
+}
+.theme--dark.v-sheet.v-list {
+  padding-top: 0px;
 }
 </style>

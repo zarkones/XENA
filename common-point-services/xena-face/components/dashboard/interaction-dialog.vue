@@ -24,9 +24,6 @@
         >
           <v-card-text
             v-if = '!clients.length'
-            class = '
-              ma-4
-            '
           >
             Please, select at least one client.
           </v-card-text>
@@ -61,8 +58,7 @@
           v-if = 'item.content == `SYSTEM_MONITOR`'
           flat
         >
-          It ain't done. <br>
-          # Insert the just do it meme here.
+          Feature is disabled. Development is progressing. Consider opening a pull-request for the implementation of system monitoring.
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -127,10 +123,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.zombie-panels-grid {
-  padding: 0px !important;
-}
-
 .v-application p {
   margin-bottom: 0px !important;
 }
