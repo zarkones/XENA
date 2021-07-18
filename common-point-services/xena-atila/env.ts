@@ -33,4 +33,8 @@ export default Env.rules({
 
 	// Heroku.
 	DATABASE_URL: Env.schema.string.optional(),
+
+	// Cross-Origin Resource Sharing Policy.
+	// Comma separated list of hosts derived from the origin header.
+	CORS_POLICY_ALLOWED_ORIGINS: Env.schema.string(),
 })
