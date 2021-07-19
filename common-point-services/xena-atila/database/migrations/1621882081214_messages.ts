@@ -35,6 +35,8 @@ export default class Messages extends BaseSchema {
       table.enum('status', ['SEEN', 'SENT'])
         .notNullable()
 
+      table.index(['to', 'status'])
+
       table.timestamps(true)
     })
   }

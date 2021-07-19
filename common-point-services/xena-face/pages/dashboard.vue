@@ -104,11 +104,13 @@ export default Vue.extend({
     GraphLine,
   },
 
-  mounted: () => {
+  mounted () {
+  },
+
+  methods: {
   },
 
   data: () => ({
-
   }),
 })
 </script>

@@ -17,6 +17,18 @@ class Atila {
     this.axios = axios
   }
 
+  public getCount = (axios: NuxtAxiosInstance) => {
+    return axios({
+      method: 'GET',
+      url: `${process.env.XENA_ATILA_HOST}/clients/stats/count`,
+    })
+    .catch(err => console.warn(err))
+    .then(resp => {
+      if (resp)
+        return resp.data as number[]
+    })
+  }
+
   public getClients = (axios: NuxtAxiosInstance) => {
     return axios({
       method: 'GET',

@@ -32,5 +32,10 @@ Route.group(() => {
   Route.group(() => {
     Route.get('/', 'ClientsController.getMultiple')
     Route.post('/', 'ClientsController.insert')
+
+    Route.group(() => {
+      Route.get('/count', 'ClientsController.getCount')
+    }).prefix('stats')
+
   }).prefix('clients')
 }).prefix('v1')
