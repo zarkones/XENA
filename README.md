@@ -22,7 +22,7 @@ This is my hobby and I'm developing this tool for the sake of learning and under
 This software is not allowed to be used for political purpose.
 This software is not allowed to be used in a commercial purpose of any kind, shape or form without a written permission.
 Selling and redistributing this software is not permited without a written permission.
-This software is not allowed to be used for training of algorithms.
+This software is not allowed to be used for training of algorithms without a written permission.
 
 ### SUPPORT MY RESEARCH ###
 
