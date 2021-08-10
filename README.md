@@ -143,7 +143,7 @@ xena-apep-url === Unknow, but can be predicted, it uses the time in order to pic
 ### RUN STEPS ###
 
 xena-face
-> cd common-point-services/xena-face && yarn && yarn dev
+> cd user-interfaces/xena-face && yarn && yarn dev
 
 xena-atila
 > cd common-point-services/xena-atila && yarn && node ace migration:run && yarn dev
