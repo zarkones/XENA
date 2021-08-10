@@ -9,8 +9,7 @@ class Pyramid {
     this.axios = axios
   }
 
-  public getBuilldProfiles = (axios: NuxtAxiosInstance) => {
-    return axios({
+  public getBuilldProfiles = (axios: NuxtAxiosInstance) => axios({
       method: 'GET',
       url: `${process.env.XENA_PYRAMID_HOST}/build-profiles`,
     })
@@ -19,7 +18,6 @@ class Pyramid {
       if (resp)
         return resp.data
     })
-  }
 
   public insertBuildProfile = (
     axios: NuxtAxiosInstance,
@@ -27,8 +25,7 @@ class Pyramid {
     description: string | null,
     gitUrl: string,
     template: BuildTemplate,
-  ) => {
-    return axios({
+  ) => axios({
       method: 'POST',
       url: `${process.env.XENA_PYRAMID_HOST}/build-profiles`,
       data: {
@@ -46,7 +43,6 @@ class Pyramid {
       if (resp)
         return resp.data
     })
-  }
 }
 
 export default new Pyramid()

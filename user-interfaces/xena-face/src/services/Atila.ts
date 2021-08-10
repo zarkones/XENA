@@ -17,8 +17,7 @@ class Atila {
     this.axios = axios
   }
 
-  public getCount = (axios: NuxtAxiosInstance) => {
-    return axios({
+  public getCount = (axios: NuxtAxiosInstance) => axios({
       method: 'GET',
       url: `${process.env.XENA_ATILA_HOST}/clients/stats/count`,
     })
@@ -27,10 +26,8 @@ class Atila {
       if (resp)
         return resp.data as number[]
     })
-  }
 
-  public getClients = (axios: NuxtAxiosInstance) => {
-    return axios({
+  public getClients = (axios: NuxtAxiosInstance) => axios({
       method: 'GET',
       url: `${process.env.XENA_ATILA_HOST}/clients`,
     })
@@ -39,10 +36,8 @@ class Atila {
       if (resp)
         return resp.data
     })
-  }
 
-  public fetchMessages = (axios: NuxtAxiosInstance, clientId: string, withReplies?: boolean) => {
-    return axios({
+  public fetchMessages = (axios: NuxtAxiosInstance, clientId: string, withReplies?: boolean) => axios({
       method: 'GET',
       url: `${process.env.XENA_ATILA_HOST}/messages`,
       params: {
@@ -55,10 +50,8 @@ class Atila {
       if (resp)
         return resp.data as Message[]
     })
-  }
 
-  public publishMessage = (axios: NuxtAxiosInstance, clientId: string, subject: string, content: string) => {
-    return axios({
+  public publishMessage = (axios: NuxtAxiosInstance, clientId: string, subject: string, content: string) => axios({
       method: 'POST',
       url: `${process.env.XENA_ATILA_HOST}/messages`,
       data: {
@@ -72,7 +65,6 @@ class Atila {
       if (resp)
         return resp.data
     })
-  }
 }
 
 export default new Atila()
