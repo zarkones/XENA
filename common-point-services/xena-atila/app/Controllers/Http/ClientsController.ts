@@ -49,4 +49,12 @@ export default class ClientsController {
   public delete = async ({}: HttpContextContract) => {
     // todo
   }
+
+  public getCount = async ({ response }) => {
+    const count = await Repo.Client.getCount()
+    if (!count.length)
+      return response.noContent()
+
+    return response.ok(count)
+  }
 }

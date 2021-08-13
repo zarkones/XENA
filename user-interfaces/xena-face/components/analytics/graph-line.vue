@@ -41,9 +41,11 @@ import Vue from 'vue'
 
 import { Chart } from 'chart.js'
 
+import * as Service from '@/src/services'
+
 export default Vue.extend({
   data: () => ({
-    botClients: [1,2,4,6,8,12,12,14,16,18,24,75,76,79,80,90,99,88,123,145,122] as number[],
+    botClients: [] as number[],
     chart: null,
     start: '',
     end: '',
@@ -54,6 +56,7 @@ export default Vue.extend({
       required: false,
       type: String,
     },
+
     title: {
       required: true,
       type: String,
@@ -114,9 +117,17 @@ export default Vue.extend({
         }
       })
     },
+
+    async getStatsCount () {
+      const count = await Service.Atila.getCount(this.$axios)
+      if (count.length)
+        this.botClients = count
+    },
   },
   
-  mounted () {
+  async mounted () {
+    await this.getStatsCount()
+
     this.chartInit()
   }
 })
