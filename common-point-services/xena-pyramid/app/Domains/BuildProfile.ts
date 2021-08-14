@@ -31,8 +31,7 @@ export default class BuildProfile {
     this.status = validEnum(status, ['ENABLED', 'DISABLED', 'DELETED'], 'BAD_BUILD_STATUS')
   }
 
-  public static fromJSON = (json) => {
-    return new BuildProfile(
+  public static fromJSON = (json) => new BuildProfile(
       json.id,
       json.name,
       json.description,
@@ -40,5 +39,4 @@ export default class BuildProfile {
       json.config,
       json.status,
     )
-  }
 }

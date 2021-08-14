@@ -25,14 +25,12 @@ export default class WebPage {
     this.$ = load(this.source)
   }
 
-  public static fromJson = (json) => {
-    return new WebPage(
+  public static fromJson = (json) => new WebPage(
       json.headers,
       json.method,
       json.source,
       json.status,
     )
-  }
 
   public keywords = (withHtml?: boolean) => {
     return KeywordExtractor.extract(withHtml ? this.source : this.$.text(), {

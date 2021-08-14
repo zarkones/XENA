@@ -1,5 +1,3 @@
-import Env from '@ioc:Adonis/Core/Env'
-
 import { validString } from './Validators'
 import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'fs/promises'
@@ -19,13 +17,11 @@ export default class Build {
     this.data = data // todo Create a validation method.
   }
 
-  public static fromJSON = (json) => {
-    return new Build(
+  public static fromJSON = (json) => new Build(
       json.id,
       json.buildProfileId,
       json.data,
     )
-  }
 
   get toJSON () {
     return {
