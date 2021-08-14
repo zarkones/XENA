@@ -1,6 +1,6 @@
 type Query = {
-  prefix: string
-  suffix: string
+  prefix?: string
+  suffix?: string
 }
 
 const DefaultQueryOptions: Query = {

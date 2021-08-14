@@ -6,23 +6,18 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ReadersController {
   public injection = async ({ request }: HttpContextContract) => {
-    const {
-      method,
-      url,
-      action,
-      options,
-    } = await request.validate(Validator.Databases.Injection)
+    const { method, url, action, options, } =
+      await request.validate(Validator.Databases.Injection)
 
     switch (action) {
       case 'GET_ALL_DATABASES':
         return Service.WebReader.makeRequest({
-          url: url.replace('SQL_INJECTION', Repo.SQL.Postgers.allDatabases({
-            prefix: options?.prefix ? options.prefix : '',
-            suffix: options?.suffix ? options.suffix : '',
-          })),
           method,
-        })
-          .catch(data => data)
+          url: url.replace('SQL_INJECTION', Repo.SQL.Postgers.allDatabases({
+            prefix: options?.prefix,
+            suffix: options?.suffix,
+          })),
+        }).catch(data => data)
     }
   }
 }
