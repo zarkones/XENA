@@ -30,4 +30,8 @@ Route.group(() => {
     Route.get('/', 'MachinesController.details')
   }).prefix('machines')
 
+  Route.group(() => {
+    Route.post('/', 'DatabasesController.injection')
+  }).prefix('databases')
+
 }).prefix('v1')
