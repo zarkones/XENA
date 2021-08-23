@@ -1,4 +1,4 @@
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/common-point-services/xena-face/static/xena-logo.png)
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/user-interfaces/xena-face/static/xena-logo.png)
 
 ### CONTENT MAP ###
 
@@ -32,7 +32,7 @@ Monero: **87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9Qw
 
 Etherium: **0x787Ba8EF8d75489160C6687296839F947DC62736**
 
-Or you can Star this project. It is free to do so.
+**Or you can Star this project. It is free to do so.**
 
 ### DESCRIPTION ###
 
@@ -158,7 +158,7 @@ xena-sensi
 > cd common-point-services/xena-sensi && yarn && yarn dev
 
 xena-apep
-> cd bot-clients/xena-apep && go run *.go http://127.0.0.1:60666
+> cd bot-clients/xena-apep && go run *.go
 
 xena-anaconda
 > cd bot-clients/xena-anaconda && python3 main.py
