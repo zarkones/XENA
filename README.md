@@ -104,7 +104,7 @@ Features:
 + Modular.
 + Executes shell command.
 
-This features (below) are implemented, but not exposed, which was done on purpose. They are seful only under penetration testing campaigns (hopefully authorized). But the platform doesn't have an authorization strategy inplemented, meaning that messages are not signed and encrypted. So, a professional pen. testing campaign is not possible at the present.
+This features (below) are implemented, but not exposed, which was done on purpose. They are useful only under penetration testing campaigns (hopefully authorized). But the platform doesn't have an authorization strategy inplemented, meaning that messages are not signed and encrypted. So, a professional pen. testing campaign is not possible at the present.
 
 + Basic web parsing.
 + Take a screenshot.
