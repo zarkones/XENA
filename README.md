@@ -46,7 +46,7 @@ With this in mind, I'm confident that the framework covers a large surface area.
 
 **SERVCES & BOT CLIENTS**
 
-> **Xena-Face**
+**Xena-Face**
 
 Web user interface powered by Nuxt.ts and TypeScript. The reason I’ve chosen the web is pure convenience. If a user has to download binaries, that would take some time, I needed the tool to be accessible instantaneously.
 Plus that way no traces are left onto the machine while performing a penetration campaign, AND it is available through the Tor browser, what more could we ask for?
@@ -56,7 +56,7 @@ Features:
 + Issue messages to the bot clients.
 + Display graphs containing data about the platform's state.
 
-> **Xena-Atila**
+**Xena-Atila**
 
 Message broker powered Adonis.ts and TypeScript. Before you ask, I know, maybe a preexisting solution for message distribution would be a better choice, but I argue that this use case is very domain specific.
 I’ve went with Postgres as the storage solution, but you can easily install different SQL drivers in the Adonis framework and go with your favorite database engine. SQL driver installation process is a piece of cake.
@@ -66,7 +66,7 @@ Features:
 + Share information about the clients.
 + Share messages between clients.
 
-> **Xena-Apep**
+**Xena-Apep**
 
 The bot client written in Golang. Why Golang you might be asking, well, cross-platform + the convenience of development. Keep in mind that I do not use Go in the professional capacity, so the code can and will be improved a lot.
 This can be used to drop other clients onto the environment.
@@ -75,7 +75,7 @@ Feature:
 + Cross platform. Native static & dynamic binaries.
 + Executes shell command.
 
-> **Xena-Ra**
+**Xena-Ra**
 
 The bot client written in Adonis.ts and TypeScript.
 Has ability to detect machine's environment and hardware.
@@ -86,7 +86,7 @@ Features:
 + Provides a deep insight into the environment's details.
 + Capable of parsing web traffic in order to find emails, numbers, keywords, etc...
 
-> **Xena-Pyramid**
+**Xena-Pyramid**
 
 Bot builder. We need a manged way of bot building and distribution, plus this service will support binary encoding out of the box in the future. Thus making hash based detection useless.
 I intent this to also be used for building of other kind of software.
@@ -95,7 +95,7 @@ Features:
 + Corss platform. Requires NodeJS.
 + Outsources building of bot client binaries.
 
-> **Xena-Anaconda**
+**Xena-Anaconda**
 
 Post exploitation bot client written in Python3 (typed, but can be improved for sure). Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
 
@@ -115,7 +115,7 @@ This features (below) are implemented, but not exposed, which was done on purpos
 + Subdomain bruteforcing.
 + Take a camera shot.
 
-> **Xena-Varvara**
+**Xena-Varvara**
 
 Bot client powered by Haxe language. It which drops other bot clients provided by Xena-Pyramid. It makes them persistent, but the mechanism is super simple. It modifies the .bashrc file.
 Feel free to open a Pull-Request in order to add other persistency methods.
@@ -126,7 +126,7 @@ Features:
 + Corss platform. Transpiles into multiple targets; PHP, Python, C++, C-Sharp. Meaning that native static & dynamic binaries are possible.
 + Downloads Apep from Pyramid and persists it on the operating system.
 
-> **Xena-Sensi**
+**Xena-Sensi**
 
 Sensi, polite and brilient assistent. It exists to supervise the network and protect it. Utilizes GPT-2 and GPT-3 (if you have a key).
 At the moment GPT-2 is not released, it needs some work and training. You can utilize GPT-3 in the current version.
@@ -135,7 +135,7 @@ Features:
 + Corss platform. Requires NodeJS.
 + GPT 3 gateway.
 
-> **Xena-Axe** [coming soon]
+**Xena-Axe** [coming soon]
 
 Oh, boy... Where to begin. Let me first introduce you to Haxe. An open source high-level strictly-typed programming language with a fast optimizing cross-compiler. It transpiles to: JavaScript, HashLink, Eval, JVM, PHP7, C, Lua, C++, Python, Java, Flash, Neko, ActionScript, PHP5.
 With that all covered, I don't know which machine cannot run at least one of the bot client of this framework.
