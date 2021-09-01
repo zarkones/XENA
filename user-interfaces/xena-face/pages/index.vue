@@ -46,9 +46,9 @@
 
           <v-text-field
             dense
-            type = 'password'
-            v-model = 'password'
-            label = 'Password'
+            type = 'privateKey'
+            v-model = 'privateKey'
+            label = 'Private Key'
             color = 'rgba(189, 147, 249, 1)'
             class = '
               pt-4
@@ -96,19 +96,19 @@ import Vue from 'vue'
 export default Vue.extend({
   data: () => ({
     username: '',
-    password: '',
+    privateKey: '',
 
-    password_start: 0,
+    privateKey_start: 0,
 
     auth_msg: false,
-    auth_msg_payload: 'Wrong username or password.',
+    auth_msg_payload: 'Wrong username or privateKey.',
   }),
 
   methods: {
     async login () {
       this.$auth.loginWith('local', {
         username: this.username,
-        password: this.password,
+        privateKey: this.privateKey,
       })
 
       this.$router.push('/dashboard')

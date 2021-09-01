@@ -1,5 +1,5 @@
 import Client from 'App/Models/Client'
-import Database from '@ioc:Adonis/Lucid/Database'
+import LucidDatabase from '@ioc:Adonis/Lucid/Database'
 
 type ClientStatus = 'ALIVE' | 'DEAD' | 'BANNED'
 
@@ -19,7 +19,7 @@ type Insert = {
   status: ClientStatus
 }
 
-class DatabaseRepo {
+export default new class Database {
   public get = ({ id, status }: Get) => Client.query()
     .select('*')
     .where('id', id)
@@ -37,11 +37,9 @@ class DatabaseRepo {
     .exec()
     .then(clients => clients.map(c => c.serialize()))
 
-  public getCount = () => Database.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
+  public getCount = () => LucidDatabase.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
     .exec()
     .then(result => result.rows.map(unixTime => unixTime.timestamp))
   
   public insert = (payload: Insert) => Client.create(payload).then(client => client.serialize())
 }
-
-export default new DatabaseRepo()

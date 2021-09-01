@@ -70,6 +70,11 @@ export default {
           to: '/interaction'
         },
         {
+          icon: 'mdi-alphabet-piqad',
+          title: 'Offensive Mode',
+          to: '/offense',
+        },
+        {
           icon: 'mdi-cube-outline',
           title: 'Author Studio',
           to: '/author'
