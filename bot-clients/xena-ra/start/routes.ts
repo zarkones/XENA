@@ -34,4 +34,8 @@ Route.group(() => {
     Route.post('/', 'DatabasesController.injection')
   }).prefix('databases')
 
+  Route.group(() => {
+    Route.post('/bruteforce', 'SubdomainsController.bruteForce')
+  }).prefix('subdomains')
+
 }).prefix('v1')
