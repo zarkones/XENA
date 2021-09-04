@@ -33,6 +33,34 @@
 			"response": []
 		},
 		{
+			"name": "DuckDuckGo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"term\": \"example123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/recon/websearch",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"recon",
+						"websearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Machines.details | Details about env. & hardware.",
 			"request": {
 				"method": "GET",
@@ -63,6 +91,117 @@
 					"path": [
 						"v1",
 						"file-systems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Database.sqlInjection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"http://127.0.0.1:3333/asdjoaishfaiusfiuasfiuahsfuiah?id=SQL_INJECTION\",\n    \"method\": \"GET\",\n    \"action\": \"GET_ALL_DATABASES\",\n    \"options\": {\n        \"prefix\": \"0';\",\n        \"suffix\": \";--\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/databases",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"databases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subdomains by Bruteforce",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"domain\": \"duckduckgo.com\",\n    \"dict\": [\n        \"test\",\n        \"stage\",\n        \"help\",\n        \"static\",\n        \"www\",\n        \"asdasdasdasdasd\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/recon/subdomain-bruteforce",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"recon",
+						"subdomain-bruteforce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subdomains by Sublist3r",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"domain\": \"duckduckgo.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/recon/sublist3r",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"recon",
+						"sublist3r"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nmap",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"192.168.1.1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}/v1/recon/nmap",
+					"host": [
+						"{{xena-ra-url}}"
+					],
+					"path": [
+						"v1",
+						"recon",
+						"nmap"
 					]
 				}
 			},
