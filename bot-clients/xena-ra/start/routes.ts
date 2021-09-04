@@ -35,7 +35,8 @@ Route.group(() => {
   }).prefix('databases')
 
   Route.group(() => {
-    Route.post('/bruteforce', 'SubdomainsController.bruteForce')
-  }).prefix('subdomains')
+    Route.post('/subdomain-bruteforce', 'SubdomainsController.bruteForce')
+    Route.post('/sublist3r', 'SubdomainsController.sublist3r')
+  }).prefix('recon')
 
 }).prefix('v1')
