@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-content>
+    <v-card-text>
         <v-text-field
         dense
         v-model = 'address'
@@ -8,10 +8,13 @@
         label = 'Address'
         color = 'rgba(189, 147, 249, 1)'
         @change = 'submit'
+        :loading = 'loading'
       >
         Address
       </v-text-field>
-    </v-card-content>
+
+      {{ result }}
+    </v-card-text>
   </v-card>
 </template>
 
@@ -23,11 +26,15 @@ import * as Service from '@/src/services'
 export default Vue.extend({
   data: () => ({
     address: '',
+    result: '',
+    loading: false,
   }),
 
   methods: {
-    submit: () => {
-      
+    async submit () {
+      this.loading = true
+      this.result = await Service.Ra.nmap(this.$axios, this.address)
+      this.loading = false
     },
   },
 })
