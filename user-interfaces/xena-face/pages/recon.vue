@@ -33,6 +33,14 @@
             <Nmap
               v-if = 'tool.name == "Nmap"'
             />
+
+            <Sublist3r
+              v-if = 'tool.name == "Sublist3r"'
+            />
+
+            <SubdomainBruteforcer
+              v-if = 'tool.name == "Subdomain Brute-Forcer"'
+            />
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -45,14 +53,14 @@
 import Vue from 'vue'
 
 import Nmap from '@/components/tools/nmap.vue'
-
-import EventBus from '@/src/EventBus'
-
-import * as Service from '@/src/services'
+import Sublist3r from '@/components/tools/sublist3r.vue'
+import SubdomainBruteforcer from '@/components/tools/subdomain-bruteforcer.vue'
 
 export default Vue.extend({
   components: {
     Nmap,
+    Sublist3r,
+    SubdomainBruteforcer,
   },
 
   data: () => ({

@@ -71,13 +71,13 @@ export default {
         },
         {
           icon: 'mdi-alphabet-piqad',
-          title: 'Offensive Mode',
-          to: '/offense',
+          title: 'Reconnaissance',
+          to: '/recon',
         },
         {
           icon: 'mdi-cube-outline',
-          title: 'Author Studio',
-          to: '/author'
+          title: 'Cloud Build',
+          to: '/build'
         },
         {
           icon: 'mdi-wrench',

@@ -10,9 +10,13 @@ export default class SubdomainsController {
   public sublist3r = async ({ request, response }: HttpContextContract) => {
     const { domain } = await request.validate(Validator.Subdomains.Sublist3r)
 
-    const command = quote(['sublist3r', '-d', domain])
+    const command = quote(['sublist3r', '--no-color', '-d', domain])
 
-    const rawOutput = execSync(command).toString('utf-8')
+    const rawOutput = execSync(command)
+      .toString('utf-8')
+      .split('Total Unique Subdomains ')[1]
+      .split('\n')
+      .slice(1)
 
     return response.ok(rawOutput)
   }
