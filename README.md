@@ -166,6 +166,8 @@ And an operating system of your choice. The framework is fully cross-platform.
 
 ![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/interaction-with-bot-clients.png)
 
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/recon.png)
+
 ![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/author-studio-aka-bot-builder.png)
 
 ![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/settings-page.png)
