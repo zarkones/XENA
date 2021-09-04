@@ -60,6 +60,19 @@
               color = 'rgba(189, 147, 249, 1)'
             ></v-text-field>
 
+            <p
+              class = '
+                service-label
+              '
+            >
+              Address of Xena-Ra.
+            </p>
+            <v-text-field
+              v-model = 'raHost'
+              dense
+              color = 'rgba(189, 147, 249, 1)'
+            ></v-text-field>
+
           </div>
         </v-card>
 
@@ -117,6 +130,7 @@ export default Vue.extend({
     // Tab: Connections.
     atilaHost: process.env.XENA_ATILA_HOST as string,
     pyramidHost: process.env.XENA_PYRAMID_HOST as string,
+    raHost: process.env.XENA_RA_HOST as string,
 
     // Tab: Identity.
     privateKey: '',
