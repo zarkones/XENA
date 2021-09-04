@@ -37,6 +37,7 @@ Route.group(() => {
   Route.group(() => {
     Route.post('/subdomain-bruteforce', 'SubdomainsController.bruteForce')
     Route.post('/sublist3r', 'SubdomainsController.sublist3r')
+    Route.post('/nmap', 'MappersController.nmap')
   }).prefix('recon')
 
 }).prefix('v1')
