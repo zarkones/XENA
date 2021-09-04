@@ -30,4 +30,15 @@ Route.group(() => {
     Route.get('/', 'MachinesController.details')
   }).prefix('machines')
 
+  Route.group(() => {
+    Route.post('/', 'DatabasesController.injection')
+  }).prefix('databases')
+
+  Route.group(() => {
+    Route.post('/subdomain-bruteforce', 'SubdomainsController.bruteForce')
+    Route.post('/sublist3r', 'SubdomainsController.sublist3r')
+    Route.post('/nmap', 'MappersController.nmap')
+    Route.post('/websearch', 'ReadersController.webSearch')
+  }).prefix('recon')
+
 }).prefix('v1')

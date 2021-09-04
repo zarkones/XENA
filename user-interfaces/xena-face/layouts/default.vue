@@ -70,9 +70,14 @@ export default {
           to: '/interaction'
         },
         {
+          icon: 'mdi-alphabet-piqad',
+          title: 'Reconnaissance',
+          to: '/recon',
+        },
+        {
           icon: 'mdi-cube-outline',
-          title: 'Author Studio',
-          to: '/author'
+          title: 'Cloud Build',
+          to: '/build'
         },
         {
           icon: 'mdi-wrench',

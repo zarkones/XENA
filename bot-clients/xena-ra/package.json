@@ -10,6 +10,7 @@
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",
     "@types/cheerio": "^0.22.29",
+    "@types/shell-quote": "^1.7.1",
     "adonis-preset-ts": "^2.1.0",
     "obfuscator": "^0.5.4",
     "pino-pretty": "^5.0.2",
@@ -28,6 +29,7 @@
     "libphonenumber-js": "^1.9.19",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
+    "shell-quote": "^1.7.2",
     "source-map-support": "^0.5.19",
     "systeminformation": "^5.7.7"
   }

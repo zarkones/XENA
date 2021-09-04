@@ -8,7 +8,7 @@
         purple-color
       '
     >
-      Author Studio
+      Cloud Build
     </v-card-title>
 
     <v-card-text>

@@ -17,11 +17,9 @@ export default class Client {
     this.status = validEnum(status, ['ALIVE', 'DEAD', 'BANNED'], 'BAD_CLIENT_STATUS')
   }
 
-  public static fromJSON = (json) => {
-    return new Client(
+  public static fromJSON = (json) => new Client(
       json.id,
       json.identificationKey,
       json.status,
     )
-  }
 }
