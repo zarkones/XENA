@@ -16,6 +16,7 @@
       v-slot:top
     >
       <v-text-field
+        outlined
         dense
         v-model = 'search'
         label = 'Search'

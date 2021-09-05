@@ -13,7 +13,7 @@
         Domain
       </v-text-field>
 
-      <div
+      <!--div
         v-if = 'subdomains && subdomains.length'
       >
         <p
@@ -22,7 +22,40 @@
         >
           {{ name }}
         </p>
-      </div>
+      </div-->
+
+    <v-data-table
+      dense
+      :headers = 'headers'
+      :items = 'subdomains'
+      item-key = 'name'
+      :search = 'search'
+      color = 'rgba(189, 147, 249, 1)'
+      flat
+      show-select
+      v-model = 'selected'
+      @input = 'interactionDialogUpdateClients'
+      :single-select = 'true'
+    >
+      <template
+        v-slot:top
+      >
+        <v-text-field
+          outlined
+          dense
+          v-model = 'search'
+          label = 'Search'
+          color = 'rgba(189, 147, 249, 1)'
+        ></v-text-field>
+      </template>
+
+      <!--  -->
+
+      <template
+        v-slot:footer
+      >
+      </template>
+    </v-data-table>
 
     </v-card-text>
   </v-card>
@@ -38,12 +71,19 @@ export default Vue.extend({
     domain: '',
     subdomains: [] as string[],
     loading: false,
+
+    search: '',
+
+    headers: [
+      { text: 'name', value: 'name' },
+    ]
   }),
 
   methods: {
     async submit () {
       this.loading = true
       this.subdomains = await Service.Ra.sublist3r(this.$axios, this.domain)
+        .then(subdomains => subdomains.map(name => ({ name }) ))
       this.loading = false
     },
   },
