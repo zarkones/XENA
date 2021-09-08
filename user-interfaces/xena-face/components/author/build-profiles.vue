@@ -32,7 +32,7 @@
           @click = 'downloadBuild(buildProfile.id)'
           tile
           small
-          light
+          outlined
           color = 'rgba(189, 147, 249, 1)'
           class = '
             mt-4

@@ -10,7 +10,7 @@ type Message = {
   replies: Message[]
 }
 
-class Atila {
+export default new class Atila {
   public readonly axios: NuxtAxiosInstance
 
   constructor (axios?: NuxtAxiosInstance) {
@@ -66,5 +66,3 @@ class Atila {
         return resp.data
     })
 }
-
-export default new Atila()

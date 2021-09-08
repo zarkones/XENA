@@ -2,7 +2,7 @@ import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
 export type BuildTemplate = 'XENA_APEP' | 'XENA_RA'
 
-class Pyramid {
+export default new class Pyramid {
   public readonly axios: NuxtAxiosInstance
 
   constructor (axios?: NuxtAxiosInstance) {
@@ -44,5 +44,3 @@ class Pyramid {
         return resp.data
     })
 }
-
-export default new Pyramid()
