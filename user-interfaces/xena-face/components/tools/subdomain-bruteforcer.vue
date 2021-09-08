@@ -21,7 +21,7 @@
         :loading = 'loading'
       ></v-text-field>
         
-      <div
+      <!--div
         v-if = 'result && result.alive && result.dead'
       >
         Alive:
@@ -41,7 +41,9 @@
         >
           {{ name }}
         </p>
-      </div>
+      </div-->
+
+      
 
     </v-card-text>
     

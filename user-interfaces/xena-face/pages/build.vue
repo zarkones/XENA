@@ -59,7 +59,7 @@
                 @click = 'insertBuildProfile'
                 tile
                 small
-                light
+                outlined
                 color = 'rgba(189, 147, 249, 1)'
                 class = '
                   mb-4

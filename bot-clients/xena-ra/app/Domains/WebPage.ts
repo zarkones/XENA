@@ -1,4 +1,5 @@
 import KeywordExtractor from 'keyword-extractor'
+import urlParse from 'url-parse'
 
 import { validNumber, validString } from './Validators'
 import { CheerioAPI, load } from 'cheerio'
@@ -26,11 +27,11 @@ export default class WebPage {
   }
 
   public static fromJson = (json) => new WebPage(
-      json.headers,
-      json.method,
-      json.source,
-      json.status,
-    )
+    json.headers,
+    json.method,
+    json.source,
+    json.status,
+  )
 
   public keywords = (withHtml?: boolean) => {
     return KeywordExtractor.extract(withHtml ? this.source : this.$.text(), {
@@ -42,4 +43,8 @@ export default class WebPage {
   }
 
   public phoneNumbers = () => findPhoneNumbersInText(this.source).map(phone => phone.number)
+
+  public static parseUrl = (url: string) => {
+    return new urlParse(url)
+  }
 }

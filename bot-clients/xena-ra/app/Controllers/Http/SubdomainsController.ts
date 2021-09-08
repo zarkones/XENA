@@ -17,8 +17,9 @@ export default class SubdomainsController {
       .split('Total Unique Subdomains ')[1]
       .split('\n')
       .slice(1)
+      .filter(name => name.length)
 
-    return response.ok(rawOutput)
+    return response.ok([ ...new Set(rawOutput) ])
   }
 
   public bruteForce = async ({ request, response }: HttpContextContract) => {

@@ -9,6 +9,9 @@ const DefaultQueryOptions: Query = {
 }
 
 export default class Postgres {
+  public static readonly pgSleep = (options: Query = DefaultQueryOptions, sleepAmount: number) =>
+    `${options.prefix}SELECT PG_SLEEP(${sleepAmount})${options.suffix}`
+
   public static readonly informationSchemaTables = (options: Query = DefaultQueryOptions) =>
     `${options.prefix}SELECT * FROM information_schema.tables${options.suffix}`
 

@@ -18,7 +18,7 @@ export default class CorsPolicy {
 
     if (originHeader && !allowedOrigins.includes(originHeader)) {
       logger.warn(`${request.ips().join(', ')} have requested a resource at ${request.url()} with a non-allowed origin of '${originHeader}'.`)
-      return response.badRequest({ success: false, message: 'Origin header value not allowed.' })
+      return response.badRequest({ success: false, message: 'CORS Error.' })
     }
 
     await next()
