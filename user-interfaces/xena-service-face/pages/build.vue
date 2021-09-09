@@ -1,7 +1,6 @@
 <template>
   <v-card
     tile
-    flat
   >
     <v-card-title
       class = '
@@ -17,7 +16,9 @@
     </v-card-text>
 
     <div class = 'ma-4'>
-      <v-expansion-panels>
+      <v-expansion-panels
+        tile
+      >
         <v-expansion-panel>
           <v-expansion-panel-header>
             Create a build profile.

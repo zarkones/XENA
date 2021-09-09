@@ -4,11 +4,11 @@
 
 1. [DISCLAIMER](#disclaimer)
 2. [SUPPORT MY RESEARCH](#support-my-research)
-3. [DESCRIPTION](#description)
-4. [REQUIREMENTS](#requirements)
-5. [GALLERY](#gallery)
-6. [POSTMAN COLLECTIONS](#postman-collections)
-7. [RUN STEPS](#run-steps)
+3. [RUN STEPS](#run-steps)
+4. [GALLERY](#gallery)
+5. [DESCRIPTION](#description)
+6. [REQUIREMENTS](#requirements)
+7. [POSTMAN COLLECTIONS](#postman-collections)
 8. [BUILD STEPS](#build-steps)
 9. [DEVELOPMENT LOGS](#development-logs)
 10. [WHOAMI?](#whoami)
@@ -33,6 +33,46 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 **Etherium:** 0x787Ba8EF8d75489160C6687296839F947DC62736
 
 **Or you can Star this project. It is free to do so.**
+
+### RUN STEPS ###
+
+xena-face
+> cd user-interfaces/service-face && yarn && yarn dev
+
+xena-atila
+> cd services/xena-service-atila && yarn && node ace migration:run && yarn dev
+
+xena-pyramid
+> cd services/xena-service-pyramid && yarn && node ace migration:run && yarn dev
+
+xena-ra
+> cd services/xena-service-ra && yarn && yarn dev
+
+xena-sensi
+> cd services/xena-service-sensi && yarn && yarn dev
+
+xena-apep
+> cd bot-clients/xena-bot-apep && go run *.go
+
+xena-anaconda
+> cd bot-clients/xena-bot-anaconda && python3 main.py
+
+xena-varvara
+> cd bot-clients/xena-bot-varvara && sh run.sh
+
+### GALLERY ###
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/login-page.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/disabled-functionality.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/interaction-with-bot-clients.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/recon.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/author-studio-aka-bot-builder.png)
+
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/settings-page.png)
 
 ### DESCRIPTION ###
 
@@ -156,21 +196,6 @@ And an operating system of your choice. The framework is fully cross-platform.
 - Linux distributions can easily meet all requirements. This is the recommended environment, but it's not a requirement.
 - MacOS is a capable Unix family member, I've never used it, but I assume the platform should run without a major issue.
 - FreeBSD's story goes the same way as for MacOS, never used it, but I do not see a reason why it couldn't support the framework.
- 
-
-### GALLERY ###
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/login-page.png)
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/disabled-functionality.png)
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/interaction-with-bot-clients.png)
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/recon.png)
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/author-studio-aka-bot-builder.png)
-
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/settings-page.png)
 
 ### POSTMAN COLLECTIONS ###
 
@@ -189,32 +214,6 @@ xena-ra-url  ===  http://127.0.0.1:60696
 xena-sensi-url  ===  http://127.0.0.1:60699
 
 xena-apep-url === Unknow, but can be predicted, it uses the time in order to pick a different port every day.
-
-### RUN STEPS ###
-
-xena-face
-> cd user-interfaces/xena-face && yarn && yarn dev
-
-xena-atila
-> cd common-point-services/xena-atila && yarn && node ace migration:run && yarn dev
-
-xena-pyramid
-> cd common-point-services/xena-pyramid && yarn && node ace migration:run && yarn dev
-
-xena-sensi
-> cd common-point-services/xena-sensi && yarn && yarn dev
-
-xena-apep
-> cd bot-clients/xena-apep && go run *.go
-
-xena-anaconda
-> cd bot-clients/xena-anaconda && python3 main.py
-
-xena-varvara
-> cd bot-clients/xena-varvara && sh run.sh
-
-xena-ra
-> cd bot-clients/xena-ra && yarn && yarn dev
 
 ### BUILD STEPS ###
 
