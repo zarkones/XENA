@@ -41,4 +41,8 @@ Route.group(() => {
     Route.post('/websearch', 'ReadersController.webSearch')
   }).prefix('recon')
 
+  Route.group(() => {
+    Route.post('/sql-injection', 'SqlInjectionsController.scan')
+  }).prefix('scans')
+
 }).prefix('v1')

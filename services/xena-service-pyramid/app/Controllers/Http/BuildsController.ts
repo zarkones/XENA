@@ -87,7 +87,7 @@ export default class BuildsController {
     // Build the binary.
     const buildOutput = (() => {
       const buildCommand =
-        `cd ${Service.Git.pathPrefix}${buildId}/bot-clients/xena-apep && go build` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
+        `cd ${Service.Git.pathPrefix}${buildId}/bot-clients/xena-bot-apep && go build` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
       try {
         return Helper.Shell.exe(buildCommand)
       } catch (e) {
@@ -99,7 +99,7 @@ export default class BuildsController {
     if (buildOutput == 'ERROR')
       throw Error('Unable to build.')
 
-    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bot-clients/xena-apep/xena-apep`
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bot-clients/xena-bot-apep/xena-apep`
 
     // Base64 binary.
     const base64Binary = await Domain.Build.getBinary(botLocation)
