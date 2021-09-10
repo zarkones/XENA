@@ -12,14 +12,22 @@ export default class SubdomainsController {
 
     const command = quote(['sublist3r', '--no-color', '-d', domain])
 
-    const rawOutput = execSync(command)
-      .toString('utf-8')
-      .split('Total Unique Subdomains ')[1]
-      .split('\n')
-      .slice(1)
-      .filter(name => name.length)
+    const subdomains = (() => {
+      try {
+        return execSync(command)
+          .toString('utf-8')
+          .split('Total Unique Subdomains ')[1]
+          .split('\n')
+          .slice(1)
+          .filter(name => name.length)
+      } catch {
+        return []
+      }
+    })()
 
-    return response.ok([ ...new Set(rawOutput) ])
+    return subdomains.length
+      ? response.ok([ ...new Set(subdomains) ])
+      : response.noContent()
   }
 
   public bruteForce = async ({ request, response }: HttpContextContract) => {

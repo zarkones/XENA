@@ -36,7 +36,6 @@
       flat
       show-select
       v-model = 'selected'
-      @input = 'interactionDialogUpdateClients'
       :single-select = 'true'
     >
       <template
@@ -73,6 +72,7 @@ export default Vue.extend({
     domain: '',
     subdomains: [] as string[],
     loading: false,
+    selected: [] as string[],
 
     search: '',
 
@@ -84,9 +84,11 @@ export default Vue.extend({
   methods: {
     async submit () {
       this.loading = true
-      this.subdomains = await Service.Ra.sublist3r(this.$axios, this.domain)
-        .then(subdomains => subdomains.map(name => ({ name }) ))
+      const subdomains = await Service.Ra.sublist3r(this.$axios, this.domain)
       this.loading = false
+
+      if (subdomains)
+        this.subdomains = subdomains.map(name => ({ name }))
     },
   },
 })
