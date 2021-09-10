@@ -15,7 +15,13 @@
       for creation of bot clients and other software. 
     </v-card-text>
 
-    <div class = 'ma-4'>
+    <div
+      class = '
+        ml-4
+        mr-4
+        mb-4
+      '
+    >
       <v-expansion-panels
         tile
       >
@@ -105,11 +111,13 @@
       </v-expansion-panels>
     </div>
 
-    <v-divider></v-divider>
+    <!--v-divider></v-divider-->
 
     <div
       class = '
-        ma-4
+        ml-4
+        mr-4
+        mb-4
       '
     >
       <BuildProfiles />

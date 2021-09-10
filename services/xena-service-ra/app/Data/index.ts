@@ -1,5 +1,5 @@
-import * as Sql from './Sql'
+import * as Worldlists from './Wordlists'
 
 export {
-  Sql,
+  Worldlists,
 }

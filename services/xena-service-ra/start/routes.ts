@@ -43,6 +43,7 @@ Route.group(() => {
 
   Route.group(() => {
     Route.post('/sql-injection', 'SqlInjectionsController.scan')
+    Route.post('/web-fuzzer', 'WebFuzzersController.scan')
   }).prefix('scans')
 
 }).prefix('v1')
