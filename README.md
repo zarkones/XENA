@@ -1,4 +1,4 @@
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/user-interfaces/xena-face/static/xena-logo.png)
+![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/user-interfaces/xena-service-face/static/xena-logo.png)
 
 ### CONTENT MAP ###
 
