@@ -38,7 +38,7 @@ export default class {
 			'LINK',
 			'UNLINK',
 		] as const),
-		regularInput: schema.array.optional().members(schema.string()),
+		wordlist: schema.array.optional().members(schema.string()),
   })
 
 	/**

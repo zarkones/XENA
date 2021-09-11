@@ -8,12 +8,12 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class WebFuzzersController {
   public scan = async ({ request, response }: HttpContextContract) => {
-    const { url, method, regularInput } = await request.validate(Validator.WebFuzzers.Scan)
+    const { url, method, wordlist } = await request.validate(Validator.WebFuzzers.Scan)
 
     const parsedUrl = Domain.WebPage.parseUrl(url)
 
-    const responses = (regularInput
-      ? [ ...Data.Worldlists.Basic, ...regularInput ]
+    const responses = (wordlist
+      ? [ ...Data.Worldlists.Basic, ...wordlist ]
       : Data.Worldlists.Basic)
       .map(payload => axios
       .request({
