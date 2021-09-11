@@ -14,7 +14,7 @@
 
       <v-expansion-panel-content>
         <WebFuzzer
-          v-if = 'tool.name == "WebFuzzer"'
+          v-if = 'tool.name == "Web Fuzzer"'
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -34,7 +34,7 @@ export default Vue.extend({
   data: () => ({
     tools: [
       {
-        name: 'WebFuzzer',
+        name: 'Web Fuzzer',
         description: 'Web URL Fuzzer.',
       },
     ] as const

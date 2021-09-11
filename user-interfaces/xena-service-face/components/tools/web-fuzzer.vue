@@ -18,6 +18,7 @@
         label = 'Request method...'
         outlined
         dense
+        :loading = 'loading'
       ></v-select>
 
       <v-text-field
@@ -42,6 +43,7 @@
           mt-4
         '
         width = '100%'
+        :loading = 'loading'
       >
         Start
       </v-btn>
