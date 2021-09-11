@@ -71,8 +71,8 @@ export default {
         },
         {
           icon: 'mdi-alphabet-piqad',
-          title: 'Reconnaissance',
-          to: '/recon',
+          title: 'Tools',
+          to: '/tools',
         },
         {
           icon: 'mdi-cube-outline',

@@ -19,7 +19,7 @@
         :key = 'item.tab'
       >
         <v-card
-          v-if = 'item.content == `SHELL`'
+          v-if = 'item.content == "SHELL"'
           flat
         >
           <v-card-text
@@ -55,7 +55,7 @@
         </v-card>
 
         <v-card
-          v-if = 'item.content == `SYSTEM_MONITOR`'
+          v-if = 'item.content == "SYSTEM_MONITOR"'
           flat
         >
           Feature is disabled. Development is progressing. Consider opening a pull-request for the implementation of system monitoring.
