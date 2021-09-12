@@ -56,7 +56,7 @@
 
               <v-select
                 v-model = 'buildTemplate'
-                :items = 'buildTemplates'
+                :items = 'buildTemplates.map(t => t.replaceAll("_", " "))'
                 label = 'Build templates'
                 outlined
                 dense
@@ -158,8 +158,9 @@ export default Vue.extend({
 
     buildTemplate: '',
     buildTemplates: [
-      'XENA_RA',
-      'XENA_APEP',
+      'XENA_BOT_ANACONDA',
+      'XENA_BOT_APEP',
+      'XENA_BOT_VARVARA',
     ],
   }),
 
@@ -170,7 +171,7 @@ export default Vue.extend({
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,
-        this.buildTemplate,
+        this.buildTemplate.replaceAll(' ', '_'),
       ).then(() => EventBus.$emit('updateBuildProfiles'))
     }
   },

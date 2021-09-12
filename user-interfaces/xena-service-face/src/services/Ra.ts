@@ -8,6 +8,19 @@ export type BruteForcedSubdomains = {
 export default new class Ra {
   public readonly axios: NuxtAxiosInstance
 
+  public readonly webMethods = [
+    'GET',
+    'DELETE',
+    'HEAD',
+    'OPTIONS',
+    'POST',
+    'PUT',
+    'PATCH',
+    'PURGE',
+    'LINK',
+    'UNLINK',
+  ]
+
   constructor (axios?: NuxtAxiosInstance) {
     this.axios = axios
   }
@@ -52,5 +65,20 @@ export default new class Ra {
     .then(resp => {
       if (resp)
         return resp.data as string
+    })
+
+  public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, worldlist?: string[]) => axios({
+      method: 'POST',
+      url: `${process.env.XENA_RA_HOST}/scans/web-fuzzer`,
+      data: {
+        url,
+        method,
+        worldlist,
+      },
+    })
+    .catch(err => console.warn(err))
+    .then(resp => {
+      if (resp)
+        return resp.data
     })
 }
