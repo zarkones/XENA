@@ -51,8 +51,12 @@
       <div
         v-for = '(response, index) in result'
         :key = 'index'
+        class = '
+          mt-4
+        '
       >
-        {{ response.url }}
+        Url: {{ response.url }} <br>
+        Status: {{ response.status }} <br>
       </div>
     </v-card-text>
   </v-card>
