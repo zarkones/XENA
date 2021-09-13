@@ -57,12 +57,16 @@
           ></v-text-field>
 
           <v-btn
-            block
-            text
+            @click = 'login'
             tile
             small
+            outlined
             color = 'rgba(189, 147, 249, 1)'
-            @click = 'login'
+            class = '
+              mt-4
+            '
+            width = '100%'
+            plain = 'false'
           >
             Login
           </v-btn>

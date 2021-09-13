@@ -48,7 +48,12 @@
         Start
       </v-btn>
 
-      {{ result }}
+      <div
+        v-for = '(response, index) in result'
+        :key = 'index'
+      >
+        {{ response.url }}
+      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -61,7 +66,7 @@ import * as Service from '@/src/services'
 export default Vue.extend({
   data: () => ({
     url: '',
-    result: '',
+    result: [],
     loading: false,
 
     wordlist: [] as string[],

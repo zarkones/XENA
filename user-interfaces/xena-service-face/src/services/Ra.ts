@@ -19,7 +19,7 @@ export default new class Ra {
     'PURGE',
     'LINK',
     'UNLINK',
-  ]
+  ] as const
 
   constructor (axios?: NuxtAxiosInstance) {
     this.axios = axios
@@ -67,13 +67,13 @@ export default new class Ra {
         return resp.data as string
     })
 
-  public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, worldlist?: string[]) => axios({
+  public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, wordlist?: string[]) => axios({
       method: 'POST',
       url: `${process.env.XENA_RA_HOST}/scans/web-fuzzer`,
       data: {
         url,
         method,
-        worldlist,
+        wordlist,
       },
     })
     .catch(err => console.warn(err))

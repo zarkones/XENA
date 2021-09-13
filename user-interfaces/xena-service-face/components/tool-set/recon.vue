@@ -55,7 +55,7 @@ export default Vue.extend({
       },
       {
         name: 'Subdomain Brute-Forcer',
-        description: 'Enumerate reachable domains with worldlist.',
+        description: 'Enumerate reachable domains with wordlist.',
       },
     ] as const
   }),
