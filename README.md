@@ -30,7 +30,7 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 
 **Monero:** 87RZRSuASU4cdVXWSXvxLUQ84MpnbpxNHfkucSP9gjNE4TzCUSWT5H7fYunk7JLGPpE9QwHXjZQtaNpeyuKsB8WWLGz13ZJ
 
-**Etherium:** 0x787Ba8EF8d75489160C6687296839F947DC62736
+**Ethereum:** 0x787Ba8EF8d75489160C6687296839F947DC62736
 
 **Or you can Star this project. It is free to do so.**
 
