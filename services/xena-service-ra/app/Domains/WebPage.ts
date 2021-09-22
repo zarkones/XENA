@@ -46,6 +46,8 @@ export default class WebPage {
       method: this.method,
       headers: this.headers,
       source: this.source,
+      keywords: this.keywords(),
+      phoneNumbers: this.phoneNumbers(),
     }
   }
 
