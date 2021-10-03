@@ -34,6 +34,8 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 
 **Or you can Star this project. It is free to do so.**
 
+[xena.network](http://xena.network)
+
 ### RUN STEPS ###
 
 xena-face
