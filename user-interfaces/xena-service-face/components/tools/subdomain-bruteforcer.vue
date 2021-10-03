@@ -23,7 +23,7 @@
         :loading = 'loading'
       ></v-text-field>
         
-      <!--div
+      <div
         v-if = 'result && result.alive && result.dead'
       >
         Alive:
@@ -43,7 +43,7 @@
         >
           {{ name }}
         </p>
-      </div-->
+      </div>
 
       
 
@@ -70,9 +70,13 @@ export default Vue.extend({
 
   methods: {
     async submit () { 
-      if (this.domain || this.rawDict && this.rawDirct.length) {
+      if (this.domain && (this.rawDict && this.rawDirct?.length)) {
         this.loading = true
-        this.result = await Service.Ra.subdomainBruteforce(this.$axios, this.domain, this.rawDict.split(','))
+        const result = await Service.Ra.subdomainBruteforce(this.$axios, this.domain, this.rawDict.split(','))
+        if (!result)
+          return
+        
+        this.result = result
         this.loading = false
       }
     },

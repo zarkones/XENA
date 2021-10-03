@@ -33,6 +33,7 @@
           <v-expansion-panel-content>
             <div>
               <v-text-field
+                outlined
                 dense
                 v-model = 'build.name'
                 label = 'Name'
@@ -40,6 +41,7 @@
               ></v-text-field>
 
               <v-text-field
+                outlined
                 dense
                 v-model = 'build.description'
                 label = 'Description'
@@ -47,6 +49,15 @@
               ></v-text-field>
 
               <v-text-field
+                outlined
+                dense
+                v-model = 'build.configHost'
+                label = 'C2 Host'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field>
+
+              <v-text-field
+                outlined
                 dense
                 v-model = 'build.gitUrl'
                 label = 'Git URL'
@@ -54,13 +65,13 @@
                 color = 'rgba(189, 147, 249, 1)'
               ></v-text-field>
 
-              <v-select
+              <!--v-select
                 v-model = 'buildTemplate'
                 :items = 'buildTemplates.map(t => t.replaceAll("_", " "))'
                 label = 'Build templates'
                 outlined
                 dense
-              ></v-select>
+              ></v-select-->
 
               <v-btn
                 @click = 'insertBuildProfile'
@@ -75,6 +86,8 @@
               >
                 Create
               </v-btn>
+
+              <BotSelection />
 
               <!-- Encoding - Not yet ready. -->
               
@@ -130,6 +143,7 @@
 import Vue from 'vue'
 
 import BuildProfiles from '@/components/author/build-profiles.vue'
+import BotSelection from '@/components/author/bot-selection.vue'
 
 import * as Service from '@/src/services'
 
@@ -138,6 +152,7 @@ import EventBus from '@/src/EventBus'
 export default Vue.extend({
   components: {
     BuildProfiles,
+    BotSelection,
   },
 
   data: () => ({
@@ -166,17 +181,20 @@ export default Vue.extend({
 
   methods: {
     async insertBuildProfile () {
-      const newBuildProfile = await Service.Pyramid.insertBuildProfile(
+      await Service.Pyramid.insertBuildProfile(
         this.$axios,
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,
-        this.buildTemplate.replaceAll(' ', '_'),
+        this.buildTemplate,
       ).then(() => EventBus.$emit('updateBuildProfiles'))
     }
   },
 
   mounted () {
+    EventBus.$on('updateBuildTemplate', (template) => {
+      this.buildTemplate = template
+    })
   },
 })
 </script>

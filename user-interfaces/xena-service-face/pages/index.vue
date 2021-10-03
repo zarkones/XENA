@@ -35,6 +35,7 @@
 
           <v-text-field
             dense
+            outlined
             v-model = 'username'
             label = 'Username'
             color = 'rgba(189, 147, 249, 1)'
@@ -46,12 +47,12 @@
 
           <v-text-field
             dense
+            outlined
             type = 'privateKey'
             v-model = 'privateKey'
             label = 'Private Key'
             color = 'rgba(189, 147, 249, 1)'
             class = '
-              pt-4
               mx-4
             '
           ></v-text-field>
@@ -63,7 +64,6 @@
             outlined
             color = 'rgba(189, 147, 249, 1)'
             class = '
-              mt-4
             '
             width = '100%'
             plain = 'false'

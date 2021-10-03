@@ -44,6 +44,7 @@
             <v-text-field
               v-model = 'atilaHost'
               dense
+              outlined
               color = 'rgba(189, 147, 249, 1)'
             ></v-text-field>
 
@@ -56,6 +57,7 @@
             </p>
             <v-text-field
               v-model = 'pyramidHost'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
             ></v-text-field>
@@ -69,6 +71,7 @@
             </p>
             <v-text-field
               v-model = 'raHost'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
             ></v-text-field>
@@ -101,6 +104,7 @@
             </p>
             <v-text-field
               v-model = 'privateKey'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
               @change = 'setPrivateKey'
