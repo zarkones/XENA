@@ -120,7 +120,7 @@ export default Vue.extend({
 
     async getStatsCount () {
       const count = await Service.Atila.getCount(this.$axios)
-      if (count.length)
+      if (count?.length)
         this.botClients = count
     },
   },
