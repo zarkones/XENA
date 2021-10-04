@@ -59,13 +59,13 @@ export default class BuildsController {
       return response.internalServerError({ success: true, message: 'Failed to clone the repository.' })
 
     switch (buildProfile.config.template) {
-      case 'XENA_RA':
+      case 'XENA_BOT_RA':
         // const ra = await this.buildRa(buildId, buildProfileId)
         // return ra == 'ERROR'
         //   ? response.internalServerError({ success: false, message: 'Failed to build.' })
         //   : response.ok(ra)
         return response.internalServerError({ success: false, message: 'Not yet implemented.' })
-      case 'XENA_APEP':
+      case 'XENA_BOT_APEP':
         const apep = await this.buildApep(buildId, buildProfileId)
         return apep
           ? response.ok(apep)

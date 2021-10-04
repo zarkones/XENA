@@ -16,6 +16,9 @@
         <WebFuzzer
           v-if = 'tool.name == "Web Fuzzer"'
         />
+        <SqlMap
+          v-if = 'tool.name == "SqlMap"'
+        />
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -25,10 +28,12 @@
 import Vue from 'vue'
 
 import WebFuzzer from '@/components/tools/web-fuzzer.vue'
+import SqlMap from '@/components/tools/sqlmap.vue'
 
 export default Vue.extend({
   components: {
     WebFuzzer,
+    SqlMap,
   },
 
   data: () => ({
@@ -36,6 +41,10 @@ export default Vue.extend({
       {
         name: 'Web Fuzzer',
         description: 'Web URL Fuzzer.',
+      },
+      {
+        name: 'SqlMap',
+        description: 'Database enumeration tool.',
       },
     ] as const
   }),

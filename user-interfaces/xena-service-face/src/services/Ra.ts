@@ -67,6 +67,19 @@ export default new class Ra {
         return resp.data as string
     })
 
+  public sqlmap = (axios: NuxtAxiosInstance, url: string) => axios({
+      method: 'POST',
+      url: `${process.env.XENA_RA_HOST}/scans/sql-injection`,
+      data: {
+        url,
+      },
+    })
+    .catch(err => console.warn(err))
+    .then(resp => {
+      if (resp)
+        return resp.data as string[]
+    })
+
   public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, wordlist?: string[]) => axios({
       method: 'POST',
       url: `${process.env.XENA_RA_HOST}/scans/web-fuzzer`,

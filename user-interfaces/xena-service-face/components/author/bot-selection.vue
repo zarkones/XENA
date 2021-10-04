@@ -83,7 +83,7 @@ export default Vue.extend({
       {
         id: 'XENA_BOT_VARVARA',
         name: 'Varvara',
-        details: `Cross-platform bot dropper powered by Haxe langauge. It job is to download bot clients and persist them
+        details: `Cross-platform bot dropper powered by Haxe langauge. Its job is to download bot clients and persist them
           within the environment. This dropper is first transpiled.`,
         logo: '/logo-varvara.png',
       },
