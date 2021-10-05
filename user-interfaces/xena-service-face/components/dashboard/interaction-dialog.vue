@@ -84,7 +84,7 @@ export default Vue.extend({
   data: () => ({
     selectedTab: 0,
     tabItems: [
-      { tab: 'Shell', content: 'SHELL' },
+      { tab: 'Terminal', content: 'SHELL' },
       { tab: 'System Monitor', content: 'SYSTEM_MONITOR' },
     ],
 

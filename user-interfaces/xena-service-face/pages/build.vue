@@ -59,6 +59,14 @@
               <v-text-field
                 outlined
                 dense
+                v-model = 'build.configPublicKey'
+                label = 'Public Key'
+                color = 'rgba(189, 147, 249, 1)'
+              ></v-text-field>
+
+              <v-text-field
+                outlined
+                dense
                 v-model = 'build.gitUrl'
                 label = 'Git URL'
                 :placeholder = 'build.gitUrl'
@@ -83,8 +91,9 @@
                   mb-4
                 '
                 width = '100%'
+                :disabled = '!buildTemplate'
               >
-                Create
+                Create {{ buildTemplate.split('_')[2] }}
               </v-btn>
 
               <BotSelection />
@@ -162,6 +171,8 @@ export default Vue.extend({
       gitUrl: 'https://github.com/zarkones/XENA.git',
       encoding: '',
       encodingIterations: 1,
+      configHost: '',
+      configPublicKey: '',
     },
 
     encodings: [
