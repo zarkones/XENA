@@ -4,22 +4,22 @@ type ClientStatus = 'ALIVE' | 'DEAD' | 'BANNED'
 
 export default class Client {
   public readonly id: string
-  public readonly identificationKey: string
+  public readonly publicKey: string
   public readonly status: ClientStatus
 
   constructor (
     id: string,
-    identificationKey: string,
+    publicKey: string,
     status: ClientStatus,
   ) {
     this.id = validString(id, 'BAD_CLIENT_ID', 'NON_EMPTY')
-    this.identificationKey = validString(identificationKey, 'BAD_CLIENT_IDENTIFICATION_KEY', 'NON_EMPTY')
+    this.publicKey = validString(publicKey, 'BAD_CLIENT_PUBLIC_KEY', 'NON_EMPTY')
     this.status = validEnum(status, ['ALIVE', 'DEAD', 'BANNED'], 'BAD_CLIENT_STATUS')
   }
 
   public static fromJSON = (json) => new Client(
       json.id,
-      json.identificationKey,
+      json.publicKey,
       json.status,
     )
 }

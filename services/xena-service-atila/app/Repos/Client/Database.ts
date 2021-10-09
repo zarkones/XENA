@@ -15,7 +15,7 @@ type GetMultiple = {
 
 type Insert = {
   id: string
-  identificationKey: string
+  publicKey: string
   status: ClientStatus
 }
 

@@ -110,6 +110,21 @@ export default Vue.extend({
         to: '/build'
       },
       {
+        icon: 'mdi-forum',
+        title: 'Forum',
+        to: '/forum',
+      },
+      {
+        icon: 'mdi-car',
+        title: 'Vehicle Registry',
+        to: '/registry',
+      },
+      {
+        icon: 'mdi-map',
+        title: 'Map',
+        to: '/map',
+      },
+      {
         icon: 'mdi-wrench',
         title: 'Settings',
         to: '/settings'

@@ -48,7 +48,7 @@
           <v-text-field
             dense
             outlined
-            type = 'privateKey'
+            type = 'password'
             v-model = 'privateKey'
             label = 'Private Key'
             color = 'rgba(189, 147, 249, 1)'

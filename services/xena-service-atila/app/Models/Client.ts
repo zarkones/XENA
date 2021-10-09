@@ -6,7 +6,7 @@ export default class Client extends BaseModel {
   public id: string
 
   @column()
-  public identificationKey: string
+  public publicKey: string
   
   @column()
   public status: 'ALIVE' | 'DEAD' | 'BANNED'

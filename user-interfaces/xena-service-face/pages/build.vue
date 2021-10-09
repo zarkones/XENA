@@ -11,7 +11,7 @@
     </v-card-title>
 
     <v-card-text>
-      Xena-Pyramid provides you with cloud build functionality. Meaning that you can create build profiles, which are used
+      Xena provides you with cloud build functionality. Meaning that you can create build profiles, which are used
       for creation of bot clients and other software. 
     </v-card-text>
 
