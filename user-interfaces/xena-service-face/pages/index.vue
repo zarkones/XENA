@@ -66,7 +66,6 @@
             class = '
             '
             width = '100%'
-            plain = 'false'
           >
             Login
           </v-btn>
@@ -97,6 +96,8 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import { mapActions } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     username: '',
@@ -110,13 +111,16 @@ export default Vue.extend({
 
   methods: {
     async login () {
-      this.$auth.loginWith('local', {
-        username: this.username,
-        privateKey: this.privateKey,
-      })
+      this.setPrivateKey(this.privateKey)
+      this.setUsername(this.username)
 
       this.$router.push('/dashboard')
     },
+
+    ...mapActions([
+      'setPrivateKey',
+      'setUsername',
+    ]),
   },
 })
 </script>

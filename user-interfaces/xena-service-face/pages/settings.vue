@@ -100,6 +100,23 @@
                 service-label
               '
             >
+              Username: 
+              <v-btn
+                tile
+                text
+                small
+                color = 'rgba(189, 147, 249, 1)'
+              >
+                {{ getUsername }}
+              </v-btn>
+            </p>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
               Your private key used for signing of messages.
             </p>
             <v-text-field
@@ -118,6 +135,8 @@
 </template>
 <script lang = 'ts'>
 import Vue from 'vue'
+
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -142,11 +161,23 @@ export default Vue.extend({
 
   methods: {
     setPrivateKey () {
-      this.$store.dispatch('setPrivateKey', this.privateKey)
-    }
+      this.setPrivateKey(this.privateKey)
+    },
+
+    ...mapActions([
+      'setPrivateKey',
+    ])
+  },
+
+  computed: {
+    ...mapGetters([
+      'getUsername',
+      'getPrivateKey',
+    ])
   },
 
   mounted () {
+    this.privateKey = this.getPrivateKey
   },
 })
 </script>

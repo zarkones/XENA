@@ -70,8 +70,8 @@
 import Vue from 'vue'
 import EventBus from '@/src/EventBus'
 
-import MessageDisplay from '@/components/interaction/message-display.vue'
-import Shell from '@/components/interaction/shell.vue'
+import MessageDisplay from '@/components/terminal/message-display.vue'
+import Shell from '@/components/terminal/shell.vue'
 
 import * as Service from '@/src/services'
 

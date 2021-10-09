@@ -1,27 +1,39 @@
-import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const store = () => {
+  return new Vuex.Store({
+    state: () => ({
+      privateKey: '',
+      username: '',
+    }),
 
-const vuex = () => new Vuex.Store({
-  state: () => ({
-    // Used for signing messages.
-    privateKey: '',
-  }),
-  mutations: {
-    setPrivateKey: (state, key) => {
-      state.privateKey = key
-    }
-  },
-  actions: {
-    setPrivateKey: (state, key) => {
-      state.commit('setPrivateKey', key)
-    }
-  },
-  modules: {},
-  getters: {
-    getPrivateKey: state => state.privateKey
-  },
-})
+    getters: {
+      getUsername: (state) => state.username,
+      getPrivateKey: (state) => state.privateKey,
+    },
 
-export default vuex
+    mutations: {
+      setPrivateKey: (state, key: string) => {
+        state.privateKey = key.replaceAll(' ', '\n')
+          .replace(`-----BEGIN\nRSA\nPRIVATE\nKEY-----`, '-----BEGIN RSA PRIVATE KEY-----')
+          .replace(`-----END\nRSA\nPRIVATE\nKEY-----`, '-----END RSA PRIVATE KEY-----')
+      },
+
+      setUsername: (state, name: string) => {
+        state.username = name
+      },
+    },
+
+    actions: {
+      setPrivateKey: ({ commit }, key: string) => {
+        commit('setPrivateKey', key)
+      },
+
+      setUsername: ({ commit }, name: string) => {
+        commit('setUsername', name)
+      },
+    },
+  })
+}
+
+export default store
