@@ -26,5 +26,15 @@ export default new class Xerum {
       if (data)
         return data as Post[]
     })
-    .catch(e => console.error(e)) 
+    .catch(e => console.error(e))
+
+  public getPost = (axios: NuxtAxiosInstance, postId: string) => axios({
+      method: 'GET',
+      url: `${process.env.XENA_XERUM_HOST}/posts/${postId}`
+      })
+      .then(({ data }) => {
+        if (data)
+          return data as Post
+      })
+      .catch(e => console.error(e))
 }

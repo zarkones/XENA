@@ -1,14 +1,16 @@
 <template>
   <div>
     <iframe
-      width = '1920'
-      height = '1080'
-      frameborder = '0'
+      class = '
+        map
+      '
+      frameborder = '0' 
+      marginheight = '0' 
+      marginwidth = '0' 
+      width = '100%' 
+      height = '100%' 
       scrolling = 'no'
-      marginheight = '0'
-      marginwidth = '0'
       :src = 'mapUrl'
-      style = 'border: 1px solid black'
     ></iframe>
   </div>
 </template>
@@ -30,4 +32,17 @@ export default Vue.extend({
 </script>
 
 <style lang = 'css'>
+.map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 </style>
