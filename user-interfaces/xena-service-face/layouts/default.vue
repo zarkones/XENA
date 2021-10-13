@@ -126,6 +126,11 @@ export default Vue.extend({
         to: '/tools',
       },
       {
+        icon: 'mdi-book',
+        title: 'Hacking Manual',
+        to: '/howtohack',
+      },
+      {
         icon: 'mdi-cube-outline',
         title: 'Cloud Build',
         to: '/build'
@@ -141,9 +146,14 @@ export default Vue.extend({
         to: '/registry',
       },
       {
-        icon: 'mdi-map',
+        icon: 'mdi-earth',
         title: 'Map',
         to: '/map',
+      },
+      {
+        icon: 'mdi-web',
+        title: 'Proxy Servers',
+        to: '/proxies',
       },
       {
         icon: 'mdi-wrench',
