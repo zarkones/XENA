@@ -131,7 +131,7 @@ export default Vue.extend({
         }
       })
 
-      const post = await this.$axios.post('/v1/posts', {
+      const post = await this.$axios.post('http://127.0.0.1:60633/v1/posts', {
         name,
         payload,
       })

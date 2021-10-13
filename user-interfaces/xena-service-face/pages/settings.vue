@@ -53,7 +53,7 @@
                 service-label
               '
             >
-              Address of Xena-Pramid.
+              Address of Xena-Pyramid.
             </p>
             <v-text-field
               v-model = 'pyramidHost'

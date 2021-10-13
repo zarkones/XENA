@@ -1,11 +1,17 @@
 import Vuex from 'vuex'
 
+import VuexPersist from 'vuex-persistedstate'
+
 const store = () => {
   return new Vuex.Store({
     state: () => ({
       privateKey: '',
       username: '',
     }),
+
+    plugins: [
+      VuexPersist()
+    ],
 
     getters: {
       getUsername: (state) => state.username,

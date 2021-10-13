@@ -38,6 +38,24 @@
       </v-list>
     </v-navigation-drawer>
 
+    <v-system-bar
+      class = '
+        system-bar
+      '
+    >
+      <span>
+      </span>
+      <v-spacer></v-spacer>
+      <v-btn
+        x-small
+        text
+        light
+        :to = '`/user?name=${getUsername}`'
+      >
+        {{ getUsername ? getUsername : 'Not logged in' }}
+      </v-btn>
+    </v-system-bar>
+
     <!-- Pages -->
     <v-main>
       <nuxt />
@@ -68,6 +86,7 @@
 import Vue from 'vue'
 
 import { mapGetters } from 'vuex'
+import { DateTime } from 'luxon'
 
 export default Vue.extend({
   computed: {
@@ -87,6 +106,8 @@ export default Vue.extend({
     rightDrawer: false,
     title: 'XENA',
     fixed: true,
+
+    luxon: DateTime,
 
     items: [
       {
@@ -134,6 +155,16 @@ export default Vue.extend({
 })
 
 </script>
+
+<style scoped>
+.system-bar {
+  background-color: #bd93f9;
+  bottom: 0px !important;
+  position: absolute;
+  min-width: 100% !important;
+  z-index: 100;
+}
+</style>
 
 <style>
 .logo {
