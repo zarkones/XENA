@@ -47,4 +47,4 @@ Route.group(() => {
     Route.post('/web-fuzzer', 'WebFuzzersController.scan')
   }).prefix('scans')
 
-}).prefix(`${Env.get('DIR_BUSTER') ?? ''}/v1`) //.middleware(['auth'])
+}).prefix(`${Env.get('DIR_BUSTER') ?? ''}/v1`).middleware(['auth'])

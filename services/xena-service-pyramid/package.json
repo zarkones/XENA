@@ -22,6 +22,7 @@
     "@adonisjs/lucid": "^15.0.0",
     "@adonisjs/repl": "^3.0.0",
     "luxon": "^1.27.0",
+    "parse-url": "^5.0.7",
     "pg": "^8.6.0",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",

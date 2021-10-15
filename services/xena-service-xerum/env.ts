@@ -28,5 +28,8 @@ export default Env.rules({
   PG_PASSWORD: Env.schema.string.optional(),
   PG_DB_NAME: Env.schema.string(),
 
+	// Heroku.
+	DATABASE_URL: Env.schema.string.optional(),
+
 	CORS_POLICY_ALLOWED_ORIGINS: Env.schema.string(),
 })

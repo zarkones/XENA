@@ -33,6 +33,9 @@ export default Env.rules({
 	PG_PASSWORD: Env.schema.string.optional(),
 	PG_DB_NAME: Env.schema.string.optional(),
 
+	// Heroku.
+	DATABASE_URL: Env.schema.string.optional(),
+
 	// Cross-Origin Resource Sharing Policy.
 	// Comma separated list of hosts derived from the origin header.
 	CORS_POLICY_ALLOWED_ORIGINS: Env.schema.string(),
