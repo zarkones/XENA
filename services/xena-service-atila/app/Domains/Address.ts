@@ -3,18 +3,12 @@ import { validNumber, validEnum } from './Validators'
 type AddressStatus = 'OK' | 'BANNED' | 'UNKNOWN'
 
 export default class Address {
-  public readonly x: number
-  public readonly y: number
-  public readonly z: number
-  public readonly w: number
-  public readonly status: AddressStatus
-
   constructor (
-    x: number,
-    y: number,
-    z: number,
-    w: number,
-    status: AddressStatus,
+    public readonly x: number,
+    public readonly y: number,
+    public readonly z: number,
+    public readonly w: number,
+    public readonly status: AddressStatus,
   ) {
     this.x = validNumber(x, 'BAD_ADDRESS_VALUE')
     this.y = validNumber(y, 'BAD_ADDRESS_VALUE')

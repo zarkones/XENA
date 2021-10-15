@@ -8,20 +8,14 @@ import { findPhoneNumbersInText } from 'libphonenumber-js'
 type Headers = Record<string, string>
 
 export default class WebPage {
-  public readonly url: string
-  public readonly headers: Headers
-  public readonly method: string
-  public readonly source: string
-  public readonly status: number
-  
   private readonly $: CheerioAPI
   
   constructor (
-    url: string,
-    headers: Headers,
-    method: string,
-    source: string,
-    status: number,
+    public readonly url: string,
+    public readonly headers: Headers,
+    public readonly method: string,
+    public readonly source: string,
+    public readonly status: number,
   ) {
     this.url = validString(url, 'BAD_WEB_PAGE_URL', 'NON_EMPTY')
     this.headers = headers ?? {}

@@ -4,22 +4,14 @@ import { v4 as uuidv4 } from 'uuid'
 type MessageStatus = 'SEEN' | 'SENT'
 
 export default class Message {
-  public readonly id: string
-  public readonly from: string | null
-  public readonly to: string | null
-  public readonly subject: string
-  public readonly content: string
-  public readonly status: MessageStatus
-  public readonly replyTo: string | null
-
   constructor (
-    id: string | null,
-    from: string | null,
-    to: string | null,
-    subject: string,
-    content: string,
-    status: MessageStatus,
-    replyTo: string | null,
+    public readonly id: string,
+    public readonly from: string | null,
+    public readonly to: string | null,
+    public readonly subject: string,
+    public readonly content: string,
+    public readonly status: MessageStatus,
+    public readonly replyTo: string | null,
   ) {
     this.id = validString(id ?? uuidv4(), 'BAD_MESSAGE_ID', 'NON_EMPTY')
     this.from = from ? validString(from, 'BAD_MESSAGE_FROM', 'NON_EMPTY') : null

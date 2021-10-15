@@ -3,14 +3,10 @@ import { validString, validEnum } from './Validators'
 type ClientStatus = 'ALIVE' | 'DEAD' | 'BANNED'
 
 export default class Client {
-  public readonly id: string
-  public readonly publicKey: string
-  public readonly status: ClientStatus
-
   constructor (
-    id: string,
-    publicKey: string,
-    status: ClientStatus,
+    public readonly id: string,
+    public readonly publicKey: string,
+    public readonly status: ClientStatus,
   ) {
     this.id = validString(id, 'BAD_CLIENT_ID', 'NON_EMPTY')
     this.publicKey = validString(publicKey, 'BAD_CLIENT_PUBLIC_KEY', 'NON_EMPTY')
