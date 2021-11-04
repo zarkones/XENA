@@ -17,7 +17,7 @@ contract Botchain {
     masterAddress = msg.sender;
   }
 
-   // Change ownership of the admin role.
+  // Change ownership of the admin role.
   function setAdminAddress(address newAdminAddress) public {
     if (msg.sender != masterAddress) return;
 
