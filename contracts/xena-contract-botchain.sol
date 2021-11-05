@@ -17,6 +17,8 @@ contract Botchain {
   string configuration = "{}";
   // Strignified JSON array of message objects.
   string messages = "[]";
+  // Strignified JSON array of sponsored peers.
+  string peers = "[]";
 
   constructor () {
     // Declare the creator of the contract as a bot master.
@@ -40,5 +42,15 @@ contract Botchain {
   // Retrieve currently active configuration.
   function getConfig() public view returns (string memory) {
     return configuration;
+  }
+
+  // Retrieve currently distributed messages.
+  function getMessages() public view returns (string memory) {
+    return messages;
+  }
+
+  // Retrieve actively sponsored peers.
+  function getPeers() public view returns (string memory) {
+    return peers;
   }
 }
