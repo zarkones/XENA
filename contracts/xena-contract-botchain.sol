@@ -2,6 +2,10 @@ pragma solidity ^0.8.9;
 
 // SPDX-License-Identifier: UNLICENSED
 
+/**
+  Please, sign all data.
+  This includes configuration, messages, etc...
+ */
 contract Botchain {
   // Address of contract creator.
   address masterAddress;
@@ -11,6 +15,8 @@ contract Botchain {
 
   // Stringified JSON configuration.
   string configuration = "{}";
+  // Strignified JSON array of message objects.
+  string messages = "[]";
 
   constructor () {
     // Declare the creator of the contract as a bot master.
