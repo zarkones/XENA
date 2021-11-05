@@ -20,6 +20,7 @@ echo "Imported XENA_SERVICE_APEP."
 # Grab the "Botchain".
 echo "Building XENA_CONTRACT_BOTCHAIN."
 cp ../../contracts/xena-contract-botchain.sol components/chain.sol
+solcjs -o . --bin --abi components/xena-contract-botchain.sol
 echo "Imported XENA_CONTRACT_BOTCHAIN recorded."
 
 # Build the bot itself.
