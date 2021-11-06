@@ -1,6 +1,8 @@
 package main
 
-import _ "embed"
+import (
+	_ "embed"
+)
 
 //go:embed components/atila.js
 var atila []byte
@@ -30,13 +32,15 @@ var chainAbi []byte
 var chainBin []byte
 
 func main() {
-	place("outTest/chain.abi", chainAbi)
-	place("outTest/chain.bin", chainBin)
-	place("outTest/atila.js", atila)
-	place("outTest/pyramid.js", atila)
-	place("outTest/ra.js", atila)
-	place("outTest/apep", apep)
-	place("outTest/varvara.py", varvaraPython)
-	place("outTest/varvaraDotnet.exe", varvaraDotnet)
-	place("outTest/varvaraCpp", varvaraCpp)
+	print(version())
+
+	// place("outTest/chain.abi", chainAbi)
+	// place("outTest/chain.bin", chainBin)
+	// place("outTest/atila.js", atila)
+	// place("outTest/pyramid.js", atila)
+	// place("outTest/ra.js", atila)
+	// place("outTest/apep", apep)
+	// place("outTest/varvara.py", varvaraPython)
+	// place("outTest/varvaraDotnet.exe", varvaraDotnet)
+	// place("outTest/varvaraCpp", varvaraCpp)
 }
