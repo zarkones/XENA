@@ -14,8 +14,8 @@ export default class Client {
   }
 
   public static fromJSON = (json) => new Client(
-      json.id,
-      json.publicKey,
-      json.status,
-    )
+    json.id,
+    json.publicKey,
+    json.status,
+  )
 }

@@ -23,12 +23,12 @@ export default class Message {
   }
 
   public static fromJSON = (json) => new Message(
-      json.id,
-      json.from,
-      json.to,
-      json.subject,
-      json.content,
-      json.status,
-      json.replyTo,
-    )
+    json.id,
+    json.from,
+    json.to,
+    json.subject,
+    json.content,
+    json.status,
+    json.replyTo,
+  )
 }

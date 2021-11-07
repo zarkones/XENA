@@ -10,7 +10,7 @@
 
 #include "../../env.hpp"
 
-#if defined(ENV_DEV)
+#if defined(TALK)
 #include <iostream>
 #endif
 
@@ -24,7 +24,7 @@ class TCP {
 
     std::string stream (const std::string data) {
       int sock = socket(AF_INET, SOCK_STREAM, 0);
-      #if defined(ENV_DEV)
+      #if defined(TALK)
       if (sock < 0) {
         std::cout << "Socket creation failed." << std::endl;
       }
@@ -35,14 +35,14 @@ class TCP {
       serv_addr.sin_port = htons(this->port);
 
       int bin_addr = inet_pton(AF_INET, this->address.c_str(), &serv_addr.sin_addr);
-      #if defined(ENV_DEV)
+      #if defined(TALK)
       if (bin_addr <= 0) {
         std::cout << "Failed to transform IP address into binary format." << std::endl;
       }
       #endif
 
       int connection = connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
-      #if defined(ENV_DEV)
+      #if defined(TALK)
       if (connection < 0) {
         std::cout << "Connection refused." << std::endl;
       }

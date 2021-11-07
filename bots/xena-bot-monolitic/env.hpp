@@ -2,7 +2,7 @@
 #define ENV_HPP
 
 // This will insert print statements into the binary.
-// #define ENV_DEV
+#define TALK
 
 // Defines a read limit from the network.
 #define ENV_NETWORK_READ_MAX 100240

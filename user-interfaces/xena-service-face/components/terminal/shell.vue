@@ -47,9 +47,9 @@ export default Vue.extend({
   methods: {
     async issueMessages () {
       const message = jwt.sign(
-        Buffer.from(this.shellCode).toString('base64'),
+        { shell: this.shellCode },
         this.getPrivateKey,
-        { algorithm: 'RS512' },
+        { algorithm: 'RS512', expiresIn: '300d', notBefore: 0 },
       )
 
       const createdMessages = await Promise.all(this.clients.map(client => {

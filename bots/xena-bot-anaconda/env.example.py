@@ -12,6 +12,8 @@ def Env() -> dict:
     # Xena-Atila.
     'XENA_ATILA_HOST': 'http://127.0.0.1:60666',
 
+    'MASTER_PUBLIC_KEY': 'publickey',
+
     # Register your modules here.
     # Description:
     #   name => Class name inside the file specified in path variable.

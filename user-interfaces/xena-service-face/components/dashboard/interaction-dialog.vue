@@ -115,7 +115,7 @@ export default Vue.extend({
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
       const messages = await Service.Atila.fetchMessages(this.$axios, this.selectedClient.id, true)
       this.messages = messages.length
-        ? messages.map(message => ({ ...message, content: Buffer.from(message.content, 'base64') }))
+        ? messages.map(message => ({ ...message, content: Buffer.from(message.content.split('.')[1], 'base64') }))
         : []
     })
   },

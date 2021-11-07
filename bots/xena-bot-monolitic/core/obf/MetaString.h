@@ -25,6 +25,10 @@
 #include "MetaRandom.h"
 #include "Log.h"
 
+#ifndef O
+#define O OBFUSCATED
+#endif // O
+
 namespace andrivet { namespace ADVobfuscator {
 
   // Represents an obfuscated string, parametrized with an alrorithm number N, a list of indexes Indexes and a key Key
