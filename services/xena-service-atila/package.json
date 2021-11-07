@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node ace build --production --ignore-ts-errors",
     "start": "node server.js",
-    "dev": "node ace serve --watch"
+    "dev": "node ace serve --watch",
+    "test": "sh migrateAndTest.sh"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",

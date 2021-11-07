@@ -1,7 +1,7 @@
 import test from 'japa'
 import supertest from 'supertest'
 
-import { BASE_URL } from '../config'
+import { BASE_URL, PUBLIC_KEY } from '../config'
 import { v4 as uuidv4 } from 'uuid'
 
 test.group('Integration - Clients', () => {
@@ -19,6 +19,7 @@ test.group('Integration - Clients', () => {
       .post('/clients')
       .send({
         id: uuidv4(),
+        publicKey: PUBLIC_KEY,
         status: 'ALIVE',
       })
       .expect(200)
@@ -35,6 +36,7 @@ test.group('Integration - Clients', () => {
     assert.equal(maybeClients.length, 1)
 
     assert.isString(maybeClients[0].id)
+    assert.isString(maybeClients[0].publicKey)
     assert.isString(maybeClients[0].status)
   })
 })

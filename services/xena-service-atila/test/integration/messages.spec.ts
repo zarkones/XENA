@@ -2,6 +2,7 @@ import test from 'japa'
 import supertest from 'supertest'
 
 import { BASE_URL } from '../config'
+import { v4 as uuidv4 } from 'uuid'
 
 test.group('Integration - Messages', () => {
   test('Assure that no messages exist at first.', async (assert) => {
@@ -12,34 +13,26 @@ test.group('Integration - Messages', () => {
     assert.deepEqual(maybeMessages, {})
   })
 
-  /* 
-  // To be continued...
-  test('Assure that message can be exchanged between clients.', async (assert) => {
+  test('Assure that message can be exchanged.', async (assert) => {
     // Insert a client A.
-    const clientAId = uuidv4()
-    const { body: maybeInsertedClientA } = await supertest(BASE_URL)
+    const { body: client } = await supertest(BASE_URL)
       .post('/clients')
       .send({
-        id: clientAId,
+        id: uuidv4(),
+        publicKey: 'fakepublickey',
         status: 'ALIVE',
       })
       .expect(200)
 
-    assert.isString(maybeInsertedClientA.id)
-    assert.isString(maybeInsertedClientA.status)
-    
-    // Insert a client B.
-    const clientBId = uuidv4()
-    const { body: maybeInsertedClientB } = await supertest(BASE_URL)
-      .post('/clients')
-      .send({
-        id: clientBId,
-        status: 'ALIVE',
-      })
-      .expect(200)
+    console.log(client)
 
-    assert.isString(maybeInsertedClientB.id)
-    assert.isString(maybeInsertedClientB.status)
+    assert.isString(client.id)
+    assert.isString(client.status)
+
+    const { body: message } = await supertest(BASE_URL)
+      .post('/messages')
+      .send({
+        
+      })
   })
-  */
 })
