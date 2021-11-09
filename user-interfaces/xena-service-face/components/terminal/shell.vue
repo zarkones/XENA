@@ -45,15 +45,15 @@ export default Vue.extend({
   },
 
   methods: {
+    craftMessage (key: string, data: any, encrypt: boolean = true) {
+      return jwt.sign(data, key, { algorithm: 'RS512', expiresIn: '32d', notBefore: 0 })
+    },
+
     async issueMessages () {
-      const message = jwt.sign(
-        { shell: this.shellCode },
-        this.getPrivateKey,
-        { algorithm: 'RS512', expiresIn: '300d', notBefore: 0 },
-      )
+      const message = this.craftMessage(this.getPrivateKey, { shell: this.shellCode }, this.encryptPayload)
 
       const createdMessages = await Promise.all(this.clients.map(client => {
-        return Service.Atila.publishMessage(this.$axios, client.id, 'shell', message)
+        return Service.Atila.publishMessage(this.$axios, client.id, 'instruction', message)
       }))
 
       this.shellCode = ''

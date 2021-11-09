@@ -26,6 +26,10 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import NodeRSA from 'node-rsa'
+
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   name: 'MessageDisplay',
 
@@ -36,6 +40,12 @@ export default Vue.extend({
     draw: true,
     replies: [] as any[],
   }),
+
+  computed: {
+    ...mapGetters([
+      'getPrivateKey',
+    ])
+  },
 
   props: {
     message: {
@@ -48,7 +58,9 @@ export default Vue.extend({
 
   mounted () {
     if (this.message?.replies?.length)
-      this.replies = this.message.replies.map(message => ({ ...message, content: Buffer.from(message.content, 'base64') }))
+      this.replies = this.message.replies.map(message => ({ ...message,
+        content: new NodeRSA(this.getPrivateKey).decrypt(message.content)
+      }))
   },
 })
 </script>

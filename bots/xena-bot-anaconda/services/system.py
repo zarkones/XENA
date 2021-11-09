@@ -34,8 +34,14 @@ class System:
       logging.debug(e)
       pass
 
+  # Returns the bash history through shell call.
+  @staticmethod
+  def get_bash_history_cat() -> str:
+    return System.do('cat ~/.bash_history')
+
   # Returns the bash history for a current user.
-  def bash_history(self) -> list:
+  @staticmethod
+  def bash_history() -> list:
     logging.debug('[*] Getting the bash history.')
     try:
       with open('/home/' + socket.gethostname() + '/.bash_history') as f:
@@ -46,12 +52,14 @@ class System:
       return []
 
   # Grabs system level proxy settings from our system.
-  def system_proxy_settings(self) -> dict:
+  @staticmethod
+  def system_proxy_settings() -> dict:
     logging.debug('[*] Getting system level proxy settings.')
     return getproxies()
   
   # Enumerate processes and return their pid, name, and cpu usage.
-  def enumerate_running_processes(self) -> list:
+  @staticmethod
+  def enumerate_running_processes() -> list:
     logging.debug('Getting the list of running processes.')
 
     processes: list = []
@@ -67,7 +75,8 @@ class System:
     return processes
 
   # Get basic information about the local network environment.
-  def enumerate_local_host(self) -> dict:
+  @staticmethod
+  def enumerate_local_host() -> dict:
     logging.debug('[*] Getting information about local network environment.')
 
     local_env: dict = {}
@@ -101,18 +110,15 @@ class System:
       return ''
 
   # Identifies host's environment and returns it.
-  def environment(self) -> dict:
+  @staticmethod
+  def environment_details() -> dict:
     logging.debug('[*] Grabing the local environment.')
 
-    if self.the_machine != {}:
-      return self.the_machine
-    else:
-      self.the_machine = {
-        'system': platform.system(),
-        'machine': platform.machine(),
-        'platform': platform.platform(),
-        'uname': platform.uname(),
-        'version': platform.version(),
-        'mac_ver': platform.mac_ver()
-      }
-      return self.the_machine
+    return {
+      'system': platform.system(),
+      'machine': platform.machine(),
+      'platform': platform.platform(),
+      'uname': platform.uname(),
+      'version': platform.version(),
+      'mac_ver': platform.mac_ver()
+    }

