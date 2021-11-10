@@ -2,17 +2,17 @@ pragma solidity ^0.8.9;
 
 // SPDX-License-Identifier: UNLICENSED
 
-/**
-  Please, sign all data.
-  This includes configuration, messages, etc...
- */
 contract Botchain {
   // Address of contract creator.
   address masterAddress;
 
   // Address of the contract Admin.
   address adminAddress;
-
+  
+  /**
+    Please, sign all data.
+    This includes configuration, messages, peers, etc...
+  */
   // Stringified JSON configuration.
   string configuration = "{}";
   // Strignified JSON array of message objects.
@@ -49,8 +49,22 @@ contract Botchain {
     return messages;
   }
 
+  // Update currently distributed messages.
+  function setMessages(string memory newMessages) public {
+    if (msg.sender != adminAddress) return;
+
+    messages = newMessages;
+  }
+
   // Retrieve actively sponsored peers.
   function getPeers() public view returns (string memory) {
     return peers;
+  }
+
+  // Update currently sponsored peers.
+  function setPeers(string memory newPeers) public {
+    if (msg.sender != adminAddress) return;
+
+    peers = newPeers;
   }
 }
