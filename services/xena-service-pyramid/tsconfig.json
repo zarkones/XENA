@@ -8,9 +8,9 @@
     "build"
   ],
   "compilerOptions": {
-    "module": "system",
-    "outDir": "./build",
-    "outFile":"./build/build.js",
+    "outDir": "build",
+    "rootDir": "./",
+    "sourceMap": true,
     "paths": {
       "App/*": [
         "./app/*"
