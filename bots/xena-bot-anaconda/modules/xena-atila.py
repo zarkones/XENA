@@ -14,43 +14,10 @@ from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 
 from services.system import System
+from domains.message import Message
 
 # Unique identifier of this bot instance.
 client_id = str(uuid4())
-
-# Message from Atila.
-class Message:
-  def __init__(self, id: str, from_id: str, to: str, subject: str, content: str, status: str, reply_to: str,):
-    self.id = id
-    self.from_id = from_id
-    self.to = to
-    self.subject = subject
-    self.content = content
-    self.status = status
-    self.reply_to = reply_to
-
-  @staticmethod
-  def from_json(json):
-    return Message(
-      id = json['id'],
-      from_id = json['from'],
-      to = json['to'],
-      subject = json['subject'],
-      content = json['content'],
-      status = json['status'],
-      reply_to = json['replyTo'],
-    )
-
-  def serialize(self):
-    return {
-      'id': self.id,
-      'from': self.from_id,
-      'to': self.to,
-      'subject': self.subject,
-      'content': self.content,
-      'status': self.status,
-      'replyTo': self.reply_to,
-    }
 
 class XenaAtila:
   def __init__(self):
