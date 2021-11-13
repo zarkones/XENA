@@ -30,6 +30,7 @@ Route.group(() => {
 
   // Clients.
   Route.group(() => {
+    Route.get('/:id', 'ClientsController.get')
     Route.get('/', 'ClientsController.getMultiple')
     Route.post('/', 'ClientsController.insert')
 

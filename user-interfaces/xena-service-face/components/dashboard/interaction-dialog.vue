@@ -75,6 +75,8 @@ import Shell from '@/components/terminal/shell.vue'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     MessageDisplay,
@@ -108,15 +110,20 @@ export default Vue.extend({
     },
   },
 
+  computed: {
+    ...mapGetters([
+      'getPrivateKey',
+    ])
+  },
+
   mounted () {
     EventBus.$on('interactionDialogUpdateClients', (clients: any[]) => this.clients = clients)
 
     EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string) => {
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
-      const messages = await Service.Atila.fetchMessages(this.$axios, this.selectedClient.id, true)
-      this.messages = messages.length
-        ? messages.map(message => ({ ...message, content: Buffer.from(message.content.split('.')[1], 'base64') }))
-        : []
+
+      const messages = await Service.Atila.fetchMessages(this.$axios, this.selectedClient.id, this.getPrivateKey, this.selectedClient.publicKey, true)
+      this.messages = messages?.length ? messages : []
     })
   },
 })

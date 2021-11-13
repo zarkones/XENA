@@ -1,4 +1,5 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import Crypto from './Crypto'
 
 type Message = {
   id: string
@@ -8,6 +9,11 @@ type Message = {
   content: string
   replyTo: string | null
   replies: Message[]
+}
+
+type Client = {
+  id: string
+  publicKey: string
 }
 
 export default new class Atila {
@@ -27,6 +33,19 @@ export default new class Atila {
         return resp.data as number[]
     })
 
+  public getClient = (axios: NuxtAxiosInstance, id: string) => axios({
+      method: 'GET',
+      url: `${process.env.XENA_ATILA_HOST}/clients/${id}`,
+      params: {
+        status: 'ALIVE',
+      }
+    })
+    .catch(err => console.warn(err))
+    .then(resp => {
+      if (resp)
+        return resp.data as Client
+    })
+
   public getClients = (axios: NuxtAxiosInstance) => axios({
       method: 'GET',
       url: `${process.env.XENA_ATILA_HOST}/clients`,
@@ -34,10 +53,10 @@ export default new class Atila {
     .catch(err => console.warn(err))
     .then(resp => {
       if (resp)
-        return resp.data
+        return resp.data as Client[]
     })
 
-  public fetchMessages = (axios: NuxtAxiosInstance, clientId: string, withReplies?: boolean) => axios({
+  public fetchMessages = (axios: NuxtAxiosInstance, clientId: string, verificationKey: string, clientVerificationKey: string, withReplies?: boolean) => axios({
       method: 'GET',
       url: `${process.env.XENA_ATILA_HOST}/messages`,
       params: {
@@ -47,8 +66,12 @@ export default new class Atila {
     })
     .catch(err => console.warn(err))
     .then(resp => {
-      if (resp)
-        return resp.data as Message[]
+      if (resp && resp.data)
+        return (resp.data as Message[]).map(message => ({
+          ...message,
+          content: Crypto.verify(verificationKey, message.content),
+          replies: message.replies.map(reply => Crypto.verify(clientVerificationKey, reply.content)),
+        }))
     })
 
   public publishMessage = (axios: NuxtAxiosInstance, clientId: string, subject: string, content: string) => axios({

@@ -23,16 +23,12 @@ import Vue from 'vue'
 
 import * as Service from '@/src/services'
 
-import jwt from 'jsonwebtoken'
-
-import { EncryptJWT, importJWK, importPKCS8, importSPKI, importX509 } from 'jose'
-
 import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   data: () => ({
     shellCode: '',
-    encryptPayload: true,
+    encryptPayload: false,
   }),
 
   props: {
@@ -48,22 +44,8 @@ export default Vue.extend({
   },
 
   methods: {
-    async craftMessage (key: string, data: any, encrypt: boolean = true) {
-      return encrypt
-        ? new EncryptJWT({ 'urn:example:claim': true })
-          .setProtectedHeader({ alg: 'RSA', enc: 'A256GCM' })
-          .setIssuedAt()
-          .setIssuer('urn:example:issuer')
-          .setAudience('urn:example:audience')
-          .setExpirationTime('32d')
-          .encrypt(await importPKCS8(key, 'RS512'))
-        : jwt.sign(data, key, { algorithm: 'RS512', expiresIn: '32d', notBefore: 0 })
-    },
-
     async issueMessages () {
-      const message = await this.craftMessage(this.getPrivateKey, { shell: this.shellCode }, this.encryptPayload)
-
-      console.log(message)
+      const message = await Service.Crypto.sign(this.getPrivateKey, { shell: this.shellCode })
 
       await Service.Atila.publishMessage(this.$axios, this.clients[0].id, 'instruction', message)
       // const createdMessages = await Promise.all(this.clients.map(client => {

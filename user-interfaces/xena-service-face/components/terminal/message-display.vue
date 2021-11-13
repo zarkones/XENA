@@ -8,16 +8,20 @@
       '
     >
       <v-card-text>
-        {{ message.content }}
+        {{ message.content.shell }}
       </v-card-text>
 
       <div
         v-for = 'replyMessage in replies'
         :key = 'replyMessage.id'
+        class = '
+          pa-4
+        '
       >
-        <MessageDisplay
+        {{ replyMessage }}
+        <!--MessageDisplay
           :message = 'replyMessage'
-        />
+        /-->
       </div>
     </v-card>
   </div>
@@ -26,7 +30,7 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
-import NodeRSA from 'node-rsa'
+import * as Service from '@/src/services'
 
 import { mapGetters } from 'vuex'
 
@@ -50,7 +54,7 @@ export default Vue.extend({
   props: {
     message: {
       required: true,
-    }
+    },
   },
 
   methods: {
@@ -58,9 +62,7 @@ export default Vue.extend({
 
   mounted () {
     if (this.message?.replies?.length)
-      this.replies = this.message.replies.map(message => ({ ...message,
-        content: new NodeRSA(this.getPrivateKey).decrypt(message.content)
-      }))
+      this.replies = this.message.replies
   },
 })
 </script>
