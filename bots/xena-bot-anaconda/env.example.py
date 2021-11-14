@@ -12,6 +12,13 @@ def Env() -> dict:
     # Xena-Atila.
     'XENA_ATILA_HOST': 'http://127.0.0.1:60666',
 
+    # Mode of behavior.
+    'STEALTH': 'AGGRESIVE',
+    # 'STEALTH': 'PUSHY',
+    # 'STEALTH': 'NORMAL',
+    # 'STEALTH': 'SNEAKY',
+    # 'STEALTH': 'PARANOID',
+
     # Public key used for verification of messages.
     'MASTER_PUBLIC_KEY': b'-----BEGIN PUBLIC KEY-----\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n-----END PUBLIC KEY-----\n',
 

