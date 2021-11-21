@@ -30,8 +30,6 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
-import * as Service from '@/src/services'
-
 import { mapGetters } from 'vuex'
 
 export default Vue.extend({

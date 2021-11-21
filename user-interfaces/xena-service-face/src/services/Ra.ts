@@ -5,8 +5,9 @@ export type BruteForcedSubdomains = {
   dead: string[],
 }
 
-export default new class Ra {
+export default class Ra {
   public readonly axios: NuxtAxiosInstance
+  public baseURL: string
 
   public readonly webMethods = [
     'GET',
@@ -21,13 +22,14 @@ export default new class Ra {
     'UNLINK',
   ] as const
 
-  constructor (axios?: NuxtAxiosInstance) {
+  constructor (axios: NuxtAxiosInstance, baseURL: string) {
     this.axios = axios
+    this.baseURL = baseURL
   }
 
-  public sublist3r = (axios: NuxtAxiosInstance, domain: string) => axios({
+  public sublist3r = (domain: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/sublist3r`,
+      url: `${this.baseURL}/recon/sublist3r`,
       data: {
         domain,
       },
@@ -38,9 +40,9 @@ export default new class Ra {
         return resp.data as string[]
     })
 
-  public subdomainBruteforce = (axios: NuxtAxiosInstance, domain: string, dict: string[]) => axios({
+  public subdomainBruteforce = (domain: string, dict: string[]) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/subdomain-bruteforce`,
+      url: `${this.baseURL}/recon/subdomain-bruteforce`,
       data: {
         domain,
         dict,
@@ -54,9 +56,9 @@ export default new class Ra {
       console.log(resp)
     })
 
-  public nmap = (axios: NuxtAxiosInstance, address: string) => axios({
+  public nmap = (address: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/nmap`,
+      url: `${this.baseURL}/recon/nmap`,
       data: {
         address,
       },
@@ -67,9 +69,9 @@ export default new class Ra {
         return resp.data as string
     })
 
-  public sqlmap = (axios: NuxtAxiosInstance, url: string) => axios({
+  public sqlmap = (url: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/scans/sql-injection`,
+      url: `${this.baseURL}/scans/sql-injection`,
       data: {
         url,
       },
@@ -80,9 +82,9 @@ export default new class Ra {
         return resp.data as string[]
     })
 
-  public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, wordlist?: string[]) => axios({
+  public webFuzzer = (url: string, method: string, wordlist?: string[]) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/scans/web-fuzzer`,
+      url: `${this.baseURL}/scans/web-fuzzer`,
       data: {
         url,
         method,

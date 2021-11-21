@@ -158,6 +158,8 @@ import * as Service from '@/src/services'
 
 import EventBus from '@/src/EventBus'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     BuildProfiles,
@@ -190,10 +192,15 @@ export default Vue.extend({
     ],
   }),
 
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+    ]),
+  },
+
   methods: {
     async insertBuildProfile () {
-      await Service.Pyramid.insertBuildProfile(
-        this.$axios,
+      await new Service.Pyramid(this.$axios, this.getPyramidHost).insertBuildProfile(
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,

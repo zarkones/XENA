@@ -41,9 +41,6 @@ import Vue from 'vue'
 
 import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
 
-import EventBus from '@/src/EventBus'
-import * as Service from '@/src/services'
-
 type VehicleType =
   | 'MICRO'
   | 'SEDAN'

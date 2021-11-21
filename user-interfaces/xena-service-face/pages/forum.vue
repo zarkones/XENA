@@ -92,6 +92,8 @@ import jwt from 'jsonwebtoken'
 
 import { Post } from '@/src/services/Xerum'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     posts: [] as Post[],
@@ -99,13 +101,19 @@ export default Vue.extend({
     newPost: {} as Post,
   }),
 
+  computed: {
+    ...mapGetters([
+      'getXerumHost',
+    ]),
+  },
+
   methods: {
     goToPost (id: string) {
       this.$router.push(`/post?id=${id}`)
     },
 
     async fetchPosts () {
-      const posts = await Service.Xerum.getPosts(this.$axios)
+      const posts = await new Service.Xerum(this.$axios, this.getXerumHost).getPosts()
       if (!posts)
         return
 

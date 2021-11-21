@@ -46,15 +46,22 @@ import Vue from 'vue'
 import * as Service from '@/src/services'
 
 import { Post } from '@/src/services/Xerum'
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   data: () => ({
     post: {} as Post,
   }),
 
+  computed: {
+    ...mapGetters([
+      'getXerumHost',
+    ]),
+  },
+
   methods: {
     async fetchPost () {
-      const post = await Service.Xerum.getPost(this.$axios, this.$route.query.id)
+      const post = await new Service.Xerum(this.$axios, this.getXerumHost).getPost(this.$route.query.id)
 
       if (!post)
         return

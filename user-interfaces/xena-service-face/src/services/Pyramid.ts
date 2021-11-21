@@ -2,16 +2,18 @@ import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
 export type BuildTemplate = 'XENA_APEP' | 'XENA_RA'
 
-export default new class Pyramid {
+export default class Pyramid {
   public readonly axios: NuxtAxiosInstance
+  public baseURL: string
 
-  constructor (axios?: NuxtAxiosInstance) {
+  constructor (axios: NuxtAxiosInstance, baseURL: string) {
     this.axios = axios
+    this.baseURL = baseURL
   }
 
-  public getBuilldProfiles = (axios: NuxtAxiosInstance) => axios({
+  public getBuilldProfiles = () => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_PYRAMID_HOST}/build-profiles`,
+      url: `${this.baseURL}/build-profiles`,
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -20,14 +22,13 @@ export default new class Pyramid {
     })
 
   public insertBuildProfile = (
-    axios: NuxtAxiosInstance,
     name: string,
     description: string | null,
     gitUrl: string,
     template: BuildTemplate,
-  ) => axios({
+  ) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_PYRAMID_HOST}/build-profiles`,
+      url: `${this.baseURL}/build-profiles`,
       data: {
         name,
         description,

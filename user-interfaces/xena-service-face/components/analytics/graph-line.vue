@@ -39,6 +39,7 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import { mapGetters } from 'vuex'
 import { Chart } from 'chart.js'
 
 import * as Service from '@/src/services'
@@ -119,10 +120,16 @@ export default Vue.extend({
     },
 
     async getStatsCount () {
-      const count = await Service.Atila.getCount(this.$axios)
+      const count = await new Service.Atila(this.$axios, this.getAtilaHost).getCount()
       if (count?.length)
         this.botClients = count
     },
+  },
+
+  computed: {
+    ...mapGetters([
+      'getAtilaHost',
+    ])
   },
   
   async mounted () {

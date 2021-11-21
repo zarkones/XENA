@@ -11,16 +11,18 @@ export type Post = {
   }
 }
 
-export default new class Xerum {
+export default class Xerum {
   public readonly axios: NuxtAxiosInstance
+  public baseURL: string
 
-  constructor (axios?: NuxtAxiosInstance) {
+  constructor (axios: NuxtAxiosInstance, baseURL: string) {
     this.axios = axios
+    this.baseURL = baseURL
   }
   
-  public getPosts = (axios: NuxtAxiosInstance) => axios({
+  public getPosts = () => this.axios({
     method: 'GET',
-    url: `${process.env.XENA_XERUM_HOST}/posts`
+    url: `${this.baseURL}/posts`
     })
     .then(({ data }) => {
       if (data)
@@ -28,9 +30,9 @@ export default new class Xerum {
     })
     .catch(e => console.error(e))
 
-  public getPost = (axios: NuxtAxiosInstance, postId: string) => axios({
+  public getPost = (postId: string) => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_XERUM_HOST}/posts/${postId}`
+      url: `${this.baseURL}/posts/${postId}`
       })
       .then(({ data }) => {
         if (data)

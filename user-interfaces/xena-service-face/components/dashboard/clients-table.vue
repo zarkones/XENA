@@ -45,6 +45,8 @@ import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
 import EventBus from '@/src/EventBus'
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     InteractionDialog,
@@ -60,6 +62,12 @@ export default Vue.extend({
     ]
   }),
 
+  computed: {
+    ...mapGetters([
+      'getAtilaHost',
+    ])
+  },
+
   methods: {
     interactionDialogUpdateClients () {
       EventBus.$emit('interactionDialogUpdateClients', this.selected)
@@ -68,7 +76,7 @@ export default Vue.extend({
     },
 
     async tableUpdate (targetPlatform?: string) {
-      const clients = await Service.Atila.getClients(this.$axios)
+      const clients = await new Service.Atila(this.$axios, this.getAtilaHost).getClients()
       if (clients)
         this.clients = clients
     },

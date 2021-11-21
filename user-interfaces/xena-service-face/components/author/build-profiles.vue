@@ -55,9 +55,17 @@ import EventBus from '@/src/EventBus'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     BuildProfiles,
+  },
+
+  computed: {
+    ...mapGetters([
+      'getPyramidHost',
+    ])
   },
 
   data: () => ({
@@ -66,7 +74,7 @@ export default Vue.extend({
 
   methods: {
     async getBuildProfiles () {
-      const builldProfiles = await Service.Pyramid.getBuilldProfiles(this.$axios)
+      const builldProfiles = await new Service.Pyramid(this.$axios, this.getPyramidHost).getBuilldProfiles()
       if (builldProfiles)
         this.builldProfiles = builldProfiles
     },

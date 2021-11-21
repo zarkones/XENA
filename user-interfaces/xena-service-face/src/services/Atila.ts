@@ -16,16 +16,18 @@ type Client = {
   publicKey: string
 }
 
-export default new class Atila {
+export default class Atila {
   public readonly axios: NuxtAxiosInstance
+  public baseURL: string
 
-  constructor (axios?: NuxtAxiosInstance) {
+  constructor (axios: NuxtAxiosInstance, baseURL: string) {
     this.axios = axios
+    this.baseURL = baseURL
   }
 
-  public getCount = (axios: NuxtAxiosInstance) => axios({
+  public getCount = () => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_ATILA_HOST}/clients/stats/count`,
+      url: `${this.baseURL}/clients/stats/count`,
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -33,9 +35,9 @@ export default new class Atila {
         return resp.data as number[]
     })
 
-  public getClient = (axios: NuxtAxiosInstance, id: string) => axios({
+  public getClient = (id: string) => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_ATILA_HOST}/clients/${id}`,
+      url: `${this.baseURL}/clients/${id}`,
       params: {
         status: 'ALIVE',
       }
@@ -46,9 +48,9 @@ export default new class Atila {
         return resp.data as Client
     })
 
-  public getClients = (axios: NuxtAxiosInstance) => axios({
+  public getClients = () => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_ATILA_HOST}/clients`,
+      url: `${this.baseURL}/clients`,
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -56,9 +58,9 @@ export default new class Atila {
         return resp.data as Client[]
     })
 
-  public fetchMessages = (axios: NuxtAxiosInstance, clientId: string, verificationKey: string, clientVerificationKey: string, withReplies?: boolean) => axios({
+  public fetchMessages = (clientId: string, verificationKey: string, clientVerificationKey: string, withReplies?: boolean) => this.axios({
       method: 'GET',
-      url: `${process.env.XENA_ATILA_HOST}/messages`,
+      url: `${this.baseURL}/messages`,
       params: {
         clientId,
         withReplies,
@@ -74,9 +76,9 @@ export default new class Atila {
         }))
     })
 
-  public publishMessage = (axios: NuxtAxiosInstance, clientId: string, subject: string, content: string) => axios({
+  public publishMessage = (clientId: string, subject: string, content: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_ATILA_HOST}/messages`,
+      url: `${this.baseURL}/messages`,
       data: {
         to: clientId,
         subject,

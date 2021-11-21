@@ -46,6 +46,7 @@
               dense
               outlined
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveAtilaHost'
             ></v-text-field>
 
             <p
@@ -60,6 +61,7 @@
               outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'savePyramidHost'
             ></v-text-field>
 
             <p
@@ -74,6 +76,7 @@
               outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveRaHost'
             ></v-text-field>
 
           </div>
@@ -150,10 +153,9 @@ export default Vue.extend({
       { tab: 'Identity', content: 'IDENTITY' },
     ],
 
-    // Tab: Connections.
-    atilaHost: process.env.XENA_ATILA_HOST as string,
-    pyramidHost: process.env.XENA_PYRAMID_HOST as string,
-    raHost: process.env.XENA_RA_HOST as string,
+    atilaHost: '',
+    pyramidHost: '',
+    raHost: '',
 
     // Tab: Identity.
     privateKey: '',
@@ -164,8 +166,23 @@ export default Vue.extend({
       this.setPrivateKey(this.privateKey)
     },
 
+    saveAtilaHost () {
+      this.setAtilaHost(this.atilaHost)
+    },
+
+    savePyramidHost () {
+      this.setPyramidHost(this.pyramidHost)
+    },
+
+    saveRaHost () {
+      this.setRaHost(this.raHost)
+    },
+
     ...mapActions([
       'setPrivateKey',
+      'setAtilaHost',
+      'setPyramidHost',
+      'setRaHost',
     ])
   },
 
@@ -173,11 +190,17 @@ export default Vue.extend({
     ...mapGetters([
       'getUsername',
       'getPrivateKey',
+      'getAtilaHost',
+      'getPyramidHost',
+      'getRaHost',
     ])
   },
 
   mounted () {
     this.privateKey = this.getPrivateKey
+    this.atilaHost = this.getAtilaHost
+    this.pyramidHost = this.getPyramidHost
+    this.raHost = this.getRaHost
   },
 })
 </script>

@@ -29,6 +29,8 @@ import Vue from 'vue'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     url: '',
@@ -36,10 +38,16 @@ export default Vue.extend({
     loading: false,
   }),
 
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+    ])
+  },
+
   methods: {
     async submit () {
       this.loading = true
-      this.result = await Service.Ra.sqlmap(this.$axios, this.url)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost).sqlmap(this.url)
       this.loading = false
     },
   },

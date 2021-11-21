@@ -113,6 +113,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getPrivateKey',
+      'getAtilaHost',
     ])
   },
 
@@ -122,7 +123,8 @@ export default Vue.extend({
     EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string) => {
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
 
-      const messages = await Service.Atila.fetchMessages(this.$axios, this.selectedClient.id, this.getPrivateKey, this.selectedClient.publicKey, true)
+      const messages = await new Service.Atila(this.$axios, this.getAtilaHost)
+        .fetchMessages(this.selectedClient.id, this.getPrivateKey, this.selectedClient.publicKey, true)
       this.messages = messages?.length ? messages : []
     })
   },

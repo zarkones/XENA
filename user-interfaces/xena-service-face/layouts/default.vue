@@ -151,11 +151,6 @@ export default Vue.extend({
         to: '/map',
       },
       {
-        icon: 'mdi-web',
-        title: 'Proxy Servers',
-        to: '/proxies',
-      },
-      {
         icon: 'mdi-wrench',
         title: 'Settings',
         to: '/settings'

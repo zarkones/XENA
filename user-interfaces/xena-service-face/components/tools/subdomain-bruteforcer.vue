@@ -59,6 +59,7 @@ import Vue from 'vue'
 import * as Service from '@/src/services'
 
 import { BruteForcedSubdomains } from '@/src/services/Ra' 
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   data: () => ({
@@ -67,12 +68,18 @@ export default Vue.extend({
     rawDict: '',
     loading: false
   }),
+  
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+    ]),
+  },
 
   methods: {
     async submit () { 
       if (this.domain && (this.rawDict && this.rawDirct?.length)) {
         this.loading = true
-        const result = await Service.Ra.subdomainBruteforce(this.$axios, this.domain, this.rawDict.split(','))
+        const result = await new Service.Ra(this.$axios, this.getRaHost).subdomainBruteforce(this.domain, this.rawDict.split(','))
         if (!result)
           return
         
