@@ -8,10 +8,10 @@ const store = () => {
       privateKey: '',
       username: '',
       env: {
-        XENA_ATILA_HOST: 'http://service.atila.xena.network',
-        XENA_PYRAMID_HOST: 'http://service.pyramid.xena.network',
-        XENA_RA_HOST: 'http://service.ra.xena.network',
-        XENA_XERUM_HOST: 'http://service.xerum.xena.network',
+        XENA_ATILA_HOST: 'http://service.atila.xena.network/v1',
+        XENA_PYRAMID_HOST: 'http://service.pyramid.xena.network/v1',
+        XENA_RA_HOST: 'http://service.ra.xena.network/v1',
+        XENA_XERUM_HOST: 'http://service.xerum.xena.network/v1',
       },
     }),
 

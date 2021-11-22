@@ -23,4 +23,6 @@ export default Env.rules({
 
 	API_SECRET: Env.schema.string(),
 	DIR_BUSTER: Env.schema.string.optional(),
+
+	TRUSTED_PUBLIC_KEY: Env.schema.string(),
 })
