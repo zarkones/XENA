@@ -6,7 +6,8 @@
 // This will insert print statements into the binary.
 #define TALK
 
-#define PAYLOAD "YOUR_SHELL_CODE"
+// Shell code of your choice to be executed.
+#define PAYLOAD "YOUR_SHELL_CODE_HERE_PLEASE"
 
 // Defines a read limit from the network.
 #define ENV_NETWORK_READ_MAX 100240
