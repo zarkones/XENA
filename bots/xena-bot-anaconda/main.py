@@ -1,15 +1,15 @@
 import logging
+
+from env import MODULES, LOGGING_LEVEL
 from multiprocessing import Process
 from importlib import import_module
-
-from env import Env
 
 class Main:
   def __init__(self) -> None:
     self.logging_init()
 
     # Starting our processes.
-    modules: dict = Env()['MODULES']
+    modules: dict = MODULES
     for name in modules:
       module: dict = modules[name]
       try:
@@ -35,7 +35,7 @@ class Main:
   def logging_init(self) -> None:
     logging.basicConfig(
       format = '%(asctime)s: %(message)s',
-      level = Env()['LOGGING_LEVEL'],
+      level = LOGGING_LEVEL,
       datefmt = '%H:%M:%S'
     )
 

