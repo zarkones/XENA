@@ -14,6 +14,7 @@
 10. [WHOAMI?](#whoami)
 
 FIRST BETA VERSION COMING SOON!!!
+
 Take a look at the cutting-edge features on "stage" branch.
 
 ### DISCLAIMER ###
