@@ -13,6 +13,9 @@
 9. [DEVELOPMENT LOGS](#development-logs)
 10. [WHOAMI?](#whoami)
 
+FIRST BETA VERSION COMING SOON!!!
+Take a look at the cutting-edge features on "stage" branch.
+
 ### DISCLAIMER ###
 
 You bear the full responsibility of your actions.
