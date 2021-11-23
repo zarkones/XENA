@@ -15,7 +15,8 @@
 
 **FIRST BETA VERSION COMING SOON!!!**
 
-**Take a look at the cutting-edge features on "stage" branch.**
+**Beta Version 0.0.1 Here:**
+**https://github.com/zarkones/XENA/pull/19**
 
 ### DISCLAIMER ###
 
