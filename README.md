@@ -25,8 +25,8 @@ This is an open-source project. This is not a commercial project.
 This project is not related to my current nor past employers.
 This is my hobby and I'm developing this tool for the sake of learning and understanding, meaning educational purpose. You shall not hold viable its creator/s nor any contributor to the project for any damage you may have done. If you contribute to the project bare in mind that your code or data may be changed in the future without a notice.
 This software is not allowed to be used for political purpose.
-This software is not allowed to be used in a commercial purpose of any kind, shape or form without a written permission.
-Selling and redistributing this software is not permited without a written permission.
+This software is not allowed to be used for commercial purpose of any kind, shape or form without a written permission.
+Selling and redistributing this software is not permitted without a written permission.
 This software is not allowed to be used for training of algorithms without a written permission.
 
 ### SUPPORT MY RESEARCH ###
@@ -83,15 +83,15 @@ xena-varvara
 
 ### DESCRIPTION ###
 
-XENA is the managed remote administration platform for botnet creation & development. Aiming to provide an ecosystem which serves the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be custimazible.
+XENA is the managed remote administration platform for botnet creation & development. Aiming to provide an ecosystem which serves the bot clients. Each service exposes an API in a JSON format delivered by HTTP protocol. Goal is to have a hybrid between centralized and decentralized network, depending on your preference, since it should be customizable.
 
-The software is not production ready. This are ealry stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
+The software is not production ready. These are early stages of development, feel free to contribute, but prior to that, please, read the disclaimer.
 For any questions or help, reach out to me at zarkones.xena@gmail.com
 
 Bot clients are very diverse, powered by Golang, TypeScript, Haxe and Python3.
 With this in mind, I'm confident that the framework covers a large surface area.
 
-**SERVCES & BOT CLIENTS**
+**SERVICES & BOT CLIENTS**
 
 **Xena-Face**
 
@@ -106,7 +106,7 @@ Features:
 **Xena-Atila**
 
 Message broker powered Adonis.ts and TypeScript. Before you ask, I know, maybe a preexisting solution for message distribution would be a better choice, but I argue that this use case is very domain specific.
-I’ve went with Postgres as the storage solution, but you can easily install different SQL drivers in the Adonis framework and go with your favorite database engine. SQL driver installation process is a piece of cake.
+I’ve gone with Postgres as the storage solution, but you can easily install different SQL drivers in the Adonis framework and go with your favorite database engine. SQL driver installation process is a piece of cake.
 Adonis provides support for PostgreSQL, MySQL, MSSQL, MariaDB and SQLite out of the box.
 
 Features:
@@ -129,7 +129,7 @@ Has ability to detect machine's environment and hardware.
 Able to detects if it's running as Windows Subsystem for Linux, as root user, and recognize Docker containers.
 
 Features:
-+ Corss platform. Requires NodeJS.
++ Cross platform. Requires NodeJS.
 + Provides a deep insight into the environment's details.
 + Capable of parsing web traffic in order to find emails, numbers, keywords, etc...
 
@@ -139,7 +139,7 @@ Bot builder. We need a manged way of bot building and distribution, plus this se
 I intent this to also be used for building of other kind of software.
 
 Features:
-+ Corss platform. Requires NodeJS.
++ Cross platform. Requires NodeJS.
 + Outsources building of bot client binaries.
 
 **Xena-Anaconda**
@@ -147,7 +147,7 @@ Features:
 Post exploitation bot client written in Python3 (typed, but can be improved for sure). Anaconda! Psszzt!@#! Modular, extandable base code for writting a bot client. It has services available to you, as well as a light-weight core which handles multi-processing. That way you write separate python scripts, which are going to be executed each into its own process. 
 
 Features:
-+ Corss platform. Requires Python3.
++ Cross platform. Requires Python3.
 + Modular.
 + Executes shell command.
 
@@ -170,7 +170,7 @@ Feel free to open a Pull-Request in order to add other persistency methods.
 Haxe transpiles to other languages, of which at the moment are tested C++, C#, Python3.
 
 Features:
-+ Corss platform. Transpiles into multiple targets; PHP, Python, C++, C-Sharp. Meaning that native static & dynamic binaries are possible.
++ Cross platform. Transpiles into multiple targets; PHP, Python, C++, C-Sharp. Meaning that native static & dynamic binaries are possible.
 + Downloads Apep from Pyramid and persists it on the operating system.
 
 **Xena-Sensi**
@@ -179,7 +179,7 @@ Sensi, polite and brilient assistent. It exists to supervise the network and pro
 At the moment GPT-2 is not released, it needs some work and training. You can utilize GPT-3 in the current version.
 
 Features:
-+ Corss platform. Requires NodeJS.
++ Cross platform. Requires NodeJS.
 + GPT 3 gateway.
 
 **Xena-Axe** [coming soon]
@@ -227,7 +227,7 @@ xena-apep-url === Unknow, but can be predicted, it uses the time in order to pic
 Build support is provided by Xena-Pyramid.
 You can interact with it by Xena-Face. (web user interface)
 
-Bare in mind that this feature is still work in progress.
+Bear in mind that this feature is still a work in progress.
 
 ...we can learn some things from the cloud. :)
 
@@ -246,7 +246,7 @@ https://www.youtube.com/watch?v=24hGJjgRfUI
 
 Zarkones. Software developer with an accent on back-end services.
 Current solutions are overpriced, when it comes to red-team software.
-I need to understand the topic and share my knowladge in a appropriate manner.
+I need to understand the topic and share my knowledge in a appropriate manner.
 
 Social links:
 1. [YouTube](https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug)
