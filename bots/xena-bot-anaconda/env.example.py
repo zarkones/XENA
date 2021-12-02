@@ -41,14 +41,14 @@ TRUSTED_PUBLIC_KEY = b'-----BEGIN PUBLIC KEY-----\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10
 MODULES = {
   'hello-world': {
     'name': 'HelloWorld',
-    'path': 'modules.hello-world',
+    'path': 'components.hello-world',
   },
   'xena-atila': {
     'name': 'XenaAtila',
-    'path': 'modules.xena-atila',
+    'path': 'components.xena-atila',
   },
   'gpt-2': {
     'name': 'GPT2',
-    'path': 'modules.brain',
+    'path': 'components.brain',
   },
 }

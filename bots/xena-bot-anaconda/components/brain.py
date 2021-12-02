@@ -18,7 +18,6 @@ class Brain:
   def create_model(self, model_name: str):
     logging.debug('Downloading a model: ' + model_name)
 
-
     subdir = os.path.join('models', model_name)
     if not os.path.exists(subdir):
         os.makedirs(subdir)
