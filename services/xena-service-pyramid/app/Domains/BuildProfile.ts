@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
 type Configuration = {
-  template: 'XENA_BOT_RA' | 'XENA_BOT_APEP'
+  template: 'XENA_BOT_RA' | 'XENA_BOT_APEP' | 'XENA_BOT_ANACONDA'
 }
 
 export default class BuildProfile {
@@ -21,7 +21,7 @@ export default class BuildProfile {
     this.description = description ? validString(description, 'BAD_BUILD_PROFILE_DESCRIPTION', 'NON_EMPTY') : null
     this.gitUrl = validString(gitUrl, 'BAD_BUILD_PROFILE_GIT_URL', 'NON_EMPTY')
     this.config = {
-      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE')
+      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE')
     }
     this.status = validEnum(status, ['ENABLED', 'DISABLED', 'DELETED'], 'BAD_BUILD_STATUS')
   }

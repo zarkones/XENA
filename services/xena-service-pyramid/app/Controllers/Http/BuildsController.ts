@@ -65,11 +65,19 @@ export default class BuildsController {
         //   ? response.internalServerError({ success: false, message: 'Failed to build.' })
         //   : response.ok(ra)
         return response.internalServerError({ success: false, message: 'Not yet implemented.' })
+
       case 'XENA_BOT_APEP':
         const apep = await this.buildApep(buildId, buildProfileId)
         return apep
           ? response.ok(apep)
           : response.internalServerError({ success: false, message: 'Failed to build.' })
+
+      case 'XENA_BOT_ANACONDA':
+        const anaconda = await this.buildAnaconda(buildId, buildProfileId)
+        return anaconda
+          ? response.ok(anaconda)
+          : response.internalServerError({ success: false, message: 'Failed to build.' })
+
       default:
         return response.unprocessableEntity({ success: false, message: 'Unrecognized build template.' })
     }
@@ -83,11 +91,51 @@ export default class BuildsController {
     // todo
   }
 
+  private buildAnaconda = async (buildId: string, buildProfileId: string) => {
+    // Build the binary.
+    const buildOutput = (() => {
+      const buildCommand =
+        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-anaconda && python3 compile.py`
+      try {
+        return Helper.Shell.exe(buildCommand)
+      } catch (e) {
+        console.warn(e)
+        return 'ERROR'
+      }
+    })()
+
+    if (buildOutput == 'ERROR')
+      throw Error('Unable to build.')
+
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bots/xena-bot-anaconda/app`
+
+    // Base64 binary.
+    const base64Binary = await Domain.Build.getBinary(botLocation)
+
+    // Store the build.
+    const build = await Repo.Build.insert( Domain.Build.fromJSON({
+      id: buildId,
+      buildProfileId, 
+      data: base64Binary,
+    })).then(build => Domain.Build.fromJSON(build))
+
+    // Repo cleaning.
+    try {
+      Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
+    } catch (e) {
+      console.warn(e)
+      return 'ERROR'
+    }
+
+    // Return the build binary.
+    return build.toBinary
+  }
+
   private buildApep = async (buildId: string, buildProfileId: string) => {
     // Build the binary.
     const buildOutput = (() => {
       const buildCommand =
-        `cd ${Service.Git.pathPrefix}${buildId}/bot-clients/xena-bot-apep && go build` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
+        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep && go build` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
       try {
         return Helper.Shell.exe(buildCommand)
       } catch (e) {
@@ -99,7 +147,7 @@ export default class BuildsController {
     if (buildOutput == 'ERROR')
       throw Error('Unable to build.')
 
-    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bot-clients/xena-bot-apep/xena-apep`
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bots/xena-bot-apep/xena-apep`
 
     // Base64 binary.
     const base64Binary = await Domain.Build.getBinary(botLocation)
