@@ -194,7 +194,7 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters([
-      'getRaHost',
+      'getPyramidHost',
     ]),
   },
 

@@ -81,7 +81,7 @@ export default Vue.extend({
 
     downloadBuild (buildProfileId: string) {
       window.open(
-        `${process.env.XENA_PYRAMID_HOST}/builds?buildProfileId=${buildProfileId}`,
+        `${this.getPyramidHost}/builds?buildProfileId=${buildProfileId}`,
         '_blank',
       )
     }
