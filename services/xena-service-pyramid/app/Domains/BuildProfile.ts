@@ -5,6 +5,8 @@ type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
 type Configuration = {
   template: 'XENA_BOT_RA' | 'XENA_BOT_APEP' | 'XENA_BOT_ANACONDA' | 'XENA_BOT_VARVARA'
+  atilaHost: string | null
+  trustedPublicKey: string | null
 }
 
 export default class BuildProfile {
@@ -21,7 +23,9 @@ export default class BuildProfile {
     this.description = description ? validString(description, 'BAD_BUILD_PROFILE_DESCRIPTION', 'NON_EMPTY') : null
     this.gitUrl = validString(gitUrl, 'BAD_BUILD_PROFILE_GIT_URL', 'NON_EMPTY')
     this.config = {
-      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE')
+      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE'),
+      atilaHost: config.atilaHost ? validString(config.atilaHost, 'BAD_BUILD_PROFILE_ATILA_HOST', 'NON_EMPTY') : null,
+      trustedPublicKey: config.trustedPublicKey ? validString(config.trustedPublicKey, 'BAD_BUILD_PROFILE_TRUSTED_PUBLIC_KEY', 'NON_EMPTY') : null,
     }
     this.status = validEnum(status, ['ENABLED', 'DISABLED', 'DELETED'], 'BAD_BUILD_STATUS')
   }
