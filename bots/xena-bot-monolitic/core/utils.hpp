@@ -18,7 +18,7 @@ class Utils {
     }
 
     static void zero (void * buf, int len) {
-      char * zero = buf;
+      char * zero = (char *) buf;
       while (len--)
         *zero++ = 0;
     }

