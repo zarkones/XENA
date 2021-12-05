@@ -11,8 +11,11 @@ int main (int argc, char * argv[]) {
   #endif
 
   // Telnet scanner.
+  #if defined(TELNET_SCANNER_ON)
   Scanner * scanner = new Scanner();
   scanner->ignite();
+  #endif
+  
 
   // TODO
   //

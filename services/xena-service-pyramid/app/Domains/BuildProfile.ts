@@ -3,8 +3,11 @@ import { v4 as uuidv4 } from 'uuid'
 
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
+export const buildTemplates = ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'] as const
+type BuildTemplate = keyof typeof buildTemplates
+
 type Configuration = {
-  template: 'XENA_BOT_RA' | 'XENA_BOT_APEP' | 'XENA_BOT_ANACONDA' | 'XENA_BOT_VARVARA'
+  template: BuildTemplate
   atilaHost: string | null
   trustedPublicKey: string | null
 }

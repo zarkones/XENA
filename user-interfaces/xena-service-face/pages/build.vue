@@ -59,8 +59,8 @@
               <v-text-field
                 outlined
                 dense
-                v-model = 'build.configPublicKey'
-                label = 'Public Key'
+                v-model = 'build.trustedPublicKey'
+                label = 'Trusted Public Key Used For Communication Integrity'
                 color = 'rgba(189, 147, 249, 1)'
               ></v-text-field>
 
@@ -174,7 +174,7 @@ export default Vue.extend({
       encoding: '',
       encodingIterations: 1,
       configHost: '',
-      configPublicKey: '',
+      trustedPublicKey: '',
     },
 
     encodings: [
@@ -204,7 +204,11 @@ export default Vue.extend({
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,
-        this.buildTemplate,
+        {
+          template: this.buildTemplate,
+          atilaHost: this.build.configHost,
+          trustedPublicKey: this.build.trustedPublicKey,
+        },
       ).then(() => EventBus.$emit('updateBuildProfiles'))
     }
   },

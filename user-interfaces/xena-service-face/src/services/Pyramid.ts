@@ -1,6 +1,11 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
-export type BuildTemplate = 'XENA_APEP' | 'XENA_RA'
+export type BuildTemplate = 'XENA_BOT_RA' | 'XENA_BOT_APEP' | 'XENA_BOT_ANACONDA'
+type Configuration = {
+  template: BuildTemplate
+  atilaHost?: string
+  trustedPublicKey?: string
+}
 
 export default class Pyramid {
   public readonly axios: NuxtAxiosInstance
@@ -25,7 +30,7 @@ export default class Pyramid {
     name: string,
     description: string | null,
     gitUrl: string,
-    template: BuildTemplate,
+    config: Configuration,
   ) => this.axios({
       method: 'POST',
       url: `${this.baseURL}/build-profiles`,
@@ -33,9 +38,7 @@ export default class Pyramid {
         name,
         description,
         gitUrl,
-        config: {
-          template,
-        },
+        config,
         status: 'ENABLED'
       },
     })

