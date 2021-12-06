@@ -1,6 +1,7 @@
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
+#include <cstring>
 #include <string>
 #include <vector>
 
@@ -31,6 +32,9 @@ class Request {
       std::string raw = this->method + O(" ") + this->route + O(" HTTP/1.1\r\n");
       raw += O("Host: ") + this->address + normalized_port + O("\r\n");
       raw += O("Connection: close\r\n");
+      raw += O("Content-Type: application/json\r\n");
+      raw += O("Content-Length: ");
+      raw += std::to_string(strlen(this->data.c_str()));
       raw += O("\r\n\r\n");
       raw += this->data;
 

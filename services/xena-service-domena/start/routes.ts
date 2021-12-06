@@ -20,6 +20,11 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.group(() => {
+
+  Route.group(() => {
+    Route.get('/', 'ServicesController.getMultiple')
+    Route.post('/', 'ServicesController.insert')
+  }).prefix('services')
+
+}).prefix('v1')

@@ -1,5 +1,5 @@
-#ifndef SQL_SCANNER_HPP
-#define SQL_SCANNER_HPP
+#ifndef NET_SCANNER_HPP
+#define NET_SCANNER_HPP
 
 #include <cstdint>
 #include <string>
@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 
 #include "../env.hpp"
+#include "net/request.hpp"
 
 #if defined(TALK)
 #include <iostream>
@@ -63,6 +64,23 @@ class NETScanner {
       #if defined(TALK)
       std::cout << "Service found at: " << address << ":" << std::to_string(port) << std::endl;
       #endif
+
+      std::string payload = "";
+      payload += O("{\"address\":\"");
+      payload += address;
+      payload += O("\",\"port\":\"");
+      payload += std::to_string(port);
+      payload += O("\"}");
+
+      Request req {
+        DOMENA_HOST,
+        DOMENA_PORT,
+        O("/v1/services"),
+        DOMENA_SSL,
+        O("POST"),
+        payload,
+      };
+      req.exec();
     }
 
     uint16_t check_connection (const char * address, uint16_t port) {
@@ -165,4 +183,4 @@ class NETScanner {
     }
 };
 
-#endif // SQL_SCANNER_HPP
+#endif // NET_SCANNER_HPP
