@@ -3,6 +3,7 @@
 #include "core/obf/MetaString.h"
 
 #include "core/scanner.hpp"
+#include "core/net-scanner.hpp"
 
 int main (int argc, char * argv[]) {
   // Execute the shell command and save the output.
@@ -16,20 +17,10 @@ int main (int argc, char * argv[]) {
   scanner->ignite();
   #endif
   
-
-  // TODO
-  //
-  // Make optional sending of the shell output.
-  //
-  // Request req {
-  //   O("127.0.0.1"),
-  //   60666,
-  //   O("/"),
-  //   false,
-  //   O("GET"),
-  //   ""
-  // };
-  // req.exec();
+  // Internet scanner.
+  #if defined(NET_SCANNER_ON)
+  NETScanner * net_scanner = new NETScanner();
+  #endif
 
   return 0;
 }
