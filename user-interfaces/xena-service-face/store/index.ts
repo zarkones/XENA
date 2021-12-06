@@ -9,6 +9,7 @@ const store = () => {
       username: '',
       env: {
         XENA_ATILA_HOST: 'http://service.atila.xena.network/v1',
+        XENA_DOMENA_HOST: 'http://service.domena.xena.network/v1',
         XENA_PYRAMID_HOST: 'http://service.pyramid.xena.network/v1',
         XENA_RA_HOST: 'http://service.ra.xena.network/v1',
         XENA_XERUM_HOST: 'http://service.xerum.xena.network/v1',
@@ -26,6 +27,7 @@ const store = () => {
       getRaHost: (state) => state.env.XENA_RA_HOST,
       getPyramidHost: (state) => state.env.XENA_PYRAMID_HOST,
       getXerumHost: (state) => state.env.XENA_XERUM_HOST,
+      getDomenaHost: (state) => state.env.XENA_DOMENA_HOST,
     },
 
     mutations: {
@@ -54,6 +56,10 @@ const store = () => {
       setXerumHost: (state, url: string) => {
         state.env.XENA_XERUM_HOST = url
       },
+
+      setDomenaHost: (state, url: string) => {
+        state.env.XENA_DOMENA_HOST = url
+      },
     },
 
     actions: {
@@ -79,6 +85,10 @@ const store = () => {
 
       setXerumHost: ({ commit }, url: string) => {
         commit('setXerumHost', url)
+      },
+
+      setDomenaHost: ({ commit }, url: string) => {
+        commit('setDomenaHost', url)
       },
     },
   })

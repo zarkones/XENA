@@ -141,6 +141,11 @@ export default Vue.extend({
         to: '/forum',
       },
       {
+        icon: 'mdi-web',
+        title: 'Internet Registry',
+        to: '/resources',
+      },
+      {
         icon: 'mdi-car',
         title: 'Vehicle Registry',
         to: '/registry',

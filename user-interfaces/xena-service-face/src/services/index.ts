@@ -3,6 +3,7 @@ import Pyramid from './Pyramid'
 import Ra from './Ra'
 import Xerum from './Xerum'
 import Crypto from './Crypto'
+import Domena from './Domena'
 
 export {
   Atila,
@@ -10,4 +11,5 @@ export {
   Ra,
   Xerum,
   Crypto,
+  Domena,
 }
