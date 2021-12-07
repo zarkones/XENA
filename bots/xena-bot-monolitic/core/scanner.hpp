@@ -3,6 +3,7 @@
 
 #include <arpa/inet.h>
 #include <errno.h>
+#include <exception>
 #include <fcntl.h>
 #include <linux/ip.h>
 #include <linux/tcp.h>
@@ -634,10 +635,11 @@ class Scanner {
 
       try {
         req.exec();
-      } catch (const char * message) {
+      }
+      catch (const std::exception &e) {
         #if defined(TALK)
         std::cout << "Failed to report found credentials." << std::endl; 
-        std::cout << message << std::endl;
+        std::cout << e.what() << std::endl; 
         #endif
       }
     }

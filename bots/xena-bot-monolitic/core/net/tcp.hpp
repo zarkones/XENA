@@ -42,11 +42,12 @@ class TCP {
       #endif
 
       int connection = connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
-      #if defined(TALK)
       if (connection < 0) {
+        return O("CONNECTION_ERROR");
+        #if defined(TALK)
         std::cout << "Connection refused." << std::endl;
+        #endif
       }
-      #endif
 
       // Send data to the destination.
       send(sock, data.c_str(), strlen(data.c_str()), 0);
