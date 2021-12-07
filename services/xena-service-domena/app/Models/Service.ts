@@ -1,6 +1,11 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
+type ServiceDetails = {
+  telnetUsername?: string
+  telnetPassword?: string
+}
+
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
   public id: string
@@ -10,6 +15,9 @@ export default class Service extends BaseModel {
   
   @column()
   public port: number
+
+  @column()
+  public details: ServiceDetails
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

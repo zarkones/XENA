@@ -15,6 +15,9 @@ export default class Services extends BaseSchema {
       
       table.integer('port')
         .notNullable()
+      
+      table.json('details')
+        .nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
