@@ -2,6 +2,9 @@ import * as Validator from 'App/Validators'
 import * as Repo from 'App/Repos'
 import * as Domain from 'App/Domains'
 
+import jwt from 'jsonwebtoken'
+import Env from '@ioc:Adonis/Core/Env'
+
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MessagesController {
@@ -19,6 +22,20 @@ export default class MessagesController {
 
   public getMultiple = async ({ request, response }: HttpContextContract) => {
     const { page, status, clientId, withReplies } = await request.validate(Validator.Message.GetMultiple)
+
+    // TEMP START
+    if (withReplies) {
+      const authHeader = request.header('Authorization')
+      if (!authHeader)
+      return response.unprocessableEntity({ success: false, message: 'Supply the auth. header.' })
+      
+      try {
+        jwt.verify(authHeader.split('Bearer ')[1], Env.get('TRUSTED_PUBLIC_KEY'), { algorithms: ['RS512'] })
+      } catch {
+        return response.unauthorized({ success: false })
+      }
+    }
+    // TEMP END
 
     const maybeMessages = await Repo.Message.getMultiple({ page, status, clientId, noReplies: !withReplies })
     if (!maybeMessages.length)

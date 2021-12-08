@@ -54,6 +54,22 @@
                 service-label
               '
             >
+              Token for Xena-Atila.
+            </p>
+
+            <v-text-field
+              v-model = 'atilaToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveAtilaToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
               Address of Xena-Pyramid.
             </p>
             <v-text-field
@@ -169,9 +185,16 @@ export default Vue.extend({
     ],
 
     atilaHost: '',
+    atilaToken: '',
+
     pyramidHost: '',
+    pyramidToken: '',
+    
     raHost: '',
-    DomenaHost: '',
+    raToken: '',
+
+    domenaHost: '',
+    domenaToken: '',
 
     // Tab: Identity.
     privateKey: '',

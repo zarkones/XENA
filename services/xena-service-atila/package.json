@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/supertest": "^2.0.11",
     "@types/uuid": "^8.3.0",
     "adonis-preset-ts": "^2.1.0",
@@ -26,6 +27,7 @@
     "@adonisjs/core": "^5.1.0",
     "@adonisjs/lucid": "^14.0.2",
     "@adonisjs/repl": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
     "luxon": "^1.27.0",
     "parse-url": "^5.0.2",
     "pg": "^8.6.0",

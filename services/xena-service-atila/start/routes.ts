@@ -30,13 +30,16 @@ Route.group(() => {
 
   // Clients.
   Route.group(() => {
-    Route.get('/:id', 'ClientsController.get')
-    Route.get('/', 'ClientsController.getMultiple')
-    Route.post('/', 'ClientsController.insert')
-
     Route.group(() => {
-      Route.get('/count', 'ClientsController.getCount')
-    }).prefix('stats')
+      Route.get('/:id', 'ClientsController.get')
+      Route.get('/', 'ClientsController.getMultiple')
+      
+      Route.group(() => {
+        Route.get('/count', 'ClientsController.getCount')
+      }).prefix('stats')
+    }).middleware(['auth'])
+      
+    Route.post('/', 'ClientsController.insert')
 
   }).prefix('clients')
 }).prefix('v1')
