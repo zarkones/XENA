@@ -17,17 +17,22 @@ type Client = {
 }
 
 export default class Atila {
-  public readonly axios: NuxtAxiosInstance
-  public baseURL: string
-
-  constructor (axios: NuxtAxiosInstance, baseURL: string) {
+  constructor (
+    public readonly axios: NuxtAxiosInstance,
+    public readonly baseURL: string,
+    public readonly token: string,
+  ) {
     this.axios = axios
     this.baseURL = baseURL
+    this.token = token
   }
 
   public getCount = () => this.axios({
       method: 'GET',
       url: `${this.baseURL}/clients/stats/count`,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -40,7 +45,10 @@ export default class Atila {
       url: `${this.baseURL}/clients/${id}`,
       params: {
         status: 'ALIVE',
-      }
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -51,6 +59,9 @@ export default class Atila {
   public getClients = () => this.axios({
       method: 'GET',
       url: `${this.baseURL}/clients`,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -64,7 +75,10 @@ export default class Atila {
       params: {
         clientId,
         withReplies,
-      }
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -83,6 +97,9 @@ export default class Atila {
         to: clientId,
         subject,
         content,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))

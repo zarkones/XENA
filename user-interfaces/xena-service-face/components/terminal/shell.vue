@@ -41,6 +41,7 @@ export default Vue.extend({
     ...mapGetters([
       'getPrivateKey',
       'getAtilaHost',
+      'getAtilaToken',
     ])
   },
 
@@ -48,7 +49,7 @@ export default Vue.extend({
     async issueMessages () {
       const message = await Service.Crypto.sign(this.getPrivateKey, { shell: this.shellCode })
 
-      await new Service.Atila(this.$axios, this.getAtilaHost).publishMessage(this.clients[0].id, 'instruction', message)
+      await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).publishMessage(this.clients[0].id, 'instruction', message)
       // const createdMessages = await Promise.all(this.clients.map(client => {
       //   return Service.Atila.publishMessage(this.$axios, client.id, 'instruction', message)
       // }))

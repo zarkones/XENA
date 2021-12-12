@@ -120,7 +120,7 @@ export default Vue.extend({
     },
 
     async getStatsCount () {
-      const count = await new Service.Atila(this.$axios, this.getAtilaHost).getCount()
+      const count = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getCount()
       if (count?.length)
         this.botClients = count
     },
@@ -129,6 +129,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getAtilaHost',
+      'getAtilaToken',
     ])
   },
   

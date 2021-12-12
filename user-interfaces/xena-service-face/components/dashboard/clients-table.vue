@@ -65,6 +65,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getAtilaHost',
+      'getAtilaToken',
     ])
   },
 
@@ -76,7 +77,7 @@ export default Vue.extend({
     },
 
     async tableUpdate (targetPlatform?: string) {
-      const clients = await new Service.Atila(this.$axios, this.getAtilaHost).getClients()
+      const clients = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getClients()
       if (clients)
         this.clients = clients
     },

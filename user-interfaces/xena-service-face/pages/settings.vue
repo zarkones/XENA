@@ -160,6 +160,37 @@
               color = 'rgba(189, 147, 249, 1)'
               @change = 'setPrivateKey'
             ></v-text-field>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
+              Generate a token using your private key, for authorization of calls to services.
+            </p>
+            
+            <v-btn
+              @click = 'generateNewToken'
+              tile
+              small
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              class = '
+              '
+              width = '100%'
+            >
+              Generate a Token
+            </v-btn>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
+              {{ newToken }}
+            </p>
           </div>
         </v-card>
       </v-tab-item>
@@ -171,6 +202,8 @@
 import Vue from 'vue'
 
 import { mapActions, mapGetters } from 'vuex'
+
+import * as Service from '@/src/services'
 
 export default Vue.extend({
   components: {
@@ -198,15 +231,24 @@ export default Vue.extend({
 
     // Tab: Identity.
     privateKey: '',
+    newToken: '',
   }),
 
   methods: {
+    generateNewToken () {
+      this.newToken = Service.Crypto.sign(this.getPrivateKey, {})
+    },
+
     setPrivateKey () {
       this.setPrivateKey(this.privateKey)
     },
 
     saveAtilaHost () {
       this.setAtilaHost(this.atilaHost)
+    },
+
+    saveAtilaToken () {
+      this.setAtilaToken(this.atilaToken)
     },
 
     savePyramidHost () {
@@ -224,6 +266,7 @@ export default Vue.extend({
     ...mapActions([
       'setPrivateKey',
       'setAtilaHost',
+      'setAtilaToken',
       'setPyramidHost',
       'setRaHost',
       'setDomenaHost',
@@ -235,6 +278,7 @@ export default Vue.extend({
       'getUsername',
       'getPrivateKey',
       'getAtilaHost',
+      'getAtilaToken',
       'getPyramidHost',
       'getRaHost',
       'getDomenaHost',
@@ -244,6 +288,7 @@ export default Vue.extend({
   mounted () {
     this.privateKey = this.getPrivateKey
     this.atilaHost = this.getAtilaHost
+    this.atilaToken = this.getAtilaToken
     this.pyramidHost = this.getPyramidHost
     this.raHost = this.getRaHost
     this.domenaHost = this.getDomenaHost
