@@ -65,6 +65,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getPyramidHost',
+      'getPyramidToken',
     ])
   },
 
@@ -74,7 +75,7 @@ export default Vue.extend({
 
   methods: {
     async getBuildProfiles () {
-      const builldProfiles = await new Service.Pyramid(this.$axios, this.getPyramidHost).getBuilldProfiles()
+      const builldProfiles = await new Service.Pyramid(this.$axios, this.getPyramidHost, this.getPyramidToken).getBuilldProfiles()
       if (builldProfiles)
         this.builldProfiles = builldProfiles
     },

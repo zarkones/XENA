@@ -8,17 +8,22 @@ type Configuration = {
 }
 
 export default class Pyramid {
-  public readonly axios: NuxtAxiosInstance
-  public baseURL: string
-
-  constructor (axios: NuxtAxiosInstance, baseURL: string) {
+  constructor (
+    public readonly axios: NuxtAxiosInstance,
+    public readonly baseURL: string,
+    public readonly token: string,
+  ) {
     this.axios = axios
     this.baseURL = baseURL
+    this.token = token
   }
 
   public getBuilldProfiles = () => this.axios({
       method: 'GET',
       url: `${this.baseURL}/build-profiles`,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -40,6 +45,9 @@ export default class Pyramid {
         gitUrl,
         config,
         status: 'ENABLED'
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))

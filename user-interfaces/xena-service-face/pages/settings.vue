@@ -85,6 +85,22 @@
                 service-label
               '
             >
+              Token for Xena-Pyramid.
+            </p>
+
+            <v-text-field
+              v-model = 'pyramidToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'savePyramidToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
               Address of Xena-Ra.
             </p>
             <v-text-field
@@ -286,6 +302,10 @@ export default Vue.extend({
       this.setPyramidHost(this.pyramidHost)
     },
 
+    savePyramidToken () {
+      this.setPyramidToken(this.pyramidToken)
+    },
+
     saveRaHost () {
       this.setRaHost(this.raHost)
     },
@@ -307,6 +327,7 @@ export default Vue.extend({
       'setAtilaHost',
       'setAtilaToken',
       'setPyramidHost',
+      'setPyramidToken',
       'setRaHost',
       'setRaToken',
       'setDomenaHost',
@@ -321,6 +342,7 @@ export default Vue.extend({
       'getAtilaHost',
       'getAtilaToken',
       'getPyramidHost',
+      'getPyramidToken',
       'getRaHost',
       'getRaToken',
       'getDomenaHost',
@@ -333,6 +355,7 @@ export default Vue.extend({
     this.atilaHost = this.getAtilaHost
     this.atilaToken = this.getAtilaToken
     this.pyramidHost = this.getPyramidHost
+    this.pyramidToken = this.getPyramidToken
     this.raHost = this.getRaHost
     this.raToken = this.getRaToken
     this.domenaHost = this.getDomenaHost

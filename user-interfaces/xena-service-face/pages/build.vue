@@ -195,12 +195,13 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getPyramidHost',
+      'getPyramidToken',
     ]),
   },
 
   methods: {
     async insertBuildProfile () {
-      await new Service.Pyramid(this.$axios, this.getPyramidHost).insertBuildProfile(
+      await new Service.Pyramid(this.$axios, this.getPyramidHost, this.getPyramidToken).insertBuildProfile(
         this.build.name,
         this.build.description?.length ? this.build.description : null,
         this.build.gitUrl,
