@@ -110,6 +110,21 @@
               @change = 'saveDomenaHost'
             ></v-text-field>
 
+            <p
+              class = '
+                service-label
+              '
+            >
+              Token for Xena-Domena.
+            </p>
+
+            <v-text-field
+              v-model = 'domenaToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveDomenaToken'
+            ></v-text-field>
           </div>
         </v-card>
 
@@ -263,6 +278,10 @@ export default Vue.extend({
       this.setDomenaHost(this.domenaHost)
     },
 
+    saveDomenaToken () {
+      this.setDomenaToken(this.domenaToken)
+    },
+
     ...mapActions([
       'setPrivateKey',
       'setAtilaHost',
@@ -270,6 +289,7 @@ export default Vue.extend({
       'setPyramidHost',
       'setRaHost',
       'setDomenaHost',
+      'setDomenaToken',
     ])
   },
 
@@ -282,6 +302,7 @@ export default Vue.extend({
       'getPyramidHost',
       'getRaHost',
       'getDomenaHost',
+      'getDomenaToken',
     ])
   },
 
@@ -292,6 +313,7 @@ export default Vue.extend({
     this.pyramidHost = this.getPyramidHost
     this.raHost = this.getRaHost
     this.domenaHost = this.getDomenaHost
+    this.domenaToken = this.getDomenaToken
   },
 })
 </script>

@@ -23,7 +23,10 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
 
   Route.group(() => {
-    Route.get('/', 'ServicesController.getMultiple')
+    Route.group(() => {
+      Route.get('/', 'ServicesController.getMultiple')
+    }).middleware(['auth'])
+
     Route.post('/', 'ServicesController.insert')
   }).prefix('services')
 

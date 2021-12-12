@@ -58,6 +58,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getDomenaHost',
+      'getDomenaToken',
     ]),
   },
 
@@ -73,7 +74,7 @@ export default Vue.extend({
 
   methods: {
     async getServices () {
-      const services = await new Service.Domena(this.$axios, this.getDomenaHost).getServices()
+      const services = await new Service.Domena(this.$axios, this.getDomenaHost, this.getDomenaToken).getServices()
       if (!services)
         return
       
