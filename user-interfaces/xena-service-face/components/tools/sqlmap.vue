@@ -41,13 +41,14 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getRaHost',
+      'getRaToken',
     ])
   },
 
   methods: {
     async submit () {
       this.loading = true
-      this.result = await new Service.Ra(this.$axios, this.getRaHost).sqlmap(this.url)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).sqlmap(this.url)
       this.loading = false
     },
   },

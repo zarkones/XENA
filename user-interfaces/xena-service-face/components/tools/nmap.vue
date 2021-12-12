@@ -36,15 +36,15 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters([
-      'getPrivateKey',
       'getRaHost',
+      'getRaToken',
     ])
   },
 
   methods: {
     async submit () {
       this.loading = true
-      this.result = await new Service.Ra(this.$axios, this.getRaHost).nmap(this.address)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).nmap(this.address)
       this.loading = false
     },
   },

@@ -82,13 +82,14 @@ export default Vue.extend({
   computed: {
     ...mapGetters([
       'getRaHost',
+      'getRaToken',
     ]),
   },
 
   methods: {
     async submit () {
       this.loading = true
-      this.result = await new Service.Ra(this.$axios, this.getRaHost).webFuzzer(this.url, this.method, this.wordlist)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).webFuzzer(this.url, this.method, this.wordlist)
       this.loading = false
     },
 

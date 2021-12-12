@@ -100,6 +100,22 @@
                 service-label
               '
             >
+              Token for Xena-Ra.
+            </p>
+
+            <v-text-field
+              v-model = 'raToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveRaToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
               Address of Xena-Domena.
             </p>
             <v-text-field
@@ -274,6 +290,10 @@ export default Vue.extend({
       this.setRaHost(this.raHost)
     },
 
+    saveRaToken () {
+      this.setRaToken(this.raToken)
+    },
+
     saveDomenaHost () {
       this.setDomenaHost(this.domenaHost)
     },
@@ -288,6 +308,7 @@ export default Vue.extend({
       'setAtilaToken',
       'setPyramidHost',
       'setRaHost',
+      'setRaToken',
       'setDomenaHost',
       'setDomenaToken',
     ])
@@ -301,6 +322,7 @@ export default Vue.extend({
       'getAtilaToken',
       'getPyramidHost',
       'getRaHost',
+      'getRaToken',
       'getDomenaHost',
       'getDomenaToken',
     ])
@@ -312,6 +334,7 @@ export default Vue.extend({
     this.atilaToken = this.getAtilaToken
     this.pyramidHost = this.getPyramidHost
     this.raHost = this.getRaHost
+    this.raToken = this.getRaToken
     this.domenaHost = this.getDomenaHost
     this.domenaToken = this.getDomenaToken
   },

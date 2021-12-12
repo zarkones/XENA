@@ -6,9 +6,6 @@ export type BruteForcedSubdomains = {
 }
 
 export default class Ra {
-  public readonly axios: NuxtAxiosInstance
-  public baseURL: string
-
   public readonly webMethods = [
     'GET',
     'DELETE',
@@ -22,9 +19,14 @@ export default class Ra {
     'UNLINK',
   ] as const
 
-  constructor (axios: NuxtAxiosInstance, baseURL: string) {
+  constructor (
+    public readonly axios: NuxtAxiosInstance,
+    public readonly baseURL: string,
+    public readonly token: string,
+  ) {
     this.axios = axios
     this.baseURL = baseURL
+    this.token = token
   }
 
   public sublist3r = (domain: string) => this.axios({
@@ -32,6 +34,9 @@ export default class Ra {
       url: `${this.baseURL}/recon/sublist3r`,
       data: {
         domain,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -46,6 +51,9 @@ export default class Ra {
       data: {
         domain,
         dict,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -62,6 +70,9 @@ export default class Ra {
       data: {
         address,
       },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     })
     .catch(err => console.warn(err))
     .then(resp => {
@@ -74,6 +85,9 @@ export default class Ra {
       url: `${this.baseURL}/scans/sql-injection`,
       data: {
         url,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -89,6 +103,9 @@ export default class Ra {
         url,
         method,
         wordlist,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
