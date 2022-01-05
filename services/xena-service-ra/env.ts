@@ -21,7 +21,6 @@ export default Env.rules({
 	APP_NAME: Env.schema.string(),
 	NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
 
-	API_SECRET: Env.schema.string(),
 	DIR_BUSTER: Env.schema.string.optional(),
 
 	TRUSTED_PUBLIC_KEY: Env.schema.string(),
