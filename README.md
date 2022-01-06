@@ -254,3 +254,4 @@ Social links:
 3. [GitHub](https://github.com/zarkones)
 4. [Reddit](https://www.reddit.com/r/xenarat)
 5. [Twitter](https://twitter.com/zarkones)
+6. [Gettr](https://gettr.com/user/zarkones)
