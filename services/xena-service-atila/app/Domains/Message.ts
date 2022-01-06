@@ -22,7 +22,7 @@ export default class Message {
     this.replyTo = replyTo ? validString(replyTo, 'BAD_MESSAGE_REPLY_TO_ID', 'NON_EMPTY') : null
   }
 
-  public static fromJSON = (json) => new Message(
+  public static fromJSON = (json: any) => new Message(
     json.id,
     json.from,
     json.to,
