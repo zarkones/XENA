@@ -28,3 +28,13 @@ func publicKeyToPEM(publicKey *rsa.PublicKey) string {
 	)
 	return string(spkiPEM)
 }
+
+// importPEMPublicKey converts a PEM encoded public key into the rsa.PublicKey object.
+func importPEMPublicKey(spkiPEM string) *rsa.PublicKey {
+	body, _ := pem.Decode([]byte(spkiPEM))
+	publicKey, _ := x509.ParsePKIXPublicKey(body.Bytes)
+	if publicKey, ok := publicKey.(*rsa.PublicKey); ok {
+		return publicKey
+	}
+	return nil
+}

