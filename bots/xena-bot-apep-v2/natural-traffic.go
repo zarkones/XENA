@@ -7,21 +7,53 @@ import (
 	"time"
 )
 
+type elem struct{ key, val string }
+
+type object []elem
+
+func (o object) MarshalJSON() (out []byte, err error) {
+	if o == nil {
+		return []byte(`null`), nil
+	}
+	if len(o) == 0 {
+		return []byte(`{}`), nil
+	}
+
+	out = append(out, '{')
+	for _, e := range o {
+		key, err := json.Marshal(e.key)
+		if err != nil {
+			return nil, err
+		}
+		val, err := json.Marshal(e.val)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, key...)
+		out = append(out, ':')
+		out = append(out, val...)
+		out = append(out, ',')
+	}
+	// replace last ',' with '}'
+	out[len(out)-1] = '}'
+	return out, nil
+}
+
 // serializedTraffic wraps around naturalTraffic and serializes map to string.
 func serializedTraffic(payload string) (string, error) {
 	trafficMap := naturalTraffic(string(payload))
-	traffic, err := json.Marshal(trafficMap)
+	traffic, err := trafficMap.MarshalJSON()
 	return string(traffic), err
 }
 
 // naturalTraffic obfuscates 'payload' into JSON-like structure.
-func naturalTraffic(payload string) map[string]string {
+func naturalTraffic(payload string) object {
 	// Decide on how many keys there will be in the JSON structure.
 	indexChar := 0
 	maxChars := 126
 	minChars := 16
 
-	var jsonObject = make(map[string]string)
+	var jsonObject object
 
 	// Build the JSON structure.
 	for indexChar < len(payload) {
@@ -31,7 +63,10 @@ func naturalTraffic(payload string) map[string]string {
 			chunkSize = len(payload) - indexChar
 		}
 		key := randomPopularWord()
-		jsonObject[key] = base64.StdEncoding.EncodeToString([]byte(payload[indexChar : indexChar+chunkSize]))
+		jsonObject = append(jsonObject, elem{
+			key: key,
+			val: base64.StdEncoding.EncodeToString([]byte(payload[indexChar : indexChar+chunkSize])),
+		})
 		indexChar += chunkSize
 	}
 
