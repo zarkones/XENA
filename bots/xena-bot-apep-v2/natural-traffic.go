@@ -11,6 +11,7 @@ type elem struct{ key, val string }
 
 type object []elem
 
+// MarshalJSON converts object type into JSON structure.
 func (o object) MarshalJSON() (out []byte, err error) {
 	if o == nil {
 		return []byte(`null`), nil

@@ -54,6 +54,7 @@ class Database {
     .update({
       status: 'SEEN'
     })
+    .exec()
 }
 
 export default new Database()

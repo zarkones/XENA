@@ -20,7 +20,7 @@ export default class MessagesController {
     return response.ok(message)
   }
 
-  public getMultiple = async ({ request, response }: HttpContextContract) => {
+  public getMultiple = async ({ request, response, logger }: HttpContextContract) => {
     const { page, status, clientId, withReplies } = await request.validate(Validator.Message.GetMultiple)
 
     // TEMP START
@@ -30,8 +30,9 @@ export default class MessagesController {
       return response.unprocessableEntity({ success: false, message: 'Supply the auth. header.' })
       
       try {
-        jwt.verify(authHeader.split('Bearer ')[1], Env.get('TRUSTED_PUBLIC_KEY'), { algorithms: ['RS512'] })
-      } catch {
+        jwt.verify(authHeader.split('Bearer ')[1], Env.get('TRUSTED_PUBLIC_KEY').replace(/\\n/g, '\n'), { algorithms: ['RS512'] })
+      } catch(e) {
+        logger.warn(e)
         return response.unauthorized({ success: false })
       }
     }

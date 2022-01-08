@@ -22,7 +22,7 @@ func publicKeyToPEM(publicKey *rsa.PublicKey) string {
 	spkiDER, _ := x509.MarshalPKIXPublicKey(publicKey)
 	spkiPEM := pem.EncodeToMemory(
 		&pem.Block{
-			Type:  "PULIC KEY",
+			Type:  "PUBLIC KEY",
 			Bytes: spkiDER,
 		},
 	)
