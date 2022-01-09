@@ -5,7 +5,7 @@ from multiprocessing import Process
 from importlib import import_module
 
 class Main:
-  def __init__(self) -> None:
+  def __init__ (self) -> None:
     self.logging_init()
 
     # Starting our processes.
@@ -22,7 +22,7 @@ class Main:
         logging.exception(e)
 
   # Handles our processes.
-  def module_init(self, module: dict) -> None:
+  def module_init (self, module: dict) -> None:
     try:
       logging.debug('Module imported: ' + module['name'])
       import_module(module['path'])
@@ -32,7 +32,7 @@ class Main:
       logging.exception(e)
 
   # Our logging configuration.
-  def logging_init(self) -> None:
+  def logging_init (self) -> None:
     logging.basicConfig(
       format = '%(asctime)s: %(message)s',
       level = LOGGING_LEVEL,

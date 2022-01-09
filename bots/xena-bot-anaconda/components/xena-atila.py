@@ -170,4 +170,4 @@ class XenaAtila:
     sleep(amount)
 
 
-xena_atila: XenaAtila = XenaAtila()
+xena_atila = XenaAtila()
