@@ -138,7 +138,12 @@ func messageAck(messageId string) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/messages/ack", bytes.NewBuffer(messageAckJson))
+	payloadJson, err := serializedTraffic(string(messageAckJson))
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", atilaHost+"/v1/messages/ack", bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -165,7 +170,12 @@ func sendMessage(message Message) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/messages", bytes.NewBuffer(insertionJson))
+	payloadJson, err := serializedTraffic(string(insertionJson))
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", atilaHost+"/v1/messages", bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
