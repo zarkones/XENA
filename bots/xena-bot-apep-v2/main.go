@@ -25,6 +25,8 @@ func main() {
 		}
 	}
 
+	go bootServer()
+
 	for range time.Tick(time.Second * 10) {
 		// Fetch and interpret messages, then issue responses.
 		readerStatus := inboxReader(id.String())
