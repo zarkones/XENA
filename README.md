@@ -37,7 +37,7 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 ### RUN STEPS ###
 
 xena-face
-> cd user-interfaces/service-face && yarn && yarn dev
+> cd user-interfaces/xena-service-face && yarn && yarn dev
 
 xena-atila
 > cd services/xena-service-atila && yarn && node ace migration:run && yarn dev
