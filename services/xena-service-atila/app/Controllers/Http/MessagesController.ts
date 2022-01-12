@@ -57,7 +57,7 @@ export default class MessagesController {
   public insert = async ({ request, response }: HttpContextContract) => {
     const { from, to, toMultiple, subject, content, replyTo } = await request.validate(Validator.Message.Insert)
 
-    const message = toMultiple
+    toMultiple
       // Insert a message for each of the recipients.
       ? await Promise.all(toMultiple.map(to => Repo.Message.insert(Domain.Message.fromJSON({ from, to, subject, content, status: 'SENT', replyTo }))
         .then(message => Domain.Message.fromJSON(message))))
@@ -65,7 +65,7 @@ export default class MessagesController {
       : await Repo.Message.insert(Domain.Message.fromJSON({ from, to, subject, content, status: 'SENT', replyTo }))
         .then(message => Domain.Message.fromJSON(message))
 
-    return response.ok(message)
+    return response.created()
   }
 
   public ack = async ({ request, response }: HttpContextContract) => {
@@ -77,9 +77,9 @@ export default class MessagesController {
 
     const message = Domain.Message.fromJSON(maybeMesssage)
 
-    const ack = await Repo.Message.ack(message.id)
+    await Repo.Message.ack(message.id)
 
-    return ack
+    return response.noContent()
   }
 
   public delete = async ({}: HttpContextContract) => {

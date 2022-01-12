@@ -125,8 +125,9 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 	}
 	defer response.Body.Close()
 
-	// Any status code other than 200 is a failure.
-	if response.StatusCode != 200 {
+	// StatusOK - We have been inserted into the database.
+	// StatusConflict - We are already in the database.
+	if response.StatusCode != http.StatusOK || response.StatusCode != http.StatusConflict {
 		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode))
 		return false
 	}

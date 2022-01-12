@@ -36,10 +36,10 @@ export default class ClientsController {
     if (maybeClient)
       return response.conflict({ success: false, message: 'Client ID has been taken.' })
     
-    const client = await Repo.Client.insert(Domain.Client.fromJSON({ id, publicKey, status }))
+    await Repo.Client.insert(Domain.Client.fromJSON({ id, publicKey, status }))
       .then(client => Domain.Client.fromJSON(client))
 
-    return response.ok(client)
+    return response.created()
   }
 
   public update = async ({}: HttpContextContract) => {
