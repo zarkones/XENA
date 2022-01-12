@@ -14,7 +14,7 @@ Docker
 
 Postgres >= 12 (or MySQL, MSSQL, MariaDB and SQLite, this requires additional configuration, see: https://docs.adonisjs.com/guides/database/introduction)
 
-Not all of the languages are required. Node.js is used for the back-end infrastructure, thus it's pretty much mandatory. Other languages are used by the bot clients.
+Not all of the languages are required. Node.js is used for the back-end infrastructure, thus it's pretty much mandatory. Other languages are used by the bot clients and thus use accordingly.
 
 # Setup Postgres
 
@@ -28,8 +28,9 @@ Docker
 
 ## Setup
 
-First make sure that you install docker using the following the 'apt' package menager for unix systems.
+First make sure that you install docker using the following 'apt' package menager for unix systems.
 > sudo apt install docker-ce docker-ce-cli containerd.io
+
 If you don't have 'apt' as your package manager, please refer to Docker's official documentation on how to install it: https://docs.docker.com/engine/install
 
 Then bring up the docker container using the following command.
@@ -70,6 +71,7 @@ Rename '.env.example' into '.env'.
 
 Then run the following command in order to generate a random app key.
 > node ace generate:key
+
 Then place that secret as the value of APP_KEY environment variable inside of the '.env' file.
 
 For the value of PG_HOST set 'postgres' or any other name that you've given to the Postgres account. PG_PASSWORD should be populated with your password that you've also set for the Postgres account.
@@ -92,10 +94,12 @@ Or if you aren't using 'yarn' as your package manager, you could do the equivale
 
 Then you will need to copy over the '.env' file, and run it using:
 > cp .env build/.env
+
 > node build/server.js
 
 But if you wish to deploy it as a container run:
 > docker build -t xena-service-atila .
+
 > docker run -it --net xena --name='xena-atila' -e PG_HOST='ip-address-of-the-postgres-continer' -e CORS_POLICY_ALLOWED_ORIGINS='http://127.0.0.1:3000' -e PG_PASSWORD='your-db-password' -e APP_KEY='your-app-secret' -e TRUSTED_PUBLIC_KEY='yout-public-key' -p 60666:60666 xena-service-atila
 
 # Setup Xena-Service-Face
@@ -146,6 +150,7 @@ Then run it using:
 
 But if you wish to deploy it as a container run:
 > docker build -t xena-service-face .
+
 > docker run -it -p 3000:3000 --net xena --name='xena-face' xena-service-face
 
-Now you can access the service through your browser at http://127.0.0.1
+Now you can access the service through your browser at http://127.0.0.1:3000
