@@ -6,7 +6,6 @@ RUN apk add --no-cache git
 WORKDIR /home/node
 # Copy the versioning files.
 COPY package.json ./
-COPY yarn.lock ./
 # Install project's dependencies.
 RUN yarn install
 # Copy the source-code.
