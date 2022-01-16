@@ -54,8 +54,9 @@ func main() {
 		matches := r.FindAllString(filesAndSources[file], -1)
 
 		for _, funcName := range matches {
-			if len(funcName[5:len(funcName)-1]) > 0 {
-				funcNames = append(funcNames, funcName[5:len(funcName)-1])
+			fun := funcName[5:len(funcName)-1]
+			if len(fun) > 0 {
+				funcNames = append(funcNames, fun)
 			}
 		}
 	}
