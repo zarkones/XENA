@@ -101,7 +101,9 @@ func main() {
 				if _, err := net.LookupIP(host); err != nil {
 					continue
 				}
-				tick(host)
+				if tick(host) {
+					break
+				}
 			}
 		}
 
