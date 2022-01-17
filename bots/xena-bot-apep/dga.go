@@ -8,7 +8,7 @@ import (
 
 // dga stands for Domain Generation Algorithm and it returns a list of domains
 // which are potentially in possesion of the bot herder.
-func dga() []string {
+func dga(dgaSeed int) []string {
 	domains := []string{}
 	for _, topLevelDOmain := range topLevelDomains {
 		for index := 0; index <= 50; index++ {
