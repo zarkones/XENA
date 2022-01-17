@@ -31,6 +31,25 @@ func publicKeyToPEM(publicKey *rsa.PublicKey) string {
 	return string(spkiPEM)
 }
 
+// privateKeyToPEM converts RSA private key object to PEM encoded string.
+func privateKeyToPEM(privateKey *rsa.PrivateKey) string {
+	spkiDER, _ := x509.MarshalPKCS8PrivateKey(privateKey)
+	spkiPEM := pem.EncodeToMemory(
+		&pem.Block{
+			Type:  "RSA PRIVATE KEY",
+			Bytes: spkiDER,
+		},
+	)
+	return string(spkiPEM)
+}
+
+// importPEMPrivateKey converts a PEM encoded private key into the rsa.PublicKey object.
+func importPEMPrivateKey(spkiPEM string) *rsa.PrivateKey {
+	body, _ := pem.Decode([]byte(spkiPEM))
+	privateKey, _ := x509.ParsePKCS1PrivateKey(body.Bytes)
+	return privateKey
+}
+
 // importPEMPublicKey converts a PEM encoded public key into the rsa.PublicKey object.
 func importPEMPublicKey(spkiPEM string) *rsa.PublicKey {
 	body, _ := pem.Decode([]byte(spkiPEM))

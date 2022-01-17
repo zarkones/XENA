@@ -11,6 +11,12 @@ func randomPopularWord() string {
 	return popularWords[rand.Intn(len(popularWords))]
 }
 
+// randomPopularWordBySeed returns the same word for the same seed from 'popularWords' variable.
+func randomPopularWordBySeed(seed int64) string {
+	rand.Seed(seed)
+	return popularWords[rand.Intn(len(popularWords))]
+}
+
 var popularWords = []string{
 	"the",
 	"of",

@@ -48,7 +48,7 @@ func messageHandler(response http.ResponseWriter, request *http.Request) {
 
 	// If message is meant for this bot, interpret and issue a reply,
 	// if not then store it in the pool of messages meat for different bots.
-	if message.To == id.String() {
+	if message.To == id {
 		reply, err := interpretMessage(atilaHost, message)
 		if err != nil {
 			fmt.Println(err.Error())
