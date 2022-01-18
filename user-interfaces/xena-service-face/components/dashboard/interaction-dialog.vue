@@ -1,68 +1,37 @@
 <template>
   <v-card
-    tile
+    flat
   >
-    <v-tabs
-      v-model = 'selectedTab'
+    <v-card-text
+      v-if = '!clients.length'
     >
-      <v-tab
-        v-for = 'item in tabItems'
-        :key = 'item.tab'
+      Please, select at least one client.
+    </v-card-text>
+
+    <!--
+      We should ask the user to select clients.
+    -->
+    <div
+      v-if = 'clients.length'
+      class = '
+        ml-4
+        mr-4
+        mt-4
+      '
+    >
+      <div
+        v-for = 'message in messages'
+        :key = 'message.id'
       >
-        {{ item.tab }}
-      </v-tab>
-    </v-tabs>
+        <MessageDisplay
+          :message = 'message'
+        />
+      </div>
 
-    <v-tabs-items v-model = 'selectedTab'>
-      <v-tab-item
-        v-for = 'item in tabItems'
-        :key = 'item.tab'
-      >
-        <v-card
-          v-if = 'item.content == "SHELL"'
-          flat
-        >
-          <v-card-text
-            v-if = '!clients.length'
-          >
-            Please, select at least one client.
-          </v-card-text>
-
-          <!--
-            We should ask the user to select clients.
-          -->
-          <div
-            v-if = 'clients.length'
-            class = '
-              ml-4
-              mr-4
-              mt-4
-            '
-          >
-            <div
-              v-for = 'message in messages'
-              :key = 'message.id'
-            >
-              <MessageDisplay
-                :message = 'message'
-              />
-            </div>
-
-            <Shell
-              :clients = 'clients'
-            />
-          </div>
-        </v-card>
-
-        <v-card
-          v-if = 'item.content == "SYSTEM_MONITOR"'
-          flat
-        >
-          Feature is disabled. Development is progressing. Consider opening a pull-request for the implementation of system monitoring.
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
-
+      <Shell
+        :clients = 'clients'
+      />
+    </div>
   </v-card>
 </template>
 

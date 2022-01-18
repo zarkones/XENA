@@ -36,7 +36,7 @@ export default class ClientsController {
     if (maybeClient)
       return response.conflict({ success: false, message: 'Client ID has been taken.' })
     
-    await Repo.Client.insert(Domain.Client.fromJSON({ id, publicKey, status }))
+    await Repo.Client.insert(Domain.Client.fromJSON({ id, ip: request.ip(), publicKey, status }))
       .then(client => Domain.Client.fromJSON(client))
 
     return response.created()

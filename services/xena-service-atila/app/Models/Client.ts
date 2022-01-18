@@ -6,6 +6,9 @@ export default class Client extends BaseModel {
   public id: string
 
   @column()
+  public ip: string
+
+  @column()
   public publicKey: string
   
   @column()

@@ -9,6 +9,9 @@ export default class Clients extends BaseSchema {
         .notNullable()
         .unique()
         .primary()
+      
+      table.string('ip', 15)
+        .notNullable()
 
       table.string('public_key', 4096)
         .notNullable()
