@@ -135,11 +135,13 @@ export default Vue.extend({
         title: 'Cloud Build',
         to: '/build'
       },
-      {
-        icon: 'mdi-forum',
-        title: 'Forum',
-        to: '/forum',
-      },
+      // This feature isn't ready yet.
+      // But it's worth exploring.
+      // {
+      //   icon: 'mdi-forum',
+      //   title: 'Forum',
+      //   to: '/forum',
+      // },
       {
         icon: 'mdi-web',
         title: 'Internet Registry',
