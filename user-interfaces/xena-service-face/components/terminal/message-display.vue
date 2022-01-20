@@ -7,8 +7,20 @@
         mb-4
       '
     >
-      <v-card-text>
+      <v-card-text class = 'd-flex'>
         {{ message.content.shell }}
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          x-small
+          outlined
+          color = 'rgba(189, 147, 249, 1)'
+          @click = 'deleteMessage'
+          :disabled = 'deleted'
+        >
+          delete
+        </v-btn>
       </v-card-text>
 
       <div
@@ -30,6 +42,8 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import * as Service from '@/src/services'
+
 import { mapGetters } from 'vuex'
 
 export default Vue.extend({
@@ -41,11 +55,14 @@ export default Vue.extend({
   data: () => ({
     draw: true,
     replies: [] as any[],
+    deleted: false,
   }),
 
   computed: {
     ...mapGetters([
       'getPrivateKey',
+      'getAtilaHost',
+      'getAtilaToken',
     ])
   },
 
@@ -56,6 +73,14 @@ export default Vue.extend({
   },
 
   methods: {
+    async deleteMessage () {
+      const status = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).deleteMessage(this.message.id)
+        .then(({ status }) => status)
+        .catch(e => console.error(e))
+      
+      if (status === 204)
+        this.deleted = true
+    }
   },
 
   mounted () {

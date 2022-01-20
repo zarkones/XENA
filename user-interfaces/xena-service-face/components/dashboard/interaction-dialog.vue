@@ -14,9 +14,7 @@
     <div
       v-if = 'clients.length'
       class = '
-        ml-4
-        mr-4
-        mt-4
+        ma-4
       '
     >
       <div
@@ -91,11 +89,15 @@ export default Vue.extend({
     EventBus.$on('interactionDialogUpdateClients', (clients: any[]) => this.clients = clients)
 
     EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string) => {
+      // Without this the rendering engine won't update. This needs to be fixed somehow.
+      this.messages = []
+
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
 
       const messages = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken)
         .fetchMessages(this.selectedClient.id, this.getPrivateKey, this.selectedClient.publicKey, true)
-      this.messages = messages?.length ? messages : []
+      
+      this.messages = messages?.length ? messages : this.messages
     })
   },
 })

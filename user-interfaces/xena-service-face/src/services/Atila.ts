@@ -27,6 +27,17 @@ export default class Atila {
     this.token = token
   }
 
+  public deleteMessage = (id: string) => this.axios({
+    method: 'DELETE',
+    url: `${this.baseURL}/messages`,
+    headers: {
+      Authorization: `Bearer ${this.token}`,
+    },
+    data: {
+      id,
+    }
+  })
+
   public getCount = () => this.axios({
       method: 'GET',
       url: `${this.baseURL}/clients/stats/count`,

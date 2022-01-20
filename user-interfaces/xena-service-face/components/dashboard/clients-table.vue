@@ -23,9 +23,23 @@
         color = 'rgba(189, 147, 249, 1)'
         class = '
           pt-4
-          mx-4
+          ml-4
+          mr-4
         '
       ></v-text-field>
+      <v-btn
+        x-small
+        outlined
+        tile
+        color = 'rgba(189, 147, 249, 1)'
+        width = '100%'
+        class = '
+          pl-4
+        '
+        @click = 'tableUpdate'
+      >
+        Refresh Bots
+      </v-btn>
     </template>
 
     <!--  -->
@@ -59,7 +73,8 @@ export default Vue.extend({
     dialog: false,
     headers: [
       { text: 'ID', value: 'ip' },
-    ]
+    ],
+    intervalIsActive: false,
   }),
 
   computed: {
@@ -85,8 +100,8 @@ export default Vue.extend({
 
   mounted () {
     this.tableUpdate()
-
-    EventBus.$on('clientsTableUpdate', async (targetPlatform: string) => await this.tableUpdate(targetPlatform))
+    
+    EventBus.$on('clientsTableUpdate', async () => await this.tableUpdate())
   },
 })
 </script>

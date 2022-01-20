@@ -18,7 +18,7 @@ export default class Message extends BaseModel {
   public content: string
   
   @column()
-  public status: 'SEEN' | 'SENT'
+  public status: 'SEEN' | 'SENT' | 'DELETED'
 
   @column()
   public replyTo: string | null

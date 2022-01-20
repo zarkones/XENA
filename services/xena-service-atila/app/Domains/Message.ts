@@ -1,7 +1,7 @@
 import { validString, validEnum } from './Validators'
 import { v4 as uuidv4 } from 'uuid'
 
-type MessageStatus = 'SEEN' | 'SENT'
+type MessageStatus = 'SEEN' | 'SENT' | 'DELETED'
 
 export default class Message {
   constructor (
@@ -18,7 +18,7 @@ export default class Message {
     this.to = to ? validString(to, 'BAD_MESSAGE_TO', 'NON_EMPTY') : null
     this.subject = validString(subject, 'BAD_MESSAGE_SUBJECT', 'NON_EMPTY')
     this.content = validString(content, 'BAD_MESSAGE_CONTENT', 'NON_EMPTY')
-    this.status = validEnum(status, ['SEEN', 'SENT'], 'BAD_MESSAGE_STATUS')
+    this.status = validEnum(status, ['SEEN', 'SENT', 'DELETED'], 'BAD_MESSAGE_STATUS')
     this.replyTo = replyTo ? validString(replyTo, 'BAD_MESSAGE_REPLY_TO_ID', 'NON_EMPTY') : null
   }
 

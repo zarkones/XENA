@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div
+    class = '
+      d-flex
+    '
+  >
     <v-text-field
       :disabled = '!getPrivateKey'
       dense
@@ -9,6 +13,17 @@
       color = 'rgba(189, 147, 249, 1)'
       @change = 'issueMessages'
     ></v-text-field>
+
+    <v-btn
+      outlined
+      color = 'rgba(189, 147, 249, 1)'
+      class = '
+        ml-4
+      '
+      @click = 'checkForReplies'
+    >
+      Check For Replies
+    </v-btn>
 
     <h3
       v-if = '!getPrivateKey'
@@ -24,6 +39,7 @@ import Vue from 'vue'
 import * as Service from '@/src/services'
 
 import { mapGetters } from 'vuex'
+import EventBus from '@/src/EventBus'
 
 export default Vue.extend({
   data: () => ({
@@ -46,6 +62,10 @@ export default Vue.extend({
   },
 
   methods: {
+    checkForReplies () {
+      EventBus.$emit('interactionDialogUpdateSelectedClient', this.clients[0].id)
+    },
+
     async issueMessages () {
       const message = await Service.Crypto.sign(this.getPrivateKey, { shell: this.shellCode })
 
@@ -53,6 +73,8 @@ export default Vue.extend({
       // const createdMessages = await Promise.all(this.clients.map(client => {
       //   return Service.Atila.publishMessage(this.$axios, client.id, 'instruction', message)
       // }))
+
+      EventBus.$emit('interactionDialogUpdateSelectedClient', this.clients[0].id)
 
       this.shellCode = ''
     }

@@ -82,7 +82,15 @@ export default class MessagesController {
     return response.noContent()
   }
 
-  public delete = async ({}: HttpContextContract) => {
-    // todo
+  public delete = async ({ request, response }: HttpContextContract) => {
+    const { id } = await request.validate(Validator.Message.Delete)
+
+    const maybeMesssage = await Repo.Message.get({ id })
+    if (!maybeMesssage)
+      return response.notFound({ success: false, message: 'Message not found.' })
+
+    await Repo.Message.delete(id)
+
+    return response.noContent()
   }
 }

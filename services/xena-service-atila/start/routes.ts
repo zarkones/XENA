@@ -23,6 +23,8 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   // Messages.
   Route.group(() => {
+    Route.delete('/', 'MessagesController.delete').middleware(['auth'])
+    
     Route.get('/', 'MessagesController.getMultiple')
     Route.post('/', 'MessagesController.insert')
     Route.post('/ack', 'MessagesController.ack')

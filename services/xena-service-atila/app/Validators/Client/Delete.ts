@@ -25,7 +25,7 @@ export default class {
 	 *    ```
 	 */
   public schema = schema.create({
-		id: schema.string({}, [ rules.uuid({ version: 4 }) ])
+		id: schema.string({}, [ rules.uuid({ version: 4 }) ]),
   })
 
 	/**
