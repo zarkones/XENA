@@ -147,11 +147,11 @@ export default Vue.extend({
         title: 'Internet Registry',
         to: '/resources',
       },
-      {
-        icon: 'mdi-car',
-        title: 'Vehicle Registry',
-        to: '/registry',
-      },
+      // {
+      //   icon: 'mdi-car',
+      //   title: 'Vehicle Registry',
+      //   to: '/registry',
+      // },
       {
         icon: 'mdi-earth',
         title: 'Map',
