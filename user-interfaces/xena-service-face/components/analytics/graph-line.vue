@@ -10,6 +10,7 @@
     <v-btn
       block
       text
+      disabled
       tile
       small
       color = 'rgba(189, 147, 249, 1)'
@@ -21,18 +22,7 @@
 
     <canvas
       :id = '`line-chart-${targetPlatform}`'
-      class = '
-        pl-2
-        pr-2
-        pb-2
-      '
     ></canvas>
-
-    <v-divider></v-divider>
-
-    <v-card-text>
-      {{ start }} - {{ end }}
-    </v-card-text>
   </v-card>
 </template>
 

@@ -29,14 +29,14 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import * as Service from '@/src/services'
+
+import { mapGetters } from 'vuex'
 import { Chart } from 'chart.js'
 
 export default Vue.extend({
   data: () => ({
     platforms: {
-      linux: 40,
-      windows: 5,
-      macos: 30,
     } as any,
     chart: null,
   }),
@@ -104,9 +104,26 @@ export default Vue.extend({
         }
       })
     },
+
+    async fetchDemographic () {
+      const systems = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getDemographic()
+      let p = {}
+      for (const system of systems) {
+        p[system.name] = system.count
+      }
+      this.platforms = p
+    },
+  },
+
+  computed: {
+    ...mapGetters([
+      'getAtilaHost',
+      'getAtilaToken',
+    ])
   },
   
-  mounted () {
+  async mounted () {
+    await this.fetchDemographic()
     this.chartInit()
   }
 })

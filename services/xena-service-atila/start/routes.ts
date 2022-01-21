@@ -38,6 +38,7 @@ Route.group(() => {
       
       Route.group(() => {
         Route.get('/count', 'ClientsController.getCount')
+        Route.get('/demographic', 'ClientsController.demographic')
       }).prefix('stats')
     }).middleware(['auth'])
       

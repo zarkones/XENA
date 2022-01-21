@@ -50,6 +50,19 @@ export default class Atila {
       if (resp)
         return resp.data as number[]
     })
+  
+  public getDemographic = (os?: string) => this.axios({
+    method: 'GET',
+    url: `${this.baseURL}/clients/stats/demographic${os ? `?os=${os}` : ''}`,
+    headers: {
+      Authorization: `Bearer ${this.token}`,
+    },
+  })
+  .catch(err => console.warn(err))
+  .then(resp => {
+    if (resp)
+      return resp.data
+  })
 
   public getClient = (id: string) => this.axios({
       method: 'GET',

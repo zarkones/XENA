@@ -59,11 +59,30 @@ export default class ClientsController {
     // todo
   }
 
-  public getCount = async ({ response }) => {
-    const count = await Repo.Client.getCount()
+  public getCount = async ({ response }: HttpContextContract) => {
+    // const { os } = await request.validate(Validator.Client.Count)
+
+    const count = await Repo.Client.count()
     if (!count.length)
       return response.noContent()
-
     return response.ok(count)
+  }
+
+  public demographic = async ({ request, response }: HttpContextContract) => {
+    const { os: name } = await request.validate(Validator.Client.Demographic)
+
+    if (name) {
+      const maybeSystem = await Repo.System.get({ name })
+      if (!maybeSystem)
+        return response.noContent()
+      
+      return response.ok(Domain.System.fromJSON(maybeSystem))
+    }
+
+    const maybeSystems = await Repo.System.getMultiple()
+    if (!maybeSystems.length)
+      return response.noContent()
+    
+    return response.ok(maybeSystems.map(s => Domain.System.fromJSON(s)))
   }
 }

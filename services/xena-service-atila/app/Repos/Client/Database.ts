@@ -38,9 +38,9 @@ export default new class Database {
     .exec()
     .then(clients => clients.map(c => c.serialize()))
 
-  public getCount = () => LucidDatabase.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
+  public count = () => LucidDatabase.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
     .exec()
-    .then(result => result.rows.map(unixTime => unixTime.timestamp))
+    .then(result => result.rows.map(unixTime => unixTime.timestamp as number))
   
   public insert = (payload: Insert) => Client.create(payload).then(client => client.serialize())
 }
