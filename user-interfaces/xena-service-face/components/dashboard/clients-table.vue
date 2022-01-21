@@ -72,7 +72,8 @@ export default Vue.extend({
     clients: [] as any[],
     dialog: false,
     headers: [
-      { text: 'ID', value: 'ip' },
+      { text: 'IP', value: 'ip' },
+      { text: 'OS', value: 'system.name' },
     ],
     intervalIsActive: false,
   }),

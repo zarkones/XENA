@@ -47,10 +47,9 @@
       </span>
       <v-spacer></v-spacer>
       <v-btn
-        x-small
+        small
         text
         light
-        :to = '`/user?name=${getUsername}`'
       >
         {{ getUsername ? getUsername : 'Not logged in' }}
       </v-btn>
@@ -86,7 +85,6 @@
 import Vue from 'vue'
 
 import { mapGetters } from 'vuex'
-import { DateTime } from 'luxon'
 
 export default Vue.extend({
   computed: {
@@ -94,6 +92,11 @@ export default Vue.extend({
       'getPrivateKey',
       'getUsername',
     ]),
+  },
+
+  mounted () {
+    if (this.getPrivateKey && this.getUsername)
+      this.$router.push('/dashboard')
   },
 
   data: () => ({
@@ -106,8 +109,6 @@ export default Vue.extend({
     rightDrawer: false,
     title: 'XENA',
     fixed: true,
-
-    luxon: DateTime,
 
     items: [
       {

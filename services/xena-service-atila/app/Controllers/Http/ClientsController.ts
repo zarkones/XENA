@@ -3,6 +3,7 @@ import * as Repo from 'App/Repos'
 import * as Domain from 'App/Domains'
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class ClientsController {
   public get = async ({ request, response }: HttpContextContract) => {
@@ -30,15 +31,23 @@ export default class ClientsController {
   }
 
   public insert = async ({ request, response }: HttpContextContract) => {
-    const { id, publicKey, status } = await request.validate(Validator.Client.Insert)
+    const { id, os, arch, publicKey, status } = await request.validate(Validator.Client.Insert)
 
     const maybeClient = await Repo.Client.get({ id })
     if (maybeClient)
       return response.conflict({ success: false, message: 'Client ID has been taken.' })
     
-    await Repo.Client.insert(Domain.Client.fromJSON({ id, ip: request.ip(), publicKey, status }))
-      .then(client => Domain.Client.fromJSON(client))
+    const system = await (async () => {
+      const maybeSystem = await Repo.System.get({ name: os })
+      if (maybeSystem)
+        return Domain.System.fromJSON(maybeSystem)
+      return Domain.System.fromJSON(await Repo.System.insert(Domain.System.fromJSON({ id: uuidv4(), name: os, arch, count: 0 })))
+    })()
 
+    await Repo.Client.insert(Domain.Client.fromJSON({ id, osId: system.id, ip: request.ip(), publicKey, status, system }))
+    
+    await Repo.System.update({ id: system.id, count: system.count + 1 })
+    
     return response.created()
   }
 

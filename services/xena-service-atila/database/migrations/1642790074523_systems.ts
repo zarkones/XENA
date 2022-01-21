@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Clients extends BaseSchema {
-  protected tableName = 'clients'
+export default class Systems extends BaseSchema {
+  protected tableName = 'systems'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
@@ -9,18 +9,15 @@ export default class Clients extends BaseSchema {
         .notNullable()
         .unique()
         .primary()
-
-      table.uuid('os_id')
+      
+      table.string('name', 64)
         .notNullable()
       
-      table.string('ip', 15)
-        .notNullable()
-
-      table.string('public_key', 4096)
-        .notNullable()
-
-      // Client's state.
-      table.enum('status', ['ALIVE', 'DEAD', 'BANNED'])
+      table.string('arch', 32)
+        .nullable()
+      
+      table.integer('count')
+        .defaultTo(0)
         .notNullable()
 
       table.timestamps(true)

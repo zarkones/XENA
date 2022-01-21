@@ -1,9 +1,9 @@
 import Client from './Client'
 import Message from './Message'
-import Address from './Address'
+import System from './System'
 
 export {
   Client,
   Message,
-  Address,
+  System,
 }

@@ -27,6 +27,8 @@ export default class {
   public schema = schema.create({
 		id: schema.string({}, [ rules.uuid({ version: 4 }) ]),
 		publicKey: schema.string(),
+		os: schema.string(),
+		arch: schema.string.optional(),
 		status: schema.enum(['ALIVE', 'DEAD', 'BANNED'] as const),
   })
 

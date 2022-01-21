@@ -27,7 +27,7 @@ type Insert = {
   replyTo: MessageId | null
 }
 
-class Database {
+export default new class Database {
   public get = ({ id, status }: Get) => Message.query()
     .select('*')
     .whereNot('status', 'DELETED')
@@ -63,7 +63,5 @@ class Database {
     .update({
       status: 'DELETED',
     })
-    .exec()
+    .first()
 }
-
-export default new Database()

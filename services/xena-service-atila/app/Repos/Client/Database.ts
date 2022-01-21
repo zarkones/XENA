@@ -34,6 +34,7 @@ export default new class Database {
     .if(status, builder => builder.where('status', status as ClientStatus))
     .if(page, builder => builder.offset(page as number * 10))
     .if(page, builder => builder.limit(10))
+    .preload('system')
     .exec()
     .then(clients => clients.map(c => c.serialize()))
 

