@@ -107,6 +107,9 @@ export default Vue.extend({
 
     async fetchDemographic () {
       const systems = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getDemographic()
+      if (!systems)
+        return
+        
       let p = {}
       for (const system of systems) {
         p[system.name] = system.count
