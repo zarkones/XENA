@@ -6,6 +6,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { v4 as uuidv4 } from 'uuid'
 
 export default class ClientsController {
+  // Returns a single bot client.
   public get = async ({ request, response }: HttpContextContract) => {
     const { id, status } = await request.validate(Validator.Client.Get)
 
@@ -18,6 +19,7 @@ export default class ClientsController {
     return response.ok(client)
   }
 
+  // Returns multiple bot clients.
   public getMultiple = async ({ request, response }: HttpContextContract) => {
     const { page, status } = await request.validate(Validator.Client.GetMultiple)
 
@@ -30,6 +32,7 @@ export default class ClientsController {
     return response.ok(clients)
   }
 
+  // Bot reaches out to this endpoint to get identified.
   public insert = async ({ request, response }: HttpContextContract) => {
     const { id, os, arch, publicKey, status } = await request.validate(Validator.Client.Insert)
 
@@ -59,6 +62,7 @@ export default class ClientsController {
     // todo
   }
 
+  // Returns timestamps as an array of when clients where created.
   public getCount = async ({ response }: HttpContextContract) => {
     // const { os } = await request.validate(Validator.Client.Count)
 
@@ -68,6 +72,7 @@ export default class ClientsController {
     return response.ok(count)
   }
 
+  // Returns stats of clients available on a operating system.
   public demographic = async ({ request, response }: HttpContextContract) => {
     const { os: name } = await request.validate(Validator.Client.Demographic)
 
