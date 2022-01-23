@@ -4,9 +4,18 @@
     tile
     min-height = '190px'
     @click = 'setBuildTemplate()'
+    :disabled = 'details.disabled'
   >
     <v-card-title>
       {{ details.name }}
+
+      <v-spacer></v-spacer>
+
+      <span
+        v-if = 'details.disabled'
+      >
+        [cooming soon]
+      </span>
     </v-card-title>
   
     <v-divider></v-divider>

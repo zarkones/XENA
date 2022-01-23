@@ -72,20 +72,23 @@ export default Vue.extend({
         details: `Modular cross-platform post-exploitation agent powered by Python3 interpreted language.
           It allows you to execute custom modules (scripts), through the light-weight mutli-processing core.`,
         logo: '/logo-anaconda.png',
+        disabled: true,
       },
       {
         id: 'XENA_BOT_APEP',
         name: 'Apep',
-        details: `Cross-platform multi-threaded universal backdoor powered by Golang compiled language.
+        details: `Cross-platform universal backdoor powered by Golang compiled language.
           Meant to provide the terminal experience like no other.`,
         logo: '/logo-apep.png',
+        disabled: false,
       },
       {
-        id: 'XENA_BOT_VARVARA',
-        name: 'Varvara',
-        details: `Cross-platform bot dropper powered by Haxe langauge. Its job is to download bot clients and persist them
-          within the environment. This dropper is first transpiled.`,
+        id: 'XENA_BOT_MONOLITIC',
+        name: 'Monolitic',
+        details: `IoT bot powered by C++ langauge. Built with Telnet bruteforcer and also capable to execute
+          payloads up on execution.`,
         logo: '/logo-varvara.png',
+        disabled: true,
       },
     ], 3),
   }),

@@ -33,6 +33,11 @@ export default class {
 			template: schema.enum(buildTemplates),
 			atilaHost: schema.string.optional(),
 			trustedPublicKey: schema.string.optional(),
+			dgaSeed: schema.string.optional(),
+			dgaAfterDays: schema.string.optional(),
+			maxLoopWait: schema.string.optional(),
+			minLoopWait: schema.string.optional(),
+			gettrProfileName: schema.string.optional(),
 		}),
 		status: schema.enum([ 'ENABLED', 'DISABLED', 'DELETED' ] as const),
   })

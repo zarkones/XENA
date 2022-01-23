@@ -10,6 +10,11 @@ type Configuration = {
   template: BuildTemplate
   atilaHost: string | null
   trustedPublicKey: string | null
+  maxLoopWait: string | null
+  minLoopWait: string | null
+  gettrProfileName: string | null
+  dgaSeed: string | null
+  dgaAfterDays: string | null
 }
 
 export default class BuildProfile {
@@ -29,6 +34,11 @@ export default class BuildProfile {
       template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE'),
       atilaHost: config.atilaHost ? validString(config.atilaHost, 'BAD_BUILD_PROFILE_ATILA_HOST', 'NON_EMPTY') : null,
       trustedPublicKey: config.trustedPublicKey ? validString(config.trustedPublicKey, 'BAD_BUILD_PROFILE_TRUSTED_PUBLIC_KEY', 'NON_EMPTY') : null,
+      maxLoopWait: config.maxLoopWait ? validString(config.maxLoopWait, 'BAD_BUILD_PROFILE_MAX_LOOP_WAIT', 'NON_EMPTY') : null,
+      minLoopWait: config.minLoopWait ? validString(config.minLoopWait, 'BAD_BUILD_PROFILE_MIN_LOOP_WAIT', 'NON_EMPTY') : null,
+      gettrProfileName: config.gettrProfileName ? validString(config.gettrProfileName, 'BAD_BUILD_PROFILE_GETTR_PROFILE_NAME', 'NON_EMPTY') : null,
+      dgaSeed: config.dgaSeed ? validString(config.dgaSeed, 'BAD_BUILD_PROFILE_DGA_SEED', 'NON_EMPTY') : null,
+      dgaAfterDays: config.dgaAfterDays ? validString(config.dgaAfterDays, 'BAD_BUILD_PROFILE_DGA_TIMEOUT', 'NON_EMPTY') : null,
     }
     this.status = validEnum(status, ['ENABLED', 'DISABLED', 'DELETED'], 'BAD_BUILD_STATUS')
   }

@@ -38,7 +38,7 @@ export default class buildProfilesController {
       status,
     } = await request.validate(Validator.BuildProfile.Insert)
 
-    const buildProfile = await Repo.BuildProfile.insert( Domain.BuildProfile.fromJSON({
+    const buildProfile = await Repo.BuildProfile.insert(Domain.BuildProfile.fromJSON({
       name,
       description,
       gitUrl,

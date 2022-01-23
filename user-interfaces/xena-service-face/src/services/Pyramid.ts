@@ -5,6 +5,11 @@ type Configuration = {
   template: BuildTemplate
   atilaHost?: string
   trustedPublicKey?: string
+  dgaSeed?: number
+  dgaAfterDays?: number
+  maxLoopWait?: number
+  minLoopWait?: number
+  gettrProfileName?: string
 }
 
 export default class Pyramid {

