@@ -10,6 +10,7 @@
     <v-btn
       block
       text
+      disabled
       tile
       small
       color = 'rgba(189, 147, 249, 1)'
@@ -21,24 +22,14 @@
 
     <canvas
       :id = '`line-chart-${targetPlatform}`'
-      class = '
-        pl-2
-        pr-2
-        pb-2
-      '
     ></canvas>
-
-    <v-divider></v-divider>
-
-    <v-card-text>
-      {{ start }} - {{ end }}
-    </v-card-text>
   </v-card>
 </template>
 
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import { mapGetters } from 'vuex'
 import { Chart } from 'chart.js'
 
 import * as Service from '@/src/services'
@@ -119,10 +110,17 @@ export default Vue.extend({
     },
 
     async getStatsCount () {
-      const count = await Service.Atila.getCount(this.$axios)
-      if (count.length)
+      const count = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getCount()
+      if (count?.length)
         this.botClients = count
     },
+  },
+
+  computed: {
+    ...mapGetters([
+      'getAtilaHost',
+      'getAtilaToken',
+    ])
   },
   
   async mounted () {

@@ -1,0 +1,6 @@
+env.example.py
+compile.py
+README.md
+.gitignore
+exclude.lst
+\*.pyc

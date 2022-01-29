@@ -66,6 +66,7 @@
 import Vue from 'vue'
 
 import * as Service from '@/src/services'
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   data: () => ({
@@ -81,10 +82,17 @@ export default Vue.extend({
     ]
   }),
 
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+      'getRaToken',
+    ]),
+  },
+
   methods: {
     async submit () {
       this.loading = true
-      const subdomains = await Service.Ra.sublist3r(this.$axios, this.domain)
+      const subdomains = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).sublist3r(this.domain)
       this.loading = false
 
       if (subdomains)

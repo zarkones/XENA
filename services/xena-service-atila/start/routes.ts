@@ -23,6 +23,8 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   // Messages.
   Route.group(() => {
+    Route.delete('/', 'MessagesController.delete').middleware(['auth'])
+    
     Route.get('/', 'MessagesController.getMultiple')
     Route.post('/', 'MessagesController.insert')
     Route.post('/ack', 'MessagesController.ack')
@@ -30,12 +32,17 @@ Route.group(() => {
 
   // Clients.
   Route.group(() => {
-    Route.get('/', 'ClientsController.getMultiple')
-    Route.post('/', 'ClientsController.insert')
-
     Route.group(() => {
-      Route.get('/count', 'ClientsController.getCount')
-    }).prefix('stats')
+      Route.get('/:id', 'ClientsController.get')
+      Route.get('/', 'ClientsController.getMultiple')
+      
+      Route.group(() => {
+        Route.get('/count', 'ClientsController.getCount')
+        Route.get('/demographic', 'ClientsController.demographic')
+      }).prefix('stats')
+    }).middleware(['auth'])
+      
+    Route.post('/', 'ClientsController.insert')
 
   }).prefix('clients')
 }).prefix('v1')

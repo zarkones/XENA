@@ -25,6 +25,8 @@ import Vue from 'vue'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     address: '',
@@ -32,10 +34,17 @@ export default Vue.extend({
     loading: false,
   }),
 
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+      'getRaToken',
+    ])
+  },
+
   methods: {
     async submit () {
       this.loading = true
-      this.result = await Service.Ra.nmap(this.$axios, this.address)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).nmap(this.address)
       this.loading = false
     },
   },

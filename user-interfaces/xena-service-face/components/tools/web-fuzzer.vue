@@ -14,7 +14,6 @@
 
       <v-select
         v-model = 'method'
-        :items = 'methods'
         label = 'Request method...'
         outlined
         dense
@@ -48,7 +47,16 @@
         Start
       </v-btn>
 
-      {{ result }}
+      <div
+        v-for = '(response, index) in result'
+        :key = 'index'
+        class = '
+          mt-4
+        '
+      >
+        Url: {{ response.url }} <br>
+        Status: {{ response.status }} <br>
+      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -58,22 +66,30 @@ import Vue from 'vue'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     url: '',
-    result: '',
+    result: [],
     loading: false,
 
     wordlist: [] as string[],
     currentWord: '',
-    methods: Service.Ra.webMethods,
     method: '',
   }),
+
+  computed: {
+    ...mapGetters([
+      'getRaHost',
+      'getRaToken',
+    ]),
+  },
 
   methods: {
     async submit () {
       this.loading = true
-      this.result = await Service.Ra.webFuzzer(this.$axios, this.url, this.method, this.wordlist)
+      this.result = await new Service.Ra(this.$axios, this.getRaHost, this.getRaToken).webFuzzer(this.url, this.method, this.wordlist)
       this.loading = false
     },
 

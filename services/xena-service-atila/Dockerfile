@@ -1,37 +1,53 @@
-# Build AdonisJS
+# Build the project.
 FROM node:16-alpine as builder
-# Set directory for all files
+# Bodyparser needs git.
+RUN apk add --no-cache git
+# Set working directory.
 WORKDIR /home/node
-# Copy over package.json files
-COPY package*.json ./
-# Install all packages
-RUN npm install
-# Copy over source code
+# Copy the versioning files.
+COPY package.json ./
+# Install project's dependencies.
+RUN yarn install
+# Copy the source-code.
 COPY . .
-# Build AdonisJS for production
-RUN npm run build --production
+# Create a production build.
+RUN yarn build
 
-
-# Build final runtime container
-FROM node:16-alpine
-# Set environment variables
-ENV NODE_ENV=production
-# Disable .env file loading
-ENV ENV_SILENT=true
-# Listen to external network connections
-# Otherwise it would only listen in-container ones
-ENV HOST=0.0.0.0
-# Set port to listen
-ENV PORT=60666
-# Set app key at start time
-ENV APP_KEY=
-# Set home dir
+# This step will install the node packages.
+FROM node:16-alpine as installer
+# Bodyparser needs git.
+RUN apk add --no-cache git
+# Set working directory.
 WORKDIR /home/node
-# Copy over built files
-COPY --from=builder /home/node/build .
-# Install only required packages
-RUN npm ci --production
-# Expose port to outside world
+# Copy the versioning files.
+COPY package.json ./
+# Install production only node packages.
+RUN yarn install --prod=true --frozen-lockfile
+
+# Build the run-time container.
+FROM node:16-alpine
+# Set basic environment variables.
+ENV NODE_ENV production
+ENV DB_CONNECTION pg
+ENV PG_PORT 5432
+ENV PG_USER postgres
+ENV PG_DB_NAME xena-atila
+ENV DRIVE_DISK local
+ENV ENV_SILENT true
+ENV HOST 0.0.0.0
+ENV PORT 60666
+# Lower the privledges. (don't use root user)
+USER node
+# Make the app's directory.
+RUN mkdir -p /home/node/app/
+# Set working directory.
+WORKDIR /home/node/app
+# Copy over the app.
+COPY --from=builder /home/node/build ./build
+COPY --from=installer /home/node/node_modules ./node_modules
+# Copy the versioning files.
+COPY package.json ./
+# Expose the app.
 EXPOSE 60666
-# Start server up
-CMD [ "node", "server.js" ]
+# Start the app.
+CMD [ "node", "./build/server.js" ]

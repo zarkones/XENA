@@ -5,9 +5,7 @@ export type BruteForcedSubdomains = {
   dead: string[],
 }
 
-export default new class Ra {
-  public readonly axios: NuxtAxiosInstance
-
+export default class Ra {
   public readonly webMethods = [
     'GET',
     'DELETE',
@@ -19,17 +17,26 @@ export default new class Ra {
     'PURGE',
     'LINK',
     'UNLINK',
-  ]
+  ] as const
 
-  constructor (axios?: NuxtAxiosInstance) {
+  constructor (
+    public readonly axios: NuxtAxiosInstance,
+    public readonly baseURL: string,
+    public readonly token: string,
+  ) {
     this.axios = axios
+    this.baseURL = baseURL
+    this.token = token
   }
 
-  public sublist3r = (axios: NuxtAxiosInstance, domain: string) => axios({
+  public sublist3r = (domain: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/sublist3r`,
+      url: `${this.baseURL}/recon/sublist3r`,
       data: {
         domain,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -38,12 +45,15 @@ export default new class Ra {
         return resp.data as string[]
     })
 
-  public subdomainBruteforce = (axios: NuxtAxiosInstance, domain: string, dict: string[]) => axios({
+  public subdomainBruteforce = (domain: string, dict: string[]) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/subdomain-bruteforce`,
+      url: `${this.baseURL}/recon/subdomain-bruteforce`,
       data: {
         domain,
         dict,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -54,11 +64,14 @@ export default new class Ra {
       console.log(resp)
     })
 
-  public nmap = (axios: NuxtAxiosInstance, address: string) => axios({
+  public nmap = (address: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/recon/nmap`,
+      url: `${this.baseURL}/recon/nmap`,
       data: {
         address,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))
@@ -67,13 +80,32 @@ export default new class Ra {
         return resp.data as string
     })
 
-  public webFuzzer = (axios: NuxtAxiosInstance, url: string, method: string, worldlist?: string[]) => axios({
+  public sqlmap = (url: string) => this.axios({
       method: 'POST',
-      url: `${process.env.XENA_RA_HOST}/scans/web-fuzzer`,
+      url: `${this.baseURL}/scans/sql-injection`,
+      data: {
+        url,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+    .catch(err => console.warn(err))
+    .then(resp => {
+      if (resp)
+        return resp.data as string[]
+    })
+
+  public webFuzzer = (url: string, method: string, wordlist?: string[]) => this.axios({
+      method: 'POST',
+      url: `${this.baseURL}/scans/web-fuzzer`,
       data: {
         url,
         method,
-        worldlist,
+        wordlist,
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       },
     })
     .catch(err => console.warn(err))

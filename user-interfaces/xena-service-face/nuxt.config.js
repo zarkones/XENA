@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Interface configuration.
   server: {
-    //host: '0.0.0.0',
-    port: '3000'
+    // host: '0.0.0.0',
+    port: '3000',
   },
 
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)

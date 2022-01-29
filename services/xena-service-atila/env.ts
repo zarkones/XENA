@@ -37,4 +37,6 @@ export default Env.rules({
 	// Cross-Origin Resource Sharing Policy.
 	// Comma separated list of hosts derived from the origin header.
 	CORS_POLICY_ALLOWED_ORIGINS: Env.schema.string(),
+
+	TRUSTED_PUBLIC_KEY: Env.schema.string(),
 })

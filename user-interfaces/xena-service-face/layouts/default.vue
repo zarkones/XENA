@@ -6,6 +6,7 @@
       :clipped = 'clipped'
       fixed
       app
+      expand-on-hover
     >
       <v-list>
         <v-list-item
@@ -37,63 +38,146 @@
       </v-list>
     </v-navigation-drawer>
 
+    <v-system-bar
+      class = '
+        system-bar
+      '
+    >
+      <span>
+      </span>
+      <v-spacer></v-spacer>
+      <v-btn
+        small
+        text
+        light
+      >
+        {{ getUsername ? getUsername : 'Not logged in' }}
+      </v-btn>
+    </v-system-bar>
+
     <!-- Pages -->
     <v-main>
       <nuxt />
     </v-main>
 
     <!--v-footer
-      :absolute="!fixed"
+      :absolute = '!fixed'
       app
+      outlined
+      fixed
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-btn
+        tile
+        small
+        color = 'rgba(189, 147, 249, 1)'
+        :plain = 'true'
+        v-if = 'getUsername'
+      >
+        {{ getUsername }}
+      </v-btn>
+
     </v-footer-->
   </v-app>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      clipped: false,
-      drawer: true,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-view-dashboard',
-          title: 'Dashboard',
-          to: '/dashboard'
-        },
-        {
-          icon: 'mdi-console',
-          title: 'Interaction',
-          to: '/interaction'
-        },
-        {
-          icon: 'mdi-alphabet-piqad',
-          title: 'Tools',
-          to: '/tools',
-        },
-        {
-          icon: 'mdi-cube-outline',
-          title: 'Cloud Build',
-          to: '/build'
-        },
-        {
-          icon: 'mdi-wrench',
-          title: 'Settings',
-          to: '/settings'
-        },
-      ],
-      miniVariant: true,
-      right: true,
-      rightDrawer: false,
-      title: 'XENA'
-    }
-  }
-}
+<script lang = 'ts'>
+import Vue from 'vue'
+
+import { mapGetters } from 'vuex'
+
+export default Vue.extend({
+  computed: {
+    ...mapGetters([
+      'getPrivateKey',
+      'getUsername',
+    ]),
+  },
+
+  mounted () {
+    if (this.getPrivateKey && this.getUsername)
+      this.$router.push('/dashboard')
+  },
+
+  data: () => ({
+    searchTerm: '',
+
+    clipped: false,
+    drawer: true,
+    miniVariant: false,
+    right: true,
+    rightDrawer: false,
+    title: 'XENA',
+    fixed: true,
+
+    items: [
+      {
+        icon: 'mdi-view-dashboard',
+        title: 'Dashboard',
+        to: '/dashboard'
+      },
+      {
+        icon: 'mdi-console',
+        title: 'Control Terminal',
+        to: '/terminal'
+      },
+      {
+        icon: 'mdi-alphabet-piqad',
+        title: 'Hacking Tools',
+        to: '/tools',
+      },
+      {
+        icon: 'mdi-book',
+        title: 'Hacking Manual',
+        to: '/howtohack',
+      },
+      {
+        icon: 'mdi-cube-outline',
+        title: 'Cloud Build',
+        to: '/build'
+      },
+      // This feature isn't ready yet.
+      // But it's worth exploring.
+      // {
+      //   icon: 'mdi-forum',
+      //   title: 'Forum',
+      //   to: '/forum',
+      // },
+      {
+        icon: 'mdi-web',
+        title: 'Internet Registry',
+        to: '/resources',
+      },
+      // {
+      //   icon: 'mdi-car',
+      //   title: 'Vehicle Registry',
+      //   to: '/registry',
+      // },
+      {
+        icon: 'mdi-earth',
+        title: 'Map',
+        to: '/map',
+      },
+      {
+        icon: 'mdi-wrench',
+        title: 'Settings',
+        to: '/settings'
+      },
+    ],
+  }),
+})
 
 </script>
+
+<style scoped>
+.system-bar {
+  background-color: #bd93f9;
+  bottom: 0px !important;
+  position: absolute;
+  min-width: 100% !important;
+  z-index: 100;
+}
+</style>
 
 <style>
 .logo {

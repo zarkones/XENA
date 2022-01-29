@@ -3,14 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'fs/promises'
 
 export default class Build {
-  public readonly id: string
-  public readonly buildProfileId: string
-  public readonly data: string
-
   constructor (
-    id: string | null,
-    buildProfileId: string,
-    data: string,
+    public readonly id: string,
+    public readonly buildProfileId: string,
+    public readonly data: string,
   ) {
     this.id = validString(id ?? uuidv4(), 'BAD_BUILD_ID', 'NON_EMPTY')
     this.buildProfileId = validString(buildProfileId, 'BAD_BUILD_PROFILE_ID', 'NON_EMPTY')

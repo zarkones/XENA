@@ -29,9 +29,11 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/list', 'BuildsController.getMultiple')
-    // This is a state changin route, but we're assigning GET method,
-    // For reasons of pure convenience.
-    Route.get('/', 'BuildsController.insert')
   }).prefix('builds')
-
+  
 }).prefix('v1')
+  .middleware(['auth'])
+
+// This is a state changin route, but we're assigning GET method,
+// For reasons of pure convenience.
+Route.get('/v1/builds', 'BuildsController.insert')

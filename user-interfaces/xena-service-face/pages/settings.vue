@@ -44,7 +44,9 @@
             <v-text-field
               v-model = 'atilaHost'
               dense
+              outlined
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveAtilaHost'
             ></v-text-field>
 
             <p
@@ -52,12 +54,46 @@
                 service-label
               '
             >
-              Address of Xena-Pramid.
+              Token for Xena-Atila.
+            </p>
+
+            <v-text-field
+              v-model = 'atilaToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveAtilaToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Address of Xena-Pyramid.
             </p>
             <v-text-field
               v-model = 'pyramidHost'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'savePyramidHost'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Token for Xena-Pyramid.
+            </p>
+
+            <v-text-field
+              v-model = 'pyramidToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'savePyramidToken'
             ></v-text-field>
 
             <p
@@ -69,10 +105,58 @@
             </p>
             <v-text-field
               v-model = 'raHost'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveRaHost'
             ></v-text-field>
 
+            <p
+              class = '
+                service-label
+              '
+            >
+              Token for Xena-Ra.
+            </p>
+
+            <v-text-field
+              v-model = 'raToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveRaToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Address of Xena-Domena.
+            </p>
+            <v-text-field
+              v-model = 'domenaHost'
+              outlined
+              dense
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveDomenaHost'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Token for Xena-Domena.
+            </p>
+
+            <v-text-field
+              v-model = 'domenaToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveDomenaToken'
+            ></v-text-field>
           </div>
         </v-card>
 
@@ -97,14 +181,63 @@
                 service-label
               '
             >
+              Username: 
+              <v-btn
+                tile
+                text
+                small
+                color = 'rgba(189, 147, 249, 1)'
+              >
+                {{ getUsername }}
+              </v-btn>
+            </p>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
               Your private key used for signing of messages.
             </p>
             <v-text-field
               v-model = 'privateKey'
+              outlined
               dense
               color = 'rgba(189, 147, 249, 1)'
               @change = 'setPrivateKey'
             ></v-text-field>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
+              Generate a token using your private key, for authorization of calls to services.
+            </p>
+            
+            <v-btn
+              @click = 'generateNewToken'
+              tile
+              small
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              class = '
+              '
+              width = '100%'
+            >
+              Generate a Token
+            </v-btn>
+
+            <p
+              class = '
+                service-label
+                mt-4
+              '
+            >
+              {{ newToken }}
+            </p>
           </div>
         </v-card>
       </v-tab-item>
@@ -114,6 +247,10 @@
 </template>
 <script lang = 'ts'>
 import Vue from 'vue'
+
+import { mapActions, mapGetters } from 'vuex'
+
+import * as Service from '@/src/services'
 
 export default Vue.extend({
   components: {
@@ -127,22 +264,102 @@ export default Vue.extend({
       { tab: 'Identity', content: 'IDENTITY' },
     ],
 
-    // Tab: Connections.
-    atilaHost: process.env.XENA_ATILA_HOST as string,
-    pyramidHost: process.env.XENA_PYRAMID_HOST as string,
-    raHost: process.env.XENA_RA_HOST as string,
+    atilaHost: '',
+    atilaToken: '',
+
+    pyramidHost: '',
+    pyramidToken: '',
+    
+    raHost: '',
+    raToken: '',
+
+    domenaHost: '',
+    domenaToken: '',
 
     // Tab: Identity.
     privateKey: '',
+    newToken: '',
   }),
 
   methods: {
+    generateNewToken () {
+      this.newToken = Service.Crypto.sign(this.getPrivateKey, {})
+    },
+
     setPrivateKey () {
-      this.$store.dispatch('setPrivateKey', this.privateKey)
-    }
+      this.setPrivateKey(this.privateKey)
+    },
+
+    saveAtilaHost () {
+      this.setAtilaHost(this.atilaHost)
+    },
+
+    saveAtilaToken () {
+      this.setAtilaToken(this.atilaToken)
+    },
+
+    savePyramidHost () {
+      this.setPyramidHost(this.pyramidHost)
+    },
+
+    savePyramidToken () {
+      this.setPyramidToken(this.pyramidToken)
+    },
+
+    saveRaHost () {
+      this.setRaHost(this.raHost)
+    },
+
+    saveRaToken () {
+      this.setRaToken(this.raToken)
+    },
+
+    saveDomenaHost () {
+      this.setDomenaHost(this.domenaHost)
+    },
+
+    saveDomenaToken () {
+      this.setDomenaToken(this.domenaToken)
+    },
+
+    ...mapActions([
+      'setPrivateKey',
+      'setAtilaHost',
+      'setAtilaToken',
+      'setPyramidHost',
+      'setPyramidToken',
+      'setRaHost',
+      'setRaToken',
+      'setDomenaHost',
+      'setDomenaToken',
+    ])
+  },
+
+  computed: {
+    ...mapGetters([
+      'getUsername',
+      'getPrivateKey',
+      'getAtilaHost',
+      'getAtilaToken',
+      'getPyramidHost',
+      'getPyramidToken',
+      'getRaHost',
+      'getRaToken',
+      'getDomenaHost',
+      'getDomenaToken',
+    ])
   },
 
   mounted () {
+    this.privateKey = this.getPrivateKey
+    this.atilaHost = this.getAtilaHost
+    this.atilaToken = this.getAtilaToken
+    this.pyramidHost = this.getPyramidHost
+    this.pyramidToken = this.getPyramidToken
+    this.raHost = this.getRaHost
+    this.raToken = this.getRaToken
+    this.domenaHost = this.getDomenaHost
+    this.domenaToken = this.getDomenaToken
   },
 })
 </script>

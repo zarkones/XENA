@@ -35,6 +35,7 @@
 
           <v-text-field
             dense
+            outlined
             v-model = 'username'
             label = 'Username'
             color = 'rgba(189, 147, 249, 1)'
@@ -46,23 +47,25 @@
 
           <v-text-field
             dense
-            type = 'privateKey'
+            outlined
+            type = 'password'
             v-model = 'privateKey'
             label = 'Private Key'
             color = 'rgba(189, 147, 249, 1)'
             class = '
-              pt-4
               mx-4
             '
           ></v-text-field>
 
           <v-btn
-            block
-            text
+            @click = 'login'
             tile
             small
+            outlined
             color = 'rgba(189, 147, 249, 1)'
-            @click = 'login'
+            class = '
+            '
+            width = '100%'
           >
             Login
           </v-btn>
@@ -93,6 +96,8 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import { mapActions } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
     username: '',
@@ -106,13 +111,16 @@ export default Vue.extend({
 
   methods: {
     async login () {
-      this.$auth.loginWith('local', {
-        username: this.username,
-        privateKey: this.privateKey,
-      })
+      this.setPrivateKey(this.privateKey)
+      this.setUsername(this.username)
 
       this.$router.push('/dashboard')
     },
+
+    ...mapActions([
+      'setPrivateKey',
+      'setUsername',
+    ]),
   },
 })
 </script>

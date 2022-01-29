@@ -12,23 +12,35 @@ export default class WebFuzzersController {
 
     const parsedUrl = Domain.WebPage.parseUrl(url)
 
-    const responses = (wordlist
-      ? [ ...Data.Worldlists.Basic, ...wordlist ]
-      : Data.Worldlists.Basic)
-      .map(payload => axios
-      .request({
-        url: `${url}${payload}`,
-        method,
-      })
-      .then(data => ({
-        success: true,
-        payload,
-        response: data.data,
-        status: data.status,
-      }))
-      .catch(error => ({ success: false, payload, error: error.message, request: error.config }))
-    )
+    const completeWordlist = wordlist?.length ? wordlist : Data.Worldlists.Basic
 
-    return response.ok(await Promise.all(responses))
+    const responses = await Promise.all(
+      completeWordlist.map(payload => axios
+        .request({
+          url: `${url}${payload}`,
+          method,
+        })
+        .then(data => ({
+          success: true,
+          payload,
+          ...data,
+        }))
+        .catch(error => ({ success: false, payload, error: error.message, request: error.config }))
+    ))
+
+    const pages = responses.map(resp => {
+      if (resp['error'])
+        return resp
+
+      return Domain.WebPage.fromJson({
+        method,
+        url: resp['config']['url'],
+        headers: resp['headers'],
+        source: resp['data'],
+        status: resp['status'],
+      }).asJSON
+    })
+
+    return response.ok(pages)
   }
 }

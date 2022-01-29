@@ -2,6 +2,9 @@ import * as Validator from 'App/Validators'
 import * as Repo from 'App/Repos'
 import * as Domain from 'App/Domains'
 
+import jwt from 'jsonwebtoken'
+import Env from '@ioc:Adonis/Core/Env'
+
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MessagesController {
@@ -17,8 +20,23 @@ export default class MessagesController {
     return response.ok(message)
   }
 
-  public getMultiple = async ({ request, response }: HttpContextContract) => {
+  public getMultiple = async ({ request, response, logger }: HttpContextContract) => {
     const { page, status, clientId, withReplies } = await request.validate(Validator.Message.GetMultiple)
+
+    // TEMP START
+    if (withReplies) {
+      const authHeader = request.header('Authorization')
+      if (!authHeader)
+      return response.unprocessableEntity({ success: false, message: 'Supply the auth. header.' })
+      
+      try {
+        jwt.verify(authHeader.split('Bearer ')[1], Env.get('TRUSTED_PUBLIC_KEY').replace(/\\n/g, '\n'), { algorithms: ['RS512'] })
+      } catch(e) {
+        logger.warn(e)
+        return response.unauthorized({ success: false })
+      }
+    }
+    // TEMP END
 
     const maybeMessages = await Repo.Message.getMultiple({ page, status, clientId, noReplies: !withReplies })
     if (!maybeMessages.length)
@@ -39,7 +57,7 @@ export default class MessagesController {
   public insert = async ({ request, response }: HttpContextContract) => {
     const { from, to, toMultiple, subject, content, replyTo } = await request.validate(Validator.Message.Insert)
 
-    const message = toMultiple
+    toMultiple
       // Insert a message for each of the recipients.
       ? await Promise.all(toMultiple.map(to => Repo.Message.insert(Domain.Message.fromJSON({ from, to, subject, content, status: 'SENT', replyTo }))
         .then(message => Domain.Message.fromJSON(message))))
@@ -47,7 +65,7 @@ export default class MessagesController {
       : await Repo.Message.insert(Domain.Message.fromJSON({ from, to, subject, content, status: 'SENT', replyTo }))
         .then(message => Domain.Message.fromJSON(message))
 
-    return response.ok(message)
+    return response.created()
   }
 
   public ack = async ({ request, response }: HttpContextContract) => {
@@ -59,12 +77,20 @@ export default class MessagesController {
 
     const message = Domain.Message.fromJSON(maybeMesssage)
 
-    const ack = await Repo.Message.ack(message.id)
+    await Repo.Message.ack(message.id)
 
-    return ack
+    return response.noContent()
   }
 
-  public delete = async ({}: HttpContextContract) => {
-    // todo
+  public delete = async ({ request, response }: HttpContextContract) => {
+    const { id } = await request.validate(Validator.Message.Delete)
+
+    const maybeMesssage = await Repo.Message.get({ id })
+    if (!maybeMesssage)
+      return response.notFound({ success: false, message: 'Message not found.' })
+
+    await Repo.Message.delete(id)
+
+    return response.noContent()
   }
 }

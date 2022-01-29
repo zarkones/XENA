@@ -4,11 +4,6 @@ import { BuildProfileId } from '../Types'
 
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
-type Configuration = {
-  shell?: string
-}
-
-
 type Get = {
   id?: BuildProfileId
 }
@@ -23,7 +18,7 @@ type Insert = {
   name: string
   description: string | null
   gitUrl: string
-  config: Configuration
+  config: any
   status: ProfileStatus
 }
 

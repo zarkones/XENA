@@ -32,7 +32,7 @@ export default class Messages extends BaseSchema {
         .inTable('messages')
 
       // Client's state.
-      table.enum('status', ['SEEN', 'SENT'])
+      table.enum('status', ['SEEN', 'SENT', 'DELETED'])
         .notNullable()
 
       table.index(['to', 'status'])

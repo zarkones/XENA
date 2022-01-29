@@ -9,83 +9,19 @@
     >
       <v-col
         cols = '12'
-        sm = '3'
+        sm = '6'
       >
         <GraphLine
-          title = 'All platforms'
+          title = 'All Platforms'
         />
       </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphLine
-          title = 'Windows'
-          targetPlatform = 'Windows'
-        />
-      </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphLine
-          title = 'Linux'
-          targetPlatform = 'Linux'
-        />
-      </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphLine
-          title = 'Mac'
-          targetPlatform = 'MacOS'
-        />
-      </v-col>
-    </v-row>
     
-    <v-row
-      dense
-    >
       <v-col
         cols = '12'
-        sm = '3'
+        sm = '6'
       >
         <GraphPolarArea
           title = 'All platforms'
-        />
-      </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphPolarArea
-          title = 'Windows'
-          targetPlatform = 'Windows'
-        />
-      </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphPolarArea
-          title = 'Linux'
-          targetPlatform = 'Linux'
-        />
-      </v-col>
-
-      <v-col
-        cols = '12'
-        sm = '3'
-      >
-        <GraphPolarArea
-          title = 'Mac'
-          targetPlatform = 'MacOS'
         />
       </v-col>
     </v-row>

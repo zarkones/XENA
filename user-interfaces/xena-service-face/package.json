@@ -14,16 +14,22 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
+    "jose": "^4.3.5",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^2.0.2",
     "mqtt": "^4.2.6",
+    "node-rsa": "^1.1.1",
     "nuxt": "^2.14.5",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@nuxt/types": "2.13.2",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/vuetify": "^1.11.2",
     "@types/jsonwebtoken": "^8.5.4",
-    "@types/node": "^15.12.1"
+    "@types/luxon": "^2.0.5",
+    "@types/node": "^15.12.1",
+    "@types/node-rsa": "^1.1.1"
   }
 }

@@ -20,9 +20,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/readers",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/readers",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -39,7 +39,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"term\": \"example123\"\n}",
+					"raw": "{\n    \"term\": \"github\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -47,9 +47,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/recon/websearch",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/recon/websearch",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -66,9 +66,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/machines",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/machines",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -84,9 +84,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/file-systems",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/file-systems",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -111,13 +111,70 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/databases",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/scan/sql-injection",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
-						"databases"
+						"scan",
+						"sql-injection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Web Fuzzer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"http://127.0.0.1:3000/\",\n    \"method\": \"GET\",\n    \"wordlist\": [\n        \"test\",\n        \"recon\",\n        \"tools\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/scans/web-fuzzer",
+					"host": [
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
+					],
+					"path": [
+						"v1",
+						"scans",
+						"web-fuzzer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SQL Injection Scanner",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"http://127.0.0.1:3333/asdjoaishfaiusfiuasfiuahsfuiah?id=SQL_INJECTION\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/scans/sql-injection",
+					"host": [
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
+					],
+					"path": [
+						"v1",
+						"scans",
+						"sql-injection"
 					]
 				}
 			},
@@ -138,9 +195,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/recon/subdomain-bruteforce",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/recon/subdomain-bruteforce",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -166,9 +223,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/recon/sublist3r",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/recon/sublist3r",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -194,9 +251,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{xena-ra-url}}/v1/recon/nmap",
+					"raw": "{{xena-ra-url}}{{xena-ra-dir-buster}}/v1/recon/nmap",
 					"host": [
-						"{{xena-ra-url}}"
+						"{{xena-ra-url}}{{xena-ra-dir-buster}}"
 					],
 					"path": [
 						"v1",
@@ -206,6 +263,41 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{xena-ra-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

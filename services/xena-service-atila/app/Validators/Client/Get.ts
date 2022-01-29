@@ -5,6 +5,13 @@ export default class {
   constructor (protected ctx: HttpContextContract) {
   }
 
+	get data () {
+		return {
+			...this.ctx.request.all(),
+			id: this.ctx.request.param('id'),
+		}
+	}
+
 	/*
 	 * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
 	 *

@@ -19,6 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import Env from '@ioc:Adonis/Core/Env'
 
 Route.group(() => {
 
@@ -46,4 +47,4 @@ Route.group(() => {
     Route.post('/web-fuzzer', 'WebFuzzersController.scan')
   }).prefix('scans')
 
-}).prefix('v1')
+}).prefix(`${Env.get('DIR_BUSTER') ?? ''}/v1`).middleware(['auth'])

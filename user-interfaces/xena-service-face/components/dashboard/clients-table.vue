@@ -23,9 +23,23 @@
         color = 'rgba(189, 147, 249, 1)'
         class = '
           pt-4
-          mx-4
+          ml-4
+          mr-4
         '
       ></v-text-field>
+      <v-btn
+        x-small
+        outlined
+        tile
+        color = 'rgba(189, 147, 249, 1)'
+        width = '100%'
+        class = '
+          pl-4
+        '
+        @click = 'tableUpdate'
+      >
+        Refresh Bots
+      </v-btn>
     </template>
 
     <!--  -->
@@ -45,6 +59,8 @@ import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
 import EventBus from '@/src/EventBus'
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     InteractionDialog,
@@ -56,9 +72,18 @@ export default Vue.extend({
     clients: [] as any[],
     dialog: false,
     headers: [
-      { text: 'ID', value: 'id' },
-    ]
+      { text: 'IP', value: 'ip' },
+      { text: 'OS', value: 'system.name' },
+    ],
+    intervalIsActive: false,
   }),
+
+  computed: {
+    ...mapGetters([
+      'getAtilaHost',
+      'getAtilaToken',
+    ])
+  },
 
   methods: {
     interactionDialogUpdateClients () {
@@ -68,7 +93,7 @@ export default Vue.extend({
     },
 
     async tableUpdate (targetPlatform?: string) {
-      const clients = await Service.Atila.getClients(this.$axios)
+      const clients = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getClients()
       if (clients)
         this.clients = clients
     },
@@ -76,8 +101,8 @@ export default Vue.extend({
 
   mounted () {
     this.tableUpdate()
-
-    EventBus.$on('clientsTableUpdate', async (targetPlatform: string) => await this.tableUpdate(targetPlatform))
+    
+    EventBus.$on('clientsTableUpdate', async () => await this.tableUpdate())
   },
 })
 </script>

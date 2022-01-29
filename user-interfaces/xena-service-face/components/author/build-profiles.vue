@@ -55,9 +55,18 @@ import EventBus from '@/src/EventBus'
 
 import * as Service from '@/src/services'
 
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   components: {
     BuildProfiles,
+  },
+
+  computed: {
+    ...mapGetters([
+      'getPyramidHost',
+      'getPyramidToken',
+    ])
   },
 
   data: () => ({
@@ -66,14 +75,14 @@ export default Vue.extend({
 
   methods: {
     async getBuildProfiles () {
-      const builldProfiles = await Service.Pyramid.getBuilldProfiles(this.$axios)
+      const builldProfiles = await new Service.Pyramid(this.$axios, this.getPyramidHost, this.getPyramidToken).getBuilldProfiles()
       if (builldProfiles)
         this.builldProfiles = builldProfiles
     },
 
     downloadBuild (buildProfileId: string) {
       window.open(
-        `${process.env.XENA_PYRAMID_HOST}/builds?buildProfileId=${buildProfileId}`,
+        `${this.getPyramidHost}/builds?buildProfileId=${buildProfileId}`,
         '_blank',
       )
     }

@@ -1,10 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-type Configuration = {
-  shell?: string
-}
-
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
 export default class BuildProfile extends BaseModel {
@@ -21,7 +17,7 @@ export default class BuildProfile extends BaseModel {
   public gitUrl: string
   
   @column()
-  public config: Configuration
+  public config: any
 
   @column()
   public status: ProfileStatus

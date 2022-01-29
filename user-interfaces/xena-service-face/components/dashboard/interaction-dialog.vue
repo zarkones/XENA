@@ -1,68 +1,35 @@
 <template>
   <v-card
-    tile
+    flat
   >
-    <v-tabs
-      v-model = 'selectedTab'
+    <v-card-text
+      v-if = '!clients.length'
     >
-      <v-tab
-        v-for = 'item in tabItems'
-        :key = 'item.tab'
+      Please, select at least one client.
+    </v-card-text>
+
+    <!--
+      We should ask the user to select clients.
+    -->
+    <div
+      v-if = 'clients.length'
+      class = '
+        ma-4
+      '
+    >
+      <div
+        v-for = 'message in messages'
+        :key = 'message.id'
       >
-        {{ item.tab }}
-      </v-tab>
-    </v-tabs>
+        <MessageDisplay
+          :message = 'message'
+        />
+      </div>
 
-    <v-tabs-items v-model = 'selectedTab'>
-      <v-tab-item
-        v-for = 'item in tabItems'
-        :key = 'item.tab'
-      >
-        <v-card
-          v-if = 'item.content == "SHELL"'
-          flat
-        >
-          <v-card-text
-            v-if = '!clients.length'
-          >
-            Please, select at least one client.
-          </v-card-text>
-
-          <!--
-            We should ask the user to select clients.
-          -->
-          <div
-            v-if = 'clients.length'
-            class = '
-              ml-4
-              mr-4
-              mt-4
-            '
-          >
-            <div
-              v-for = 'message in messages'
-              :key = 'message.id'
-            >
-              <MessageDisplay
-                :message = 'message'
-              />
-            </div>
-
-            <Shell
-              :clients = 'clients'
-            />
-          </div>
-        </v-card>
-
-        <v-card
-          v-if = 'item.content == "SYSTEM_MONITOR"'
-          flat
-        >
-          Feature is disabled. Development is progressing. Consider opening a pull-request for the implementation of system monitoring.
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
-
+      <Shell
+        :clients = 'clients'
+      />
+    </div>
   </v-card>
 </template>
 
@@ -70,10 +37,12 @@
 import Vue from 'vue'
 import EventBus from '@/src/EventBus'
 
-import MessageDisplay from '@/components/interaction/message-display.vue'
-import Shell from '@/components/interaction/shell.vue'
+import MessageDisplay from '@/components/terminal/message-display.vue'
+import Shell from '@/components/terminal/shell.vue'
 
 import * as Service from '@/src/services'
+
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -84,7 +53,7 @@ export default Vue.extend({
   data: () => ({
     selectedTab: 0,
     tabItems: [
-      { tab: 'Shell', content: 'SHELL' },
+      { tab: 'Terminal', content: 'SHELL' },
       { tab: 'System Monitor', content: 'SYSTEM_MONITOR' },
     ],
 
@@ -108,15 +77,27 @@ export default Vue.extend({
     },
   },
 
+  computed: {
+    ...mapGetters([
+      'getPrivateKey',
+      'getAtilaHost',
+      'getAtilaToken',
+    ])
+  },
+
   mounted () {
     EventBus.$on('interactionDialogUpdateClients', (clients: any[]) => this.clients = clients)
 
     EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string) => {
+      // Without this the rendering engine won't update. This needs to be fixed somehow.
+      this.messages = []
+
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
-      const messages = await Service.Atila.fetchMessages(this.$axios, this.selectedClient.id, true)
-      this.messages = messages.length
-        ? messages.map(message => ({ ...message, content: Buffer.from(message.content, 'base64') }))
-        : []
+
+      const messages = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken)
+        .fetchMessages(this.selectedClient.id, this.getPrivateKey, this.selectedClient.publicKey, true)
+      
+      this.messages = messages?.length ? messages : this.messages
     })
   },
 })

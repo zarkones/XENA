@@ -15,7 +15,7 @@ type GetMultiple = {
 
 type Insert = {
   id: string
-  identificationKey: string
+  publicKey: string
   status: ClientStatus
 }
 
@@ -34,12 +34,13 @@ export default new class Database {
     .if(status, builder => builder.where('status', status as ClientStatus))
     .if(page, builder => builder.offset(page as number * 10))
     .if(page, builder => builder.limit(10))
+    .preload('system')
     .exec()
     .then(clients => clients.map(c => c.serialize()))
 
-  public getCount = () => LucidDatabase.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
+  public count = () => LucidDatabase.rawQuery('select extract(epoch from created_at) * 1000 as timestamp from clients')
     .exec()
-    .then(result => result.rows.map(unixTime => unixTime.timestamp))
+    .then(result => result.rows.map(unixTime => unixTime.timestamp as number))
   
   public insert = (payload: Insert) => Client.create(payload).then(client => client.serialize())
 }
