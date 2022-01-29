@@ -227,7 +227,7 @@ export default class BuildsController {
     // Build the binary.
     const buildOutput = (() => {
       const buildCommand =
-        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep && sh build.sh` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
+        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep && go get && sh build.sh` // -o ${Env.get('BUILD_DESTINATION')}${buildId}_BUILD
       try {
         return Helper.Shell.exe(buildCommand)
       } catch (e) {

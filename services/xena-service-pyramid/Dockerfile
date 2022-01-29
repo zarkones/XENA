@@ -38,15 +38,17 @@ ENV HOST 0.0.0.0
 ENV PORT 60667
 ENV BUILD_DESTINATION ./xena-pyramid-software-builds/
 
-# Add golang.
 COPY --from=golang:1.6-alpine /usr/local/go/ /usr/local/go/
 ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOPATH=$HOME/go
+CMD export GOPATH
 
 # Git is needed for downloading the source codes.
 RUN apk add git
 
 # Lower the privledges. (don't use root user)
-USER node
+# USER node
+
 # Make the app's directory.
 RUN mkdir -p /home/node/app/
 # Set working directory.

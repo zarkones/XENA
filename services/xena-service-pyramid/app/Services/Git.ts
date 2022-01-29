@@ -21,7 +21,7 @@ class Git {
       Helper.Shell.exe(`rm -r ${buildPath}`)
     } catch (e) {}
 
-    const repoCloningOutput = Helper.Shell.exe(`git clone ${ Env.get('NODE_ENV') == 'development' ? '-b stage' : '' } ${url.protocol}//${url.hostname}${url.pathname} ${buildPath}`)
+    const repoCloningOutput = Helper.Shell.exe(`git clone -b ${Env.get('XENA_GIT_BRANCH')} ${url.protocol}//${url.hostname}${url.pathname} ${buildPath}`)
 
     if (repoCloningOutput.endsWith('not an empty directory.'))
       return 'ALREADY_CLONED'

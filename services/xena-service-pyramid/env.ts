@@ -41,4 +41,6 @@ export default Env.rules({
 	CORS_POLICY_ALLOWED_ORIGINS: Env.schema.string(),
 
 	TRUSTED_PUBLIC_KEY: Env.schema.string(),
+
+	XENA_GIT_BRANCH: Env.schema.string(),
 })
