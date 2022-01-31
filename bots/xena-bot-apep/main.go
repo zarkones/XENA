@@ -95,11 +95,11 @@ func initialize() {
 }
 
 func main() {
-	// NEEDS SOME WORK.
 	// Check if the bot is persistent within the environment, if not then persist.
-	// if !checkIfPersisted() {
-	// 	persist()
-	// }
+	if !checkIfPersisted() {
+		err := persist()
+		fmt.Println(err)
+	}
 
 	// Once the bot is started we need to load some variables and prepare it for normal work.
 	initialize()

