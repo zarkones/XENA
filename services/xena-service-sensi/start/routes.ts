@@ -25,3 +25,4 @@ Route.group(() => {
     Route.post('/', 'DialogsController.ask')
   }).prefix('dialogs')
 }).prefix('v1')
+  .middleware(['auth'])

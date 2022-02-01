@@ -21,13 +21,17 @@ export default Env.rules({
 	APP_NAME: Env.schema.string(),
 	NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
 
+	TRUSTED_PUBLIC_KEY: Env.schema.string(),
+	
 	// OpenAI configuration.
 	OPEN_AI_HOST: Env.schema.string(),
 	OPEN_AI_KEY: Env.schema.string(),
 
-	// Redis configuration.
-	REDIS_CONNECTION: Env.schema.enum(['local'] as const),
-  REDIS_HOST: Env.schema.string({ format: 'host' }),
-  REDIS_PORT: Env.schema.number(),
-  REDIS_PASSWORD: Env.schema.string.optional(),
+	DB_CONNECTION: Env.schema.string(),
+
+	PG_HOST: Env.schema.string({ format: 'host' }),
+	PG_PORT: Env.schema.number(),
+	PG_USER: Env.schema.string(),
+	PG_PASSWORD: Env.schema.string.optional(),
+	PG_DB_NAME: Env.schema.string(),
 })
