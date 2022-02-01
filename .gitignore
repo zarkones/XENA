@@ -54,3 +54,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+xena.private.key
+xena.private.key.pub
+xena.public.key
