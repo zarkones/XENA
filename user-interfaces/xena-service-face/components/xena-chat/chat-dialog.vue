@@ -37,22 +37,28 @@
       </v-toolbar>
 
       <div
-        v-for = 'sentence in dialog'
-        :key = 'sentence.id'
         class = '
-          ma-4
+          sentences
         '
       >
-        <span
+        <div
+          v-for = 'sentence in dialog'
+          :key = 'sentence.id'
           class = '
-            input-display
+            ma-4
           '
         >
-          {{ sentence.input }}
-        </span>
-        <br>
-        {{ sentence.output }}
-        <br>
+          <span
+            class = '
+              input-display
+            '
+          >
+            {{ sentence.input }}
+          </span>
+          <br>
+          {{ sentence.output }}
+          <br>
+        </div>
       </div>
 
       <v-card-actions>
@@ -131,6 +137,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.sentences {
+  padding-bottom: 42px;
+}
+
 .input-display {
   color: rgba(189, 147, 249, 1);
 }
