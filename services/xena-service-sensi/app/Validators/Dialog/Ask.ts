@@ -25,7 +25,7 @@ export default class AskValidator {
 	 *    ```
 	 */
   public schema = schema.create({
-		prompt: schema.string({ escape: true }, [ rules.minLength(5), rules.maxLength(126) ])
+		prompt: schema.string({ escape: true }, [ rules.minLength(5), rules.maxLength(300) ])
   })
 
 	/**

@@ -9,9 +9,9 @@ export type Service = {
 
 export default class Domena {
   constructor (
-    public readonly axios: NuxtAxiosInstance,
-    public readonly baseURL: string,
-    public readonly token: string,
+    private readonly axios: NuxtAxiosInstance,
+    private readonly baseURL: string,
+    private readonly token: string,
   ) {
     this.axios = axios
     this.baseURL = baseURL

@@ -102,7 +102,7 @@ export default Vue.extend({
   },
 
   mounted () {
-    if (this.getPrivateKey && this.getUsername)
+    if (this.getPrivateKey && this.getUsername && this.$router.history.current.path == '/')
       this.$router.push('/dashboard')
   },
 

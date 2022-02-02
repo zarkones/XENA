@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model = 'dialog'
+    v-model = 'popup'
     fullscreen
     hide-overlay
     transition = 'dialog-bottom-transition'
@@ -30,15 +30,15 @@
         <v-btn
           icon
           dark
-          @click = 'dialog = false'
+          @click = 'popup = false'
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
 
       <div
-        v-for = 'message in messages'
-        :key = 'message.id'
+        v-for = 'sentence in dialog'
+        :key = 'sentence.id'
         class = '
           ma-4
         '
@@ -48,10 +48,10 @@
             input-display
           '
         >
-          {{ message.input }}
+          {{ sentence.input }}
         </span>
         <br>
-        {{ message.output }}
+        {{ sentence.output }}
         <br>
       </div>
 
@@ -63,6 +63,7 @@
           label = 'Send a message...'
           color = 'rgba(189, 147, 249, 1)'
           @change = 'issueMessage'
+          :loading = 'loading'
           class = '
             input-field
             pl-4
@@ -78,29 +79,47 @@
 <script lang = 'ts'>
 import Vue from 'vue'
 
+import * as Service from '@/src/services'
+import { Dialog } from '@/src/services/Sensi'
+
+import { mapGetters } from 'vuex'
+
 export default Vue.extend({
   data: () => ({
-    dialog: false,
+    popup: false,
     input: '',
-    messages: [
-      {
-        input: 'What is malware?',
-        output: 'Malware is a malicious software designed to perform an action or a set of actions which are undesired by the affected user.',
-      },
-      {
-        input: 'Is C++ a language?',
-        output: 'Correct. C++ is a low level programming language.'
-      }
-    ],
+    loading: false,
+    dialog: [] as Dialog,
   }),
+
+  computed: {
+    ...mapGetters([
+      'getSensiHost',
+      'getSensiToken',
+    ])
+  },
 
   methods: {
     async issueMessage () {
+      if (!this.input)
+        return
+      
+      const input = this.input
+      this.input = ''
 
+      this.loading = true
+      await new Service.Sensi(this.$axios, this.getSensiHost, this.getSensiToken).insert(input)
+      this.loading = false
+
+      await this.fetchMessages()
     },
 
     async fetchMessages () {
-
+      const dialog = await new Service.Sensi(this.$axios, this.getSensiHost, this.getSensiToken).getDialog()
+      if (!dialog)
+        return
+      
+      this.dialog = dialog
     }
   },
 

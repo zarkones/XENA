@@ -22,6 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   Route.group(() => {
+    Route.get('/', 'DialogsController.getMultiple')
     Route.post('/', 'DialogsController.ask')
   }).prefix('dialogs')
 }).prefix('v1')

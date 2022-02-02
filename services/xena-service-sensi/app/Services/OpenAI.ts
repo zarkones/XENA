@@ -1,7 +1,6 @@
 import Config from '@ioc:Adonis/Core/Config'
 
 import axios from 'axios'
-import Cache from './Cache'
 
 export type OpenAIConfig = {
   apiKey: string // Keep protected, please.
@@ -54,10 +53,6 @@ class OpenAI {
   } 
 
   public ask = async (prompt: string) => {
-    const cached = await Cache.get(prompt)
-    if (cached?.length)
-      return JSON.parse(cached) as OpenAIResponse
-
     const response = await axios.post(`${this.remote}/v1/engines/davinci/completions`,
       {
         prompt,
@@ -93,9 +88,6 @@ class OpenAI {
           } as OpenAIResponse
         }
       })
-
-    if (response)
-      await Cache.set(prompt, JSON.stringify(response))
 
     return response
   }
