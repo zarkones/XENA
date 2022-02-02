@@ -7,9 +7,10 @@
 3. [HOW TO SETUP](#how-to-setup)
 4. [DESCRIPTION](#description)
 5. [GALLERY](#gallery)
-6. [REQUIREMENTS](#requirements)
-7. [POSTMAN COLLECTIONS](#postman-collections)
-8. [WHOAMI?](#whoami)
+6. [SERVICES AND BOT CLIENTS](#services-and-bot-clients)
+7. [REQUIREMENTS](#requirements)
+8. [POSTMAN COLLECTIONS](#postman-collections)
+9. [WHOAMI?](#whoami)
 
 ### DISCLAIMER ###
 
@@ -63,7 +64,7 @@ With this in mind, bots are able to run on Windows, MacOS, Linux and FreeBSD.
 
 ![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/promotional-materials/settings-page.png)
 
-**SERVICES & BOT CLIENTS**
+### SERVICES AND BOT CLIENTS ###
 
 **Xena-Service-Face**
 
