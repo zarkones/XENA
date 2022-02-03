@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 type ProfileStatus = 'ENABLED' | 'DISABLED' | 'DELETED'
 
-export const buildTemplates = ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'] as const
+export const buildTemplates = ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA', 'XENA_BOT_MONOLITIC'] as const
 type BuildTemplate = keyof typeof buildTemplates
 
 type Configuration = {
@@ -31,7 +31,7 @@ export default class BuildProfile {
     this.description = description ? validString(description, 'BAD_BUILD_PROFILE_DESCRIPTION', 'NON_EMPTY') : null
     this.gitUrl = validString(gitUrl, 'BAD_BUILD_PROFILE_GIT_URL', 'NON_EMPTY')
     this.config = {
-      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE'),
+      template: validEnum(config.template, ['XENA_BOT_RA', 'XENA_BOT_APEP', 'XENA_BOT_ANACONDA', 'XENA_BOT_VARVARA', 'XENA_BOT_MONOLITIC'], 'BAD_BUILD_PROFILE_CONFIG_TEMPLATE'),
       atilaHost: config.atilaHost ? validString(config.atilaHost, 'BAD_BUILD_PROFILE_ATILA_HOST', 'NON_EMPTY') : null,
       trustedPublicKey: config.trustedPublicKey ? validString(config.trustedPublicKey, 'BAD_BUILD_PROFILE_TRUSTED_PUBLIC_KEY', 'NON_EMPTY') : null,
       maxLoopWait: config.maxLoopWait ? validString(config.maxLoopWait, 'BAD_BUILD_PROFILE_MAX_LOOP_WAIT', 'NON_EMPTY') : null,
