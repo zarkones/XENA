@@ -22,6 +22,9 @@ const store = () => {
 
         XENA_XERUM_HOST: 'http://service.xerum.xena.network/v1',
         XENA_XERUM_TOKEN: '',
+
+        XENA_SENSI_HOST: 'http://service.sensi.xena.network/v1',
+        XENA_SENSI_TOKEN: '',
       },
     }),
 
@@ -47,6 +50,9 @@ const store = () => {
 
       getDomenaHost: (state) => state.env.XENA_DOMENA_HOST,
       getDomenaToken: (state) => state.env.XENA_DOMENA_TOKEN,
+
+      getSensiHost: (state) => state.env.XENA_SENSI_HOST,
+      getSensiToken: (state) => state.env.XENA_SENSI_TOKEN,
     },
 
     mutations: {
@@ -55,7 +61,6 @@ const store = () => {
           .replace(`-----BEGIN\nRSA\nPRIVATE\nKEY-----`, '-----BEGIN RSA PRIVATE KEY-----')
           .replace(`-----END\nRSA\nPRIVATE\nKEY-----`, '-----END RSA PRIVATE KEY-----')
       },
-
       setUsername: (state, name: string) => {
         state.username = name
       },
@@ -63,7 +68,6 @@ const store = () => {
       setAtilaHost: (state, url: string) => {
         state.env.XENA_ATILA_HOST = url
       },
-
       setAtilaToken: (state, token: string) => {
         state.env.XENA_ATILA_TOKEN = token
       },
@@ -71,7 +75,6 @@ const store = () => {
       setRaHost: (state, url: string) => {
         state.env.XENA_RA_HOST = url
       },
-
       setRaToken: (state, token: string) => {
         state.env.XENA_RA_TOKEN = token
       },
@@ -79,7 +82,6 @@ const store = () => {
       setPyramidHost: (state, url: string) => {
         state.env.XENA_PYRAMID_HOST = url
       },
-
       setPyramidToken: (state, token: string) => {
         state.env.XENA_PYRAMID_TOKEN = token
       },
@@ -87,7 +89,6 @@ const store = () => {
       setXerumHost: (state, url: string) => {
         state.env.XENA_XERUM_HOST = url
       },
-
       setXerumToken: (state, token: string) => {
         state.env.XENA_XERUM_TOKEN = token
       },
@@ -95,9 +96,15 @@ const store = () => {
       setDomenaHost: (state, url: string) => {
         state.env.XENA_DOMENA_HOST = url
       },
-
       setDomenaToken: (state, token: string) => {
         state.env.XENA_DOMENA_TOKEN = token
+      },
+
+      setSensiHost: (state, url: string) => {
+        state.env.XENA_SENSI_HOST = url
+      },
+      setSensiToken: (state, token: string) => {
+        state.env.XENA_SENSI_TOKEN = token
       },
     },
 
@@ -105,7 +112,6 @@ const store = () => {
       setPrivateKey: ({ commit }, key: string) => {
         commit('setPrivateKey', key)
       },
-
       setUsername: ({ commit }, name: string) => {
         commit('setUsername', name)
       },
@@ -113,7 +119,6 @@ const store = () => {
       setAtilaHost: ({ commit }, url: string) => {
         commit('setAtilaHost', url)
       },
-
       setAtilaToken: ({ commit }, token: string) => {
         commit('setAtilaToken', token)
       },
@@ -121,7 +126,6 @@ const store = () => {
       setRaHost: ({ commit }, url: string) => {
         commit('setRaHost', url)
       },
-
       setRaToken: ({ commit }, token: string) => {
         commit('setRaToken', token)
       },
@@ -129,7 +133,6 @@ const store = () => {
       setPyramidHost: ({ commit }, url: string) => {
         commit('setPyramidHost', url)
       },
-
       setPyramidToken: ({ commit }, token: string) => {
         commit('setPyramidToken', token)
       },
@@ -137,7 +140,6 @@ const store = () => {
       setXerumHost: ({ commit }, url: string) => {
         commit('setXerumHost', url)
       },
-
       setXerumToken: ({ commit }, token: string) => {
         commit('setXerumToken', token)
       },
@@ -145,9 +147,15 @@ const store = () => {
       setDomenaHost: ({ commit }, url: string) => {
         commit('setDomenaHost', url)
       },
-
       setDomenaToken: ({ commit }, token: string) => {
         commit('setDomenaToken', token)
+      },
+
+      setSensiHost: ({ commit }, url: string) => {
+        commit('setSensiHost', url)
+      },
+      setSensiToken: ({ commit }, token: string) => {
+        commit('setSensiToken', token)
       },
     },
   })

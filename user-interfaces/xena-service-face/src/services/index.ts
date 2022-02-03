@@ -4,6 +4,7 @@ import Ra from './Ra'
 import Xerum from './Xerum'
 import Crypto from './Crypto'
 import Domena from './Domena'
+import Sensi from './Sensi'
 
 export {
   Atila,
@@ -12,4 +13,5 @@ export {
   Xerum,
   Crypto,
   Domena,
+  Sensi,
 }
