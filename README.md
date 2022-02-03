@@ -8,9 +8,10 @@
 4. [DESCRIPTION](#description)
 5. [GALLERY](#gallery)
 6. [SERVICES AND BOT CLIENTS](#services-and-bot-clients)
-7. [REQUIREMENTS](#requirements)
-8. [POSTMAN COLLECTIONS](#postman-collections)
-9. [WHOAMI?](#whoami)
+7. [CONTRACTS](#contracts)
+8. [REQUIREMENTS](#requirements)
+9. [POSTMAN COLLECTIONS](#postman-collections)
+10. [WHOAMI?](#whoami)
 
 ### DISCLAIMER ###
 
@@ -37,13 +38,15 @@ Working full-time and developing a hobby project is stressful. Gin-Tonic can eas
 
 ### HOW TO SETUP ###
 
+Execute inside of the root folder of the project.
+
 > sh setup.sh
 
 [Setup Video Tutorial](https://youtu.be/i5Ct7qg_qVE)
 
 ### DESCRIPTION ###
 
-XENA is the managed remote administration platform for botnet creation & development. Favoring secrecy and resiliency over performance. Aiming to provide an ecosystem which serves the bot herders. It's micro-service oriented allowing for specialization and lower footprint. Ese of deployment is enabled via Docker containers.
+XENA is the managed remote administration platform for botnet creation & development powered by blockchain and machine learning. Favoring secrecy and resiliency over performance. Aiming to provide an ecosystem which serves the bot herders. It's micro-service oriented allowing for specialization and lower footprint. Ese of deployment is enabled via Docker containers.
 
 You interact with the botnet through an elegant dark-themed web user interface. All communication is signed with bot herder's private key, and verified by the bots using hardcoded public key.
 
@@ -84,11 +87,13 @@ This can be used to drop other clients onto the environment.
 Features:
 + Cross platform. Native static & dynamic binaries.
 + Executes shell command.
++ Domain Generation Alogithm. (DGA)
 + Get operating system's details.
 + Persistent on Linux. (requires root)
 + Grabs Chromium's web history. (linux)
 + Grabs Chromium's search history. (linux)
 + Search duckduckgo and return results.
++ Gets the currently active CNC from Gettr's user profile's website.
 
 **Xena-Bot-Monolitic**
 
@@ -156,6 +161,16 @@ At the moment GPT-2 is not released, it needs some work and training. You can ut
 Features:
 + Cross platform. Requires NodeJS.
 + GPT 3 gateway. Allowing you to chat with AI in the web user interface.
+
+### CONTRACTS ###
+
+**Xena-Contract-Botchain**
+
+This contract allows the bootstrapping of the botnet by acting as a smart contract on Ethereum blockchain. The creator of the contract has the highest authority and is able to assign an administrator of the contract and reassign it. Only the administrator can change the currently promoted configuration, messages and sponsored peers.
+
+The contract's creator cannot change any properties of the contract apart from the currently active administrator. That way we avoid a single point of failure, where the creator connects to the blockchain and discloses his IP address thus risk getting attacked and his wallet key stolen. Also all configuration, messages and sponsored peers MUST be signed in order to lower the attack area. Thus a successful takeover of the contract requires the creator's wallet key and the bot master's private key.
+
+There is no need to publish this contract on a private blockchain.
 
 ### REQUIREMENTS ###
 
