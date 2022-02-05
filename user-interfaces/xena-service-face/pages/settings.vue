@@ -4,7 +4,9 @@
   >
     <v-tabs
       v-model = 'selectedTab'
-      style = 'color: #bd93f9 !important;caret-color: #bd93f9 !important;'
+      class = '
+        setting-tabs
+      '
     >
       <v-tab
         v-for = 'item in tabItems'
@@ -31,6 +33,7 @@
             class = '
               pt-4
               mx-4
+              mb-4
             '
           >
             <p
@@ -38,7 +41,7 @@
                 service-label
               '
             >
-              Address of Xena-Atila.
+              Address of Xena-Atila
             </p>
 
             <v-text-field
@@ -54,7 +57,7 @@
                 service-label
               '
             >
-              Token for Xena-Atila.
+              Token for Xena-Atila
             </p>
 
             <v-text-field
@@ -70,7 +73,7 @@
                 service-label
               '
             >
-              Address of Xena-Pyramid.
+              Address of Xena-Pyramid
             </p>
             <v-text-field
               v-model = 'pyramidHost'
@@ -85,7 +88,7 @@
                 service-label
               '
             >
-              Token for Xena-Pyramid.
+              Token for Xena-Pyramid
             </p>
 
             <v-text-field
@@ -101,7 +104,7 @@
                 service-label
               '
             >
-              Address of Xena-Ra.
+              Address of Xena-Ra
             </p>
             <v-text-field
               v-model = 'raHost'
@@ -116,7 +119,7 @@
                 service-label
               '
             >
-              Token for Xena-Ra.
+              Token for Xena-Ra
             </p>
 
             <v-text-field
@@ -132,7 +135,7 @@
                 service-label
               '
             >
-              Address of Xena-Domena.
+              Address of Xena-Domena
             </p>
             <v-text-field
               v-model = 'domenaHost'
@@ -147,7 +150,7 @@
                 service-label
               '
             >
-              Token for Xena-Domena.
+              Token for Xena-Domena
             </p>
 
             <v-text-field
@@ -156,6 +159,37 @@
               outlined
               color = 'rgba(189, 147, 249, 1)'
               @change = 'saveDomenaToken'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Address of Xena-Sensi
+            </p>
+            <v-text-field
+              v-model = 'sensiHost'
+              outlined
+              dense
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveSensiHost'
+            ></v-text-field>
+
+            <p
+              class = '
+                service-label
+              '
+            >
+              Token for Xena-Sensi
+            </p>
+
+            <v-text-field
+              v-model = 'sensiToken'
+              dense
+              outlined
+              color = 'rgba(189, 147, 249, 1)'
+              @change = 'saveSensiToken'
             ></v-text-field>
           </div>
         </v-card>
@@ -239,6 +273,7 @@
               {{ newToken }}
             </p>
           </div>
+
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -276,6 +311,9 @@ export default Vue.extend({
     domenaHost: '',
     domenaToken: '',
 
+    sensiHost: '',
+    sensiToken: '',
+
     // Tab: Identity.
     privateKey: '',
     newToken: '',
@@ -293,7 +331,6 @@ export default Vue.extend({
     saveAtilaHost () {
       this.setAtilaHost(this.atilaHost)
     },
-
     saveAtilaToken () {
       this.setAtilaToken(this.atilaToken)
     },
@@ -301,7 +338,6 @@ export default Vue.extend({
     savePyramidHost () {
       this.setPyramidHost(this.pyramidHost)
     },
-
     savePyramidToken () {
       this.setPyramidToken(this.pyramidToken)
     },
@@ -309,7 +345,6 @@ export default Vue.extend({
     saveRaHost () {
       this.setRaHost(this.raHost)
     },
-
     saveRaToken () {
       this.setRaToken(this.raToken)
     },
@@ -317,9 +352,15 @@ export default Vue.extend({
     saveDomenaHost () {
       this.setDomenaHost(this.domenaHost)
     },
-
     saveDomenaToken () {
       this.setDomenaToken(this.domenaToken)
+    },
+
+    saveSensiHost () {
+      this.setSensiHost(this.sensiHost)
+    },
+    saveSensiToken () {
+      this.setSensiToken(this.sensiToken)
     },
 
     ...mapActions([
@@ -332,6 +373,8 @@ export default Vue.extend({
       'setRaToken',
       'setDomenaHost',
       'setDomenaToken',
+      'setSensiHost',
+      'setSensiToken',
     ])
   },
 
@@ -347,19 +390,28 @@ export default Vue.extend({
       'getRaToken',
       'getDomenaHost',
       'getDomenaToken',
+      'getSensiHost',
+      'getSensiToken',
     ])
   },
 
   mounted () {
     this.privateKey = this.getPrivateKey
+
     this.atilaHost = this.getAtilaHost
     this.atilaToken = this.getAtilaToken
+
     this.pyramidHost = this.getPyramidHost
     this.pyramidToken = this.getPyramidToken
+
     this.raHost = this.getRaHost
     this.raToken = this.getRaToken
+
     this.domenaHost = this.getDomenaHost
     this.domenaToken = this.getDomenaToken
+
+    this.sensiHost = this.getSensiHost
+    this.sensiToken = this.getSensiToken
   },
 })
 </script>
@@ -368,5 +420,10 @@ export default Vue.extend({
 .service-label {
   font-size: 18px;
   margin-bottom: 4px;
+}
+
+.setting-tabs {
+  color: #bd93f9 !important;
+  caret-color: #bd93f9 !important;
 }
 </style>

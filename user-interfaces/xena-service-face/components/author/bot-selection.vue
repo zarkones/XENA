@@ -88,7 +88,7 @@ export default Vue.extend({
         details: `IoT bot powered by C++ langauge. Built with Telnet bruteforcer and also capable to execute
           payloads up on execution.`,
         logo: '/logo-varvara.png',
-        disabled: true,
+        disabled: false,
       },
     ], 3),
   }),

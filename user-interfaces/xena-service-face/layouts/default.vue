@@ -43,9 +43,10 @@
         system-bar
       '
     >
-      <span>
-      </span>
+      <ChatWithXena />
+
       <v-spacer></v-spacer>
+
       <v-btn
         small
         text
@@ -86,7 +87,13 @@ import Vue from 'vue'
 
 import { mapGetters } from 'vuex'
 
+import ChatWithXena from '@/components/xena-chat/chat-dialog.vue'
+
 export default Vue.extend({
+  components: {
+    ChatWithXena,
+  },
+
   computed: {
     ...mapGetters([
       'getPrivateKey',
@@ -95,7 +102,7 @@ export default Vue.extend({
   },
 
   mounted () {
-    if (this.getPrivateKey && this.getUsername)
+    if (this.getPrivateKey && this.getUsername && this.$router.history.current.path == '/')
       this.$router.push('/dashboard')
   },
 
