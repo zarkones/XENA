@@ -18,9 +18,11 @@ class Main:
     self.init_xena_docker_network()
     self.setup_atila_postgres_container()
     self.setup_pyramid_postgres_container()
+    self.setup_domena_postgres_container()
     self.setup_xena_service_face_container()
     self.setup_xena_service_atila_container()
     self.setup_xena_service_pyramid_container()
+    self.setup_xena_service_domena_container()
   
   def load_keys (self):
     with open('xena.private.key', 'r') as f:
@@ -32,6 +34,9 @@ class Main:
 
   def init_xena_docker_network (self):
     system('docker network create xena')
+
+  def setup_domena_postgres_container (self):
+    system('''docker run -d --name xena-domena-postgres --net xena -e POSTGRES_DB=xena-domena -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=''' + self.postgres_pass + ''' postgres''')
 
   def setup_pyramid_postgres_container (self):
     system('''docker run -d --name xena-pyramid-postgres --net xena -e POSTGRES_DB=xena-pyramid -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=''' + self.postgres_pass + ''' postgres''')
@@ -65,5 +70,17 @@ class Main:
     print('Enter y/Y to confirm!')
     print()
     system('docker exec -ti xena-atila sh -c "node build/ace migration:run"')
+
+  def setup_xena_service_domena_container (self):
+    # Regex thing is because python recognizes {{ }} as string formating.
+    postgres_container_address = check_output(
+      'docker inspect -f \'[[range.NetworkSettings.Networks]][[.IPAddress]][[end]]\' xena-domena-postgres'.replace('[[', '{' + '{').replace(']]', '}' + '}'),
+      shell = True
+    ).decode('utf-8').replace('\n', '')
+    system('''cd services/xena-service-domena && docker build -t xena-service-domena . && docker run -d --net xena --name='xena-domena' -e PG_HOST="''' + postgres_container_address + '''" -e CORS_POLICY_ALLOWED_ORIGINS='http://127.0.0.1:3000' -e PG_PASSWORD="''' + self.postgres_pass + '''" -e APP_KEY="''' + self.app_key + '''" -e TRUSTED_PUBLIC_KEY="''' + self.public_key + '''" -p 60666:60666 xena-service-domena''')
+    print()
+    print('Enter y/Y to confirm!')
+    print()
+    system('docker exec -ti xena-domena sh -c "node build/ace migration:run"')
 
 Main()

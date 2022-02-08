@@ -4,6 +4,8 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 type ServiceDetails = {
   telnetUsername?: string
   telnetPassword?: string
+  sshUsername?: string
+  sshPassword?: string
 }
 
 export default class Service extends BaseModel {
