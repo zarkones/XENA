@@ -54,13 +54,13 @@ func hashSelf() (string, error) {
 
 	selfPath, err := os.Executable()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return hash, err
 	}
 
 	contentRaw, err := ioutil.ReadFile(selfPath)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return hash, err
 	}
 

