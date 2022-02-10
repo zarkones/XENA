@@ -13,7 +13,6 @@ func dga(dgaSeed int) []string {
 	for _, topLevelDOmain := range topLevelDomains {
 		for index := 0; index <= 50; index++ {
 			domain := strings.ToLower(fmt.Sprint(time.Now().Month())+fmt.Sprint(time.Now().Day()*(dgaSeed+time.Now().Year())*index)+fmt.Sprint(time.Now().Month())) + topLevelDOmain
-			fmt.Println(domain)
 			domains = append(domains, domain)
 		}
 	}

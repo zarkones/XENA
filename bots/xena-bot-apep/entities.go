@@ -42,28 +42,28 @@ func messageHandler(response http.ResponseWriter, request *http.Request) {
 
 	err := jsonDecoder.Decode(&message)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 
 	// If message is meant for this bot, interpret and issue a reply,
 	// if not then store it in the pool of messages meat for different bots.
 	if message.To == id {
-		reply, err := interpretMessage(atilaHost, message)
+		reply, err := interpretMessage(gatewayHost, message)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return
 		}
 
-		err = sendMessage(atilaHost, reply)
+		err = sendMessage(gatewayHost, reply)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return
 		}
 
-		err = messageAck(atilaHost, reply.ReplyTo)
+		err = messageAck(gatewayHost, reply.ReplyTo)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			return
 		}
 
@@ -83,7 +83,7 @@ func pingHandler(response http.ResponseWriter, request *http.Request) {
 
 	err := jsonDecoder.Decode(&ping)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 
@@ -98,7 +98,7 @@ func bootServer() {
 	// Listen on the port.
 	err := http.ListenAndServe(":"+peerPort, nil)
 	if err != nil {
-		fmt.Print(err.Error())
+		fmt.Print(err)
 		return
 	}
 }
