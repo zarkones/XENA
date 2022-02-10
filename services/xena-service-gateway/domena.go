@@ -42,6 +42,6 @@ func domenaServiceInsert(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	response.Write(respBody)
 	response.WriteHeader(nextResp.StatusCode)
+	response.Write(respBody)
 }

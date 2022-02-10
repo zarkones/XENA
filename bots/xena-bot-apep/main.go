@@ -26,8 +26,14 @@ var identified bool = false
 // tick is the content of the main loop. Returns false if something went wrong.
 func tick(host string) bool {
 	if !identified {
-		identified = identify(host, id, publicIdentificationKey)
-		return false
+		err := identify(host, id, publicIdentificationKey)
+		if err != nil {
+			fmt.Println(err)
+			identified = false
+			return false
+		}
+		identified = true
+		return true
 	}
 
 	messages, err := fetchMessages(host, id)

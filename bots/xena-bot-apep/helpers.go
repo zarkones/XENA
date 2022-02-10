@@ -5,10 +5,17 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
 )
+
+// randEntry returns a random entry from a supplied list.
+func randEntry(slice []string) string {
+	rand.Seed(time.Now().UnixNano())
+	return slice[rand.Intn(len(slice))]
+}
 
 // integersFromString tapes numbers from a string and puts them together into a int64.
 func integersFromString(text string) int64 {
