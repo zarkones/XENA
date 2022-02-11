@@ -36,6 +36,10 @@ class Main:
     
     self.setup_xena_service_face_container()
 
+    print()
+    print()
+    print('Navigate to http://127.0.0.1:3000')
+
   def gen_secret (self):
     return str(time()) + str(time_ns())
   
