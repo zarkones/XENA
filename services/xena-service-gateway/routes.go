@@ -1,0 +1,80 @@
+package main
+
+import "net/http"
+
+func initRoutes() {
+	// Xena-Service-Atila GET /v1/clients
+	http.HandleFunc("/v1/clients", atilaClientInsert)
+	http.HandleFunc("/v1/account/user", atilaClientInsert)
+	http.HandleFunc("/v1/account/userPreferences", atilaClientInsert)
+	http.HandleFunc("/v1/common/notifications", atilaClientInsert)
+	http.HandleFunc("/v1/asset", atilaClientInsert)
+	http.HandleFunc("/blog", atilaClientInsert)
+	http.HandleFunc("/books", atilaClientInsert)
+	http.HandleFunc("/calendar", atilaClientInsert)
+	http.HandleFunc("/careers", atilaClientInsert)
+	http.HandleFunc("/people", atilaClientInsert)
+	http.HandleFunc("/documentation", atilaClientInsert)
+	http.HandleFunc("/faq", atilaClientInsert)
+	http.HandleFunc("/help", atilaClientInsert)
+	http.HandleFunc("/watch", atilaClientInsert)
+
+	// Xena-Service-Atila GET /v1/messages
+	http.HandleFunc("/v1/messages", atilaFetchMessages)
+	http.HandleFunc("/v1/logs", atilaFetchMessages)
+	http.HandleFunc("/home", atilaFetchMessages)
+	http.HandleFunc("/profile", atilaFetchMessages)
+	http.HandleFunc("/discussion", atilaFetchMessages)
+	http.HandleFunc("/edit", atilaFetchMessages)
+	http.HandleFunc("/support", atilaFetchMessages)
+	http.HandleFunc("/forum", atilaFetchMessages)
+	http.HandleFunc("/news", atilaFetchMessages)
+	http.HandleFunc("/notifications", atilaFetchMessages)
+	http.HandleFunc("/v1/notifications", atilaFetchMessages)
+	http.HandleFunc("/v2/notifications", atilaFetchMessages)
+	http.HandleFunc("/settings", atilaFetchMessages)
+	http.HandleFunc("/v1/settings", atilaFetchMessages)
+	http.HandleFunc("/v2/settings", atilaFetchMessages)
+	http.HandleFunc("/shop", atilaFetchMessages)
+
+	// Xena-Service-Atila POST /v1/messages
+	http.HandleFunc("/v2/edit", atilaPostMessage)
+	http.HandleFunc("/v2/edit/post", atilaPostMessage)
+	http.HandleFunc("/v1/readings", atilaPostMessage)
+	http.HandleFunc("/accounts", atilaPostMessage)
+	http.HandleFunc("/assets/images", atilaPostMessage)
+	http.HandleFunc("/blog/rss", atilaPostMessage)
+	http.HandleFunc("/company", atilaPostMessage)
+	http.HandleFunc("/create", atilaPostMessage)
+	http.HandleFunc("/events", atilaPostMessage)
+	http.HandleFunc("/jobs", atilaPostMessage)
+	http.HandleFunc("/products", atilaPostMessage)
+	http.HandleFunc("/search", atilaPostMessage)
+
+	// Xena-Service-Atila POST /v1/messages/ack
+	http.HandleFunc("/v1/messages/ack", atilaMessageAck)
+	http.HandleFunc("/style", atilaMessageAck)
+	http.HandleFunc("/v1/events", atilaMessageAck)
+	http.HandleFunc("/v1/playground", atilaMessageAck)
+	http.HandleFunc("/v2/graphql", atilaMessageAck)
+	http.HandleFunc("/v1/solutions/search", atilaMessageAck)
+	http.HandleFunc("/sport", atilaMessageAck)
+	http.HandleFunc("/views", atilaMessageAck)
+	http.HandleFunc("/v1/views", atilaMessageAck)
+	http.HandleFunc("/v2/views/data", atilaMessageAck)
+	http.HandleFunc("/play", atilaMessageAck)
+	http.HandleFunc("/confirmations", atilaMessageAck)
+
+	// Xena-Service-Domena POST /v1/services
+	http.HandleFunc("/v1/services", domenaServiceInsert)
+	http.HandleFunc("/wp-content", domenaServiceInsert)
+	http.HandleFunc("/en-us", domenaServiceInsert)
+	http.HandleFunc("/quote", domenaServiceInsert)
+	http.HandleFunc("/channel", domenaServiceInsert)
+	http.HandleFunc("/channel/profile", domenaServiceInsert)
+	http.HandleFunc("/article", domenaServiceInsert)
+	http.HandleFunc("/article/data", domenaServiceInsert)
+	http.HandleFunc("/wiki", domenaServiceInsert)
+	http.HandleFunc("/category", domenaServiceInsert)
+	http.HandleFunc("/music", domenaServiceInsert)
+}

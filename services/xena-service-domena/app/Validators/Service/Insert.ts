@@ -29,6 +29,8 @@ export default class Validator {
     details: schema.object.optional().members({
       telnetUsername: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
       telnetPassword: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
+      sshUsername: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
+      sshPassword: schema.string.optional({}, [ rules.minLength(1), rules.maxLength(512) ]),
     }),
   })
 
