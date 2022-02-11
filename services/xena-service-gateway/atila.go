@@ -180,7 +180,7 @@ func atilaMessageAck(response http.ResponseWriter, request *http.Request) {
 	}
 
 	// Check for the correct status code.
-	if nextResp.StatusCode != http.StatusOK {
+	if nextResp.StatusCode != http.StatusNoContent {
 		fmt.Println("Received status code missmatch on atilaMessageAck: " + nextResp.Status)
 		response.WriteHeader(http.StatusNotFound)
 		return
