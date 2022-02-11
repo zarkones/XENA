@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
+	"errors"
 	"fmt"
 )
 
@@ -44,19 +45,31 @@ func privateKeyToPEM(privateKey *rsa.PrivateKey) string {
 }
 
 // importPEMPrivateKey converts a PEM encoded private key into the rsa.PublicKey object.
-func importPEMPrivateKey(spkiPEM string) *rsa.PrivateKey {
+func importPEMPrivateKey(spkiPEM string) (*rsa.PrivateKey, error) {
 	body, _ := pem.Decode([]byte(spkiPEM))
-	privateKey, _ := x509.ParsePKCS1PrivateKey(body.Bytes)
-	return privateKey
+	privateKey, err := x509.ParsePKCS8PrivateKey(body.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	rsaKey, ok := privateKey.(*rsa.PrivateKey)
+	if !ok {
+		return nil, errors.New("failed to parse the private key")
+	}
+	return rsaKey, nil
 }
 
 // importPEMPublicKey converts a PEM encoded public key into the rsa.PublicKey object.
 func importPEMPublicKey(spkiPEM string) *rsa.PublicKey {
 	body, _ := pem.Decode([]byte(spkiPEM))
-	publicKey, _ := x509.ParsePKIXPublicKey(body.Bytes)
+	publicKey, err := x509.ParsePKIXPublicKey(body.Bytes)
+	if err != nil {
+		fmt.Println("Failed to parse public key.")
+		return nil
+	}
 	if publicKey, ok := publicKey.(*rsa.PublicKey); ok {
 		return publicKey
 	}
+	fmt.Println("Failed to parse public key.")
 	return nil
 }
 

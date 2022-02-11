@@ -98,7 +98,10 @@ func initialize() {
 		dbInsertBotDetails(id, privateKeyToPEM(privateIdentificationKey), publicKeyToPEM(publicIdentificationKey))
 	} else {
 		// Load into global variables bot's details.
-		privateIdentificationKey = importPEMPrivateKey(botDetails.PrivateKey)
+		privateIdentificationKey, err = importPEMPrivateKey(botDetails.PrivateKey)
+		if err != nil {
+			panic(err)
+		}
 		publicIdentificationKey = importPEMPublicKey(botDetails.PublicKey)
 		id = botDetails.Id
 	}

@@ -41,12 +41,12 @@ func submitCreds(host string, creds Creds) error {
 		return err
 	}
 
+	defer response.Body.Close()
+
 	// Domena service should return 201 - Created.
 	if response.StatusCode != http.StatusCreated {
 		return errors.New("insertion of service details failed with status:" + response.Status)
 	}
-
-	defer response.Body.Close()
 
 	return nil
 }

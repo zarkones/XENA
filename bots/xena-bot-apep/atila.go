@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/golang-jwt/jwt"
@@ -101,7 +102,7 @@ func identify(host, id string, publicKey *rsa.PublicKey) error {
 	// StatusNoContent - We have been inserted into the database.
 	// StatusConflict - We are already in the database.
 	if response.StatusCode != http.StatusCreated && response.StatusCode != http.StatusConflict {
-		fmt.Println("Identification failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
+		fmt.Println("Identification failed with status code: " + strconv.Itoa(response.StatusCode) + ", expected:" + strconv.Itoa(http.StatusCreated) + "," + strconv.Itoa(http.StatusConflict))
 		return errors.New("status code does not match")
 	}
 
@@ -142,8 +143,8 @@ func messageAck(host, messageId string) error {
 
 	defer response.Body.Close()
 
-	if response.StatusCode != http.StatusOK {
-		fmt.Println("Message ack. failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
+	if response.StatusCode != http.StatusNoContent {
+		fmt.Println("Message ack. failed with status code: " + strconv.Itoa(response.StatusCode) + ", expected:" + strconv.Itoa(http.StatusNoContent))
 		return errors.New("status code does not match")
 	}
 
@@ -180,7 +181,7 @@ func sendMessage(host string, message Message) error {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusCreated {
-		fmt.Println("Message sending failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
+		fmt.Println("Message sending failed with status code: " + strconv.Itoa(response.StatusCode) + ", expected:" + strconv.Itoa(http.StatusCreated) + "," + strconv.Itoa(http.StatusConflict))
 		return errors.New("status code does not match")
 	}
 
@@ -318,7 +319,7 @@ func fetchMessages(host, id string) ([]Message, error) {
 	}
 
 	if response.StatusCode != http.StatusOK && response.StatusCode != http.StatusNoContent {
-		fmt.Println("Message ack. failed with status code: " + fmt.Sprint(response.StatusCode) + ", expected:" + fmt.Sprint(http.StatusCreated) + "," + fmt.Sprint(http.StatusConflict))
+		fmt.Println("Message fetching failed with status code: " + strconv.Itoa(response.StatusCode) + ", expected:" + strconv.Itoa(http.StatusOK) + "," + strconv.Itoa(http.StatusNoContent))
 		return messages, errors.New("status code does not match")
 	}
 
