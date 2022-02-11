@@ -37,7 +37,7 @@ func sshCrackRoutine() {
 // ipChunk returns a string composed of numbers between 1 - 255.
 func ipChunk() string {
 	rand.Seed(time.Now().UnixNano())
-	return fmt.Sprint(rand.Intn(253) + 1)
+	return strconv.Itoa(rand.Intn(253) + 1)
 }
 
 // ipRandomAddress returns a random IP address.
