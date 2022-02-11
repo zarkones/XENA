@@ -26,8 +26,8 @@ func gettrProfileWebsite(username string) (string, error) {
 	var profile map[string]interface{}
 
 	jsonDecoder := json.NewDecoder(response.Body)
-	jsonErr := jsonDecoder.Decode(&profile)
-	if jsonErr != nil {
+	err = jsonDecoder.Decode(&profile)
+	if err != nil {
 		return website, err
 	}
 

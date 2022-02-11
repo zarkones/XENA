@@ -3,6 +3,8 @@ import { validString, validNumber } from './Validators'
 type ServiceDetails = {
   telnetUsername?: string
   telnetPassword?: string
+  sshUsername?: string
+  sshPassword?: string
 }
 
 export default class Service {
@@ -19,6 +21,8 @@ export default class Service {
       ? {
         telnetUsername: details.telnetUsername ? validString(details.telnetUsername, 'BAD_SERVICE_DETAILS_TELNET_USERNAME', 'NON_EMPTY') : undefined,
         telnetPassword: details.telnetPassword ? validString(details.telnetPassword, 'BAD_SERVICE_DETAILS_TELNET_PASSWORD', 'NON_EMPTY') : undefined,
+        sshUsername: details.sshUsername ? validString(details.sshUsername, 'BAD_SERVICE_DETAILS_SSH_USERNAME', 'NON_EMPTY') : undefined,
+        sshPassword: details.sshPassword ? validString(details.sshPassword, 'BAD_SERVICE_DETAILS_SSH_PASSWORD', 'NON_EMPTY') : undefined,
       }
       : undefined
   }

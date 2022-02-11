@@ -23,6 +23,6 @@ export default class ServicesController {
 
     await Repo.Service.insert(newService)
 
-    return response.noContent()
+    return response.created()
   }
 }
