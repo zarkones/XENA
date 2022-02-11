@@ -11,7 +11,7 @@ func domenaServiceInsert(response http.ResponseWriter, request *http.Request) {
 	body, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		fmt.Println(err)
-		response.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -20,7 +20,7 @@ func domenaServiceInsert(response http.ResponseWriter, request *http.Request) {
 	nextReq.Header.Set("User-Agent", request.UserAgent())
 	if err != nil {
 		fmt.Println(err)
-		response.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -29,7 +29,7 @@ func domenaServiceInsert(response http.ResponseWriter, request *http.Request) {
 	nextResp, err := client.Do(nextReq)
 	if err != nil {
 		fmt.Println(err)
-		response.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -38,7 +38,14 @@ func domenaServiceInsert(response http.ResponseWriter, request *http.Request) {
 	respBody, err := ioutil.ReadAll(nextResp.Body)
 	if err != nil {
 		fmt.Println(err)
-		response.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	// Check for the correct status code.
+	if nextResp.StatusCode != http.StatusCreated {
+		fmt.Println("Received status code missmatch on domenaServiceInsert: " + nextResp.Status)
+		response.WriteHeader(http.StatusNotFound)
 		return
 	}
 

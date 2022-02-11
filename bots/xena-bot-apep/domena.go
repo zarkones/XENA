@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
 )
 
@@ -38,7 +38,12 @@ func submitCreds(host string, creds Creds) error {
 
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err)
+		return err
+	}
+
+	// Domena service should return 201 - Created.
+	if response.StatusCode != http.StatusCreated {
+		return errors.New("insertion of service details failed with status:" + response.Status)
 	}
 
 	defer response.Body.Close()
