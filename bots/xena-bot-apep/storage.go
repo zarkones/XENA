@@ -19,11 +19,7 @@ var db *sql.DB
 
 // dbInit creates the database file and runs the migration.
 func dbInit() error {
-	hash, err := hashSelf()
-	if err != nil {
-		return err
-	}
-	databaseName := randomPopularWordBySeed(integersFromString(hash))
+	databaseName := randomPopularWordBySeed(integersFromString(selfHash))
 
 	database, err := sql.Open("sqlite3", "./"+databaseName+".db")
 	if err != nil {

