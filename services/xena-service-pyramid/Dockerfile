@@ -5,7 +5,7 @@ RUN apk add --no-cache git
 # Set working directory.
 WORKDIR /home/node
 # Copy the versioning files.
-COPY package.json ./
+COPY package*.json ./
 # Install project's dependencies.
 RUN yarn install
 # Copy the source-code.
@@ -20,7 +20,7 @@ RUN apk add --no-cache git
 # Set working directory.
 WORKDIR /home/node
 # Copy the versioning files.
-COPY package.json ./
+COPY package*.json ./
 # Install production only node packages.
 RUN yarn install --prod=true --frozen-lockfile
 
@@ -38,16 +38,12 @@ ENV HOST 0.0.0.0
 ENV PORT 60667
 ENV BUILD_DESTINATION ./xena-pyramid-software-builds/
 
-COPY --from=golang:1.6-alpine /usr/local/go/ /usr/local/go/
-ENV PATH="/usr/local/go/bin:${PATH}"
-ENV GOPATH=$HOME/go
-CMD export GOPATH
-
 # Git is needed for downloading the source codes.
-RUN apk add git
+
+RUN apk update && apk add git go
 
 # Lower the privledges. (don't use root user)
-# USER node
+USER node
 
 # Make the app's directory.
 RUN mkdir -p /home/node/app/
@@ -55,9 +51,9 @@ RUN mkdir -p /home/node/app/
 WORKDIR /home/node/app
 # Copy over the app.
 COPY --from=builder /home/node/build ./build
-COPY --from=installer /home/node/node_modules ./node_modules
+COPY --from=installer /home/node/node_modules ./build/node_modules
 # Copy the versioning files.
-COPY package.json ./
+COPY package*.json ./build
 # Expose the app.
 EXPOSE 60667
 # Start the app.
