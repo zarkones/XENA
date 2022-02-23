@@ -1,5 +1,6 @@
+clear
 
-echo "Welcome to XENA botnet kit!"
+echo "\nWelcome to XENA botnet kit!\n"
 
 echo "Checking Python3 installation."
 if ! python3 --version; then
