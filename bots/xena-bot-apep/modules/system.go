@@ -1,4 +1,4 @@
-package main
+package modules
 
 import (
 	"bytes"
@@ -14,8 +14,8 @@ type OsDetails struct {
 	CpuCount int    `json:"cpuCount"`
 }
 
-// osDetails returns basic system's information.
-func osDetails() OsDetails {
+// GetOsDetails returns basic system's information.
+func GetOsDetails() OsDetails {
 	osName := runtime.GOOS
 	if osName == "darwin" {
 		osName = "mac"
@@ -32,8 +32,8 @@ func osDetails() OsDetails {
 	}
 }
 
-// runTerminal takes an input and runs it within the shell context and returns the result as a string.
-func runTerminal(input string) (string, error) {
+// RunTerminal takes an input and runs it within the shell context and returns the result as a string.
+func RunTerminal(input string) (string, error) {
 	cmd := exec.Command(strings.TrimSuffix(input, "\n"))
 	var out bytes.Buffer
 	cmd.Stdout = &out

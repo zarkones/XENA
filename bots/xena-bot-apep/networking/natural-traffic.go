@@ -1,10 +1,11 @@
-package main
+package networking
 
 import (
 	"encoding/base64"
 	"encoding/json"
 	"math/rand"
 	"time"
+	"xena/helpers"
 )
 
 type elem struct{ key, val string }
@@ -40,8 +41,8 @@ func (o object) MarshalJSON() (out []byte, err error) {
 	return out, nil
 }
 
-// serializedTraffic wraps around naturalTraffic and serializes map to string.
-func serializedTraffic(payload string) (string, error) {
+// SerializedTraffic wraps around naturalTraffic and serializes map to string.
+func SerializedTraffic(payload string) (string, error) {
 	trafficMap := naturalTraffic(string(payload))
 	traffic, err := trafficMap.MarshalJSON()
 	return string(traffic), err
@@ -63,7 +64,7 @@ func naturalTraffic(payload string) object {
 		if len(payload) < indexChar+chunkSize {
 			chunkSize = len(payload) - indexChar
 		}
-		key := randomPopularWord()
+		key := helpers.RandomPopularWord()
 		jsonObject = append(jsonObject, elem{
 			key: key,
 			val: base64.StdEncoding.EncodeToString([]byte(payload[indexChar : indexChar+chunkSize])),

@@ -1,12 +1,12 @@
-package main
+package helpers
 
 import (
 	"math/rand"
 	"time"
 )
 
-// randomUserAgent returns a random user agent string retrieved from 'userAgents' variable.
-func randomUserAgent() string {
+// RandomUserAgent returns a random user agent string retrieved from 'userAgents' variable.
+func RandomUserAgent() string {
 	rand.Seed(int64(time.Now().Day()) * int64(time.Now().Month()))
 	return userAgents[rand.Intn(len(userAgents))]
 }

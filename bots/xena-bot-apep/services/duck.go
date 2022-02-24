@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ type DuckDuckGoSearch struct {
 
 // duckit performs a web search using the DuckDuckGo.
 // Returns a slice of strings representing urls.
-func duckit(term string) ([]string, error) {
+func Duckit(term string) ([]string, error) {
 	var searchResults []string
 
 	request, err := http.NewRequest("POST", "https://html.duckduckgo.com/html?q="+term, nil)

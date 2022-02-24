@@ -1,12 +1,12 @@
-package main
+package helpers
 
 import (
 	"math/rand"
 	"time"
 )
 
-// randomPopularDomain returns a radom domain from 'popularDomains' variable.
-func randomPopularDomain() string {
+// RandomPopularDomain returns a radom domain from 'popularDomains' variable.
+func RandomPopularDomain() string {
 	rand.Seed(int64(time.Now().Day()) * int64(time.Now().Month()))
 	return popularDomains[rand.Intn(len(popularDomains))]
 }
