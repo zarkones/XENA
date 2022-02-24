@@ -1,18 +1,18 @@
-package main
+package helpers
 
 import (
 	"math/rand"
 	"time"
 )
 
-// randomPopularWord returns a random word from 'popularWords' variable.
-func randomPopularWord() string {
+// RandomPopularWord returns a random word from 'popularWords' variable.
+func RandomPopularWord() string {
 	rand.Seed(time.Now().UnixNano())
 	return popularWords[rand.Intn(len(popularWords))]
 }
 
-// randomPopularWordBySeed returns the same word for the same seed from 'popularWords' variable.
-func randomPopularWordBySeed(seed int64) string {
+// RandomPopularWordBySeed returns the same word for the same seed from 'popularWords' variable.
+func RandomPopularWordBySeed(seed int64) string {
 	rand.Seed(seed)
 	return popularWords[rand.Intn(len(popularWords))]
 }

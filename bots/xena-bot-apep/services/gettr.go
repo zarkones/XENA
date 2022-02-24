@@ -1,17 +1,18 @@
-package main
+package services
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"xena/helpers"
 )
 
-// gettrProfileWebsite returns the website string applied to a Gettr account.
-func gettrProfileWebsite(username string) (string, error) {
+// GettrProfileWebsite returns the website string applied to a Gettr account.
+func GettrProfileWebsite(username string) (string, error) {
 	website := ""
 
 	request, err := http.NewRequest("GET", "https://api.gettr.com/s/uinf/"+username, nil)
-	request.Header.Set("User-Agent", randomUserAgent())
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return website, err
 	}

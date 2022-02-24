@@ -1,18 +1,22 @@
-package main
+package modules
 
 import (
+	"crypto/md5"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"os"
 )
 
-// generatePrivateKey creates a RSA private key.
-func generatePrivateKey() *rsa.PrivateKey {
+// GeneratePrivateKey creates a RSA private key.
+func GeneratePrivateKey() *rsa.PrivateKey {
 	secret, err := rsa.GenerateKey(rand.Reader, 4096)
 	if err != nil {
 		fmt.Println(err)
@@ -20,8 +24,8 @@ func generatePrivateKey() *rsa.PrivateKey {
 	return secret
 }
 
-// publicKeyToPEM converts RSA public key object to PEM encoded string.
-func publicKeyToPEM(publicKey *rsa.PublicKey) string {
+// PublicKeyToPEM converts RSA public key object to PEM encoded string.
+func PublicKeyToPEM(publicKey *rsa.PublicKey) string {
 	spkiDER, _ := x509.MarshalPKIXPublicKey(publicKey)
 	spkiPEM := pem.EncodeToMemory(
 		&pem.Block{
@@ -32,8 +36,8 @@ func publicKeyToPEM(publicKey *rsa.PublicKey) string {
 	return string(spkiPEM)
 }
 
-// privateKeyToPEM converts RSA private key object to PEM encoded string.
-func privateKeyToPEM(privateKey *rsa.PrivateKey) string {
+// PrivateKeyToPEM converts RSA private key object to PEM encoded string.
+func PrivateKeyToPEM(privateKey *rsa.PrivateKey) string {
 	spkiDER, _ := x509.MarshalPKCS8PrivateKey(privateKey)
 	spkiPEM := pem.EncodeToMemory(
 		&pem.Block{
@@ -44,8 +48,8 @@ func privateKeyToPEM(privateKey *rsa.PrivateKey) string {
 	return string(spkiPEM)
 }
 
-// importPEMPrivateKey converts a PEM encoded private key into the rsa.PublicKey object.
-func importPEMPrivateKey(spkiPEM string) (*rsa.PrivateKey, error) {
+// ImportPEMPrivateKey converts a PEM encoded private key into the rsa.PublicKey object.
+func ImportPEMPrivateKey(spkiPEM string) (*rsa.PrivateKey, error) {
 	body, _ := pem.Decode([]byte(spkiPEM))
 	privateKey, err := x509.ParsePKCS8PrivateKey(body.Bytes)
 	if err != nil {
@@ -58,8 +62,8 @@ func importPEMPrivateKey(spkiPEM string) (*rsa.PrivateKey, error) {
 	return rsaKey, nil
 }
 
-// importPEMPublicKey converts a PEM encoded public key into the rsa.PublicKey object.
-func importPEMPublicKey(spkiPEM string) *rsa.PublicKey {
+// ImportPEMPublicKey converts a PEM encoded public key into the rsa.PublicKey object.
+func ImportPEMPublicKey(spkiPEM string) *rsa.PublicKey {
 	body, _ := pem.Decode([]byte(spkiPEM))
 	publicKey, err := x509.ParsePKIXPublicKey(body.Bytes)
 	if err != nil {
@@ -92,4 +96,26 @@ func decryptRSAOAEP(cipherText string, privKey rsa.PrivateKey) string {
 		fmt.Println(err)
 	}
 	return string(plaintext)
+}
+
+// HashSelf finds the path of the bot executable, reads it and returns MD5 hash of it.
+func HashSelf() (string, error) {
+	hash := ""
+
+	selfPath, err := os.Executable()
+	if err != nil {
+		fmt.Println(err)
+		return hash, err
+	}
+
+	contentRaw, err := ioutil.ReadFile(selfPath)
+	if err != nil {
+		fmt.Println(err)
+		return hash, err
+	}
+
+	md5Hash := md5.Sum(contentRaw)
+	hash = hex.EncodeToString(md5Hash[:])
+
+	return hash, nil
 }

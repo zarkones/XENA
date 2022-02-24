@@ -1,4 +1,4 @@
-module xena-apep
+module xena
 
 go 1.7
 

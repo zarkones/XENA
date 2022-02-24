@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-// dga stands for Domain Generation Algorithm and it returns a list of domains
+// Dga stands for Domain Generation Algorithm and it returns a list of domains
 // which are potentially in possesion of the bot herder.
-func dga(dgaSeed int) []string {
+func Dga(dgaSeed int) []string {
 	domains := []string{}
 	for _, topLevelDOmain := range topLevelDomains {
 		for index := 0; index <= 50; index++ {

@@ -1,4 +1,4 @@
-FROM node:16.1.0-alpine
+FROM node:16-alpine
 
 # Create destination directory.
 RUN mkdir -p /usr/src/xena-service-face

