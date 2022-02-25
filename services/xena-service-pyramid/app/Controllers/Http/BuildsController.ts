@@ -268,21 +268,21 @@ export default class BuildsController {
     dgaAfterDays: string,
   ) => {
     fs.renameSync(
-      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.example`,
-      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`,
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/config/env.example`,
+      `${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/config/env.go`,
     )
 
-    const envContent = fs.readFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`)
+    const envContent = fs.readFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/config/env.go`)
       .toString()
       .replace('http://127.0.0.1:60666', atilaHost)
       .replace('-----BEGIN PUBLIC KEY-----\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n10\\n11\\n12\\n-----END PUBLIC KEY-----\\n', trustedPublicKey)
-      .replace('var maxLoopWait int = 10', `var maxLoopWait int = ${maxLoopWait}`)
-      .replace('var minLoopWait int = 5', `var minLoopWait int = ${minLoopWait}`)
-      .replace('var gettrProfileName string = ""', `var gettrProfileName string = "${gettrProfileName}"`)
-      .replace('var dgaSeed = 123', `var dgaSeed = ${dgaSeed}`)
-      .replace('var dgaAfterDays = 7', `var dgaAfterDays = ${dgaAfterDays}`)
+      .replace('var MaxLoopWait int = 10', `var MaxLoopWait int = ${maxLoopWait}`)
+      .replace('var MinLoopWait int = 5', `var MinLoopWait int = ${minLoopWait}`)
+      .replace('var GettrProfileName string = ""', `var GettrProfileName string = "${gettrProfileName}"`)
+      .replace('var DgaSeed = 123', `var DgaSeed = ${dgaSeed}`)
+      .replace('var DgaAfterDays = 7', `var DgaAfterDays = ${dgaAfterDays}`)
     
-    fs.writeFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/env.go`, envContent)
+    fs.writeFileSync(`${Service.Git.pathPrefix}${buildId}/bots/xena-bot-apep/config/env.go`, envContent)
 
     // Build the binary.
     const buildOutput = (() => {
