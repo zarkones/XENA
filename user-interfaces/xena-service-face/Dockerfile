@@ -10,12 +10,12 @@ RUN apk add git
 
 # Copy the app, note .dockerignore
 COPY . /usr/src/xena-service-face/
-RUN npm install
-RUN npm run build
+RUN yarn install
+RUN yarn build
 
 EXPOSE 3000
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3000
 
-CMD [ "npm", "start" ]
+CMD [ "main" ]
