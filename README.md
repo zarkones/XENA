@@ -94,6 +94,8 @@ Features:
 + Grabs Chromium's search history. (linux)
 + Search duckduckgo and return results.
 + Gets the currently active CNC from Gettr's user profile's website.
++ SSH brute-forcer.
++ Hibernate on start up for ~15 minutes to avoid analysis.
 
 **Xena-Bot-Monolitic**
 
