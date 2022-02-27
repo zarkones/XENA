@@ -18,13 +18,13 @@ func main() {
 	fmt.Println("Welcome to XENA!")
 	fmt.Println("Setup process initiated. This may take some time.")
 
+	fmt.Print("Creating a key pair. ")
 	privateKeyOrg, publicKeyOrg, err := crypto.KeyPair()
 	if err != nil {
 		issue()
 		panic("CRYPTO_PRIVATE_KEY_GENERATION_FAILED")
 	}
-
-	fmt.Println("Key-pair generated.")
+	fmt.Println("Created.")
 
 	publicKey := strings.ReplaceAll(publicKeyOrg, "\n", "\\n")
 
@@ -37,37 +37,37 @@ func main() {
 	domenaDbSecret := crypto.UniqueSecret()
 	domenaKeySecret := crypto.UniqueSecret()
 
-	fmt.Print("Checking Docker")
+	fmt.Print("Checking Docker. ")
 	if err = docker.Download(); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_DOWNLOAD_FAILED")
 	}
-	fmt.Println(", all good.")
+	fmt.Println("Installed.")
 
-	fmt.Print("Creating a docker network")
+	fmt.Print("Creating a docker network. ")
 	if err = docker.CreateNetwork(); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_NETWORK_CREATION_FAILED")
 	}
-	fmt.Println(", created.")
+	fmt.Println("Created.")
 
-	fmt.Print("Creating two containers: xena-atila, xena-atila-postgres.")
+	fmt.Print("Creating two containers: xena-atila, xena-atila-postgres. ")
 	if err = docker.InitAtila(atilaKeySecret, atilaDbSecret, publicKey); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_INIT_ATILA_FAILED")
 	}
-	fmt.Println(" Success.")
+	fmt.Println("Success.")
 
-	fmt.Print("Creating two containers: xena-domena, xena-domena-postgres.")
+	fmt.Print("Creating two containers: xena-domena, xena-domena-postgres. ")
 	if err = docker.InitDomena(domenaKeySecret, domenaDbSecret, publicKey); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_INIT_DOMENA_FAILED")
 	}
-	fmt.Println(" Success.")
+	fmt.Println("Success.")
 
 	fmt.Print("Creating two containers: xena-pyramid, xena-pyramid-postgres. ")
 	if err = docker.InitPyramid(pyramidKeySecret, pyramidDbSecret, publicKey); err != nil {
@@ -75,22 +75,25 @@ func main() {
 		issue()
 		panic("DOCKER_INIT_PYRAMID_FAILED")
 	}
-	fmt.Println(" Success.")
+	fmt.Println("Success.")
 
-	fmt.Print("Creating one container: xena-gateway.. ")
+	fmt.Print("Creating one container: xena-gateway. ")
 	if err = docker.InitGateway(); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_INIT_GATEWAY_FAILED")
 	}
-	fmt.Println(" Success.")
+	fmt.Println("Success.")
 
+	fmt.Print("Creating one container: xena-Face. ")
 	if err = docker.InitFace(); err != nil {
 		fmt.Println(err)
 		issue()
 		panic("DOCKER_INIT_FACE_FAILED")
 	}
-	fmt.Println(" Success.")
+	fmt.Println("Success.")
+	fmt.Println()
+	fmt.Println("Installation process complete!")
 	fmt.Println()
 
 	fmt.Println(privateKeyOrg)
