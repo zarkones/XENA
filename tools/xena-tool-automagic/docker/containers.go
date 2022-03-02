@@ -30,6 +30,9 @@ func initAtilaService(serviceSecret, dbSecret, publicKey string) error {
 	if _, err := shell.Run("cd services/xena-service-atila && docker build -t xena-service-atila . && docker run -d --net xena --name='xena-atila' -e PG_HOST='" + address + "' -e CORS_POLICY_ALLOWED_ORIGINS='http://127.0.0.1:3000' -e PG_PASSWORD='" + dbSecret + "' -e APP_KEY='" + serviceSecret + "' -e TRUSTED_PUBLIC_KEY='" + publicKey + "' -p 60666:60666 xena-service-atila"); err != nil {
 		return errors.New(" " + err.Error() + ". Unable to build and run xena-atila container.")
 	}
+	if _, err := shell.Run("docker exec -ti xena-atila sh -c \"node build/ace migration:run --force\""); err != nil {
+		return errors.New(" " + err.Error() + ". Unable to run migrations on xena-atila container.")
+	}
 	return nil
 }
 
@@ -60,6 +63,9 @@ func initPyramidService(serviceSecret, dbSecret, publicKey string) error {
 	if _, err := shell.Run("cd services/xena-service-pyramid && docker build -t xena-service-pyramid . && docker run -d --net xena --name='xena-pyramid' -e XENA_GIT_BRANCH='stage' -e PG_HOST='" + address + "' -e CORS_POLICY_ALLOWED_ORIGINS='http://127.0.0.1:3000' -e PG_PASSWORD='" + dbSecret + "' -e APP_KEY='" + serviceSecret + "' -e TRUSTED_PUBLIC_KEY='" + publicKey + "' -p 60667:60667 xena-service-pyramid"); err != nil {
 		return errors.New(" " + err.Error() + ". Unable to build and run xena-pyramid container.")
 	}
+	if _, err := shell.Run("docker exec -ti xena-pyramid sh -c \"node build/ace migration:run --force\""); err != nil {
+		return errors.New(" " + err.Error() + ". Unable to run migrations on xena-pyramid container.")
+	}
 	return nil
 }
 
@@ -89,6 +95,9 @@ func initDomenaService(serviceSecret, dbSecret, publicKey string) error {
 	}
 	if _, err := shell.Run("cd services/xena-service-domena && docker build -t xena-service-domena . && docker run -d --net xena --name='xena-domena' -e PG_HOST='" + address + "' -e CORS_POLICY_ALLOWED_ORIGINS='http://127.0.0.1:3000' -e PG_PASSWORD='" + dbSecret + "' -e APP_KEY='" + serviceSecret + "' -e TRUSTED_PUBLIC_KEY='" + publicKey + "' -p 60798:60798 xena-service-domena"); err != nil {
 		return errors.New(" " + err.Error() + ". Unable to build and run xena-domena container.")
+	}
+	if _, err := shell.Run("docker exec -ti xena-domena sh -c \"node build/ace migration:run --force\""); err != nil {
+		return errors.New(" " + err.Error() + ". Unable to run migrations on xena-domena container.")
 	}
 	return nil
 }
