@@ -4,27 +4,113 @@ import (
 	"fmt"
 	"main/crypto"
 	"main/docker"
+	"main/shell"
 	"strings"
 )
 
 func issue() {
 	fmt.Println()
+	fmt.Println()
+	fmt.Println("- - - LOGS START - - -")
+
+	fmt.Println("- - - - - - - XENA_ATILA - - - - - - -")
+	logs, err := shell.Run("docker container logs xena-atila")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+	fmt.Println("- - - - - - - XENA_ATILA - - - - - - -")
+	fmt.Println("- - - - - - - XENA_ATILA_POSTGRES - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-atila-postgres")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - - - - - XENA_DOMENA - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-domena")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+	fmt.Println("- - - - - - - XENA_DOMENA_POSTGRES - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-domena-postgres")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - - - - - XENA_PYRAMID - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-pyramid")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+	fmt.Println("- - - - - - - XENA_PYRAMID_POSTGRES - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-pyramid-postgres")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - - - - - XENA_FACE - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-face")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - - - - - XENA_GATEWAY - - - - - - -")
+	logs, err = shell.Run("docker container logs xena-gateway")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - DOCKER PS - - -")
+	logs, err = shell.Run("docker ps -a | grep xena")
+	if err != nil {
+		fmt.Print("An error happened during the printing of container logs: ")
+		fmt.Println(err)
+	}
+	fmt.Println(logs)
+
+	fmt.Println("- - - LOGS END - - -")
+	fmt.Println()
+	fmt.Println()
+
 	fmt.Println("Seems like something went wrong.")
 	fmt.Println("Please, submit a ticket at: https://github.com/zarkones/XENA/issues")
+
 	fmt.Println()
+	fmt.Println("Provide the logs when submiting a ticket.")
+	fmt.Println()
+
+	fmt.Println("FIX TIPS:")
+	fmt.Println(`
+	1. "exit status 125" indicates a conflict in container names. Delete all containers with the prefix 'xena' and run setup process again.
+	`)
 }
 
 func main() {
 	fmt.Println("Welcome to XENA!")
 	fmt.Println("Setup process initiated. This may take some time.")
 
+	fmt.Print("Creating a key pair. ")
 	privateKeyOrg, publicKeyOrg, err := crypto.KeyPair()
 	if err != nil {
 		issue()
 		panic("CRYPTO_PRIVATE_KEY_GENERATION_FAILED")
 	}
-
-	fmt.Println("Key-pair generated.")
+	fmt.Println("Created.")
 
 	publicKey := strings.ReplaceAll(publicKeyOrg, "\n", "\\n")
 
@@ -37,54 +123,63 @@ func main() {
 	domenaDbSecret := crypto.UniqueSecret()
 	domenaKeySecret := crypto.UniqueSecret()
 
+	fmt.Print("Checking Docker. ")
 	if err = docker.Download(); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_DOWNLOAD_FAILED")
 	}
-	fmt.Println("Docker checked.")
+	fmt.Println("Installed.")
 
+	fmt.Print("Creating a docker network. ")
 	if err = docker.CreateNetwork(); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_NETWORK_CREATION_FAILED")
 	}
-	fmt.Println("Created a docker network.")
+	fmt.Println("Created.")
 
+	fmt.Print("Creating two containers: xena-atila, xena-atila-postgres. ")
 	if err = docker.InitAtila(atilaKeySecret, atilaDbSecret, publicKey); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_INIT_ATILA_FAILED")
 	}
-	fmt.Println("Initialized XENA_SERVICE_ATILA.")
+	fmt.Println("Success.")
 
+	fmt.Print("Creating two containers: xena-domena, xena-domena-postgres. ")
 	if err = docker.InitDomena(domenaKeySecret, domenaDbSecret, publicKey); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_INIT_DOMENA_FAILED")
 	}
-	fmt.Println("Initialized XENA_SERVICE_DOMENA.")
+	fmt.Println("Success.")
 
+	fmt.Print("Creating two containers: xena-pyramid, xena-pyramid-postgres. ")
 	if err = docker.InitPyramid(pyramidKeySecret, pyramidDbSecret, publicKey); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_INIT_PYRAMID_FAILED")
 	}
-	fmt.Println("Initialized XENA_SERVICE_PYRAMID.")
+	fmt.Println("Success.")
 
+	fmt.Print("Creating one container: xena-gateway. ")
 	if err = docker.InitGateway(); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_INIT_GATEWAY_FAILED")
 	}
-	fmt.Println("Initialized XENA_SERVICE_GATEWAY.")
+	fmt.Println("Success.")
 
+	fmt.Print("Creating one container: xena-Face. ")
 	if err = docker.InitFace(); err != nil {
-		fmt.Println(err)
 		issue()
+		fmt.Println(err)
 		panic("DOCKER_INIT_FACE_FAILED")
 	}
-	fmt.Println("Initialized XENA_SERVICE_FACE.")
+	fmt.Println("Success.")
+	fmt.Println()
+	fmt.Println("Installation process complete!")
 	fmt.Println()
 
 	fmt.Println(privateKeyOrg)

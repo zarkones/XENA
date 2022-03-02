@@ -1,4 +1,4 @@
-package modules
+package networking
 
 import (
 	"math/rand"

