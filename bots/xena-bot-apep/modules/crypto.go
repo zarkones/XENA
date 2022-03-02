@@ -77,7 +77,7 @@ func ImportPEMPublicKey(spkiPEM string) *rsa.PublicKey {
 	return nil
 }
 
-func encryptRSAOAEP(secretMessage string, key rsa.PublicKey) string {
+func EncryptRSAOAEP(secretMessage string, key rsa.PublicKey) string {
 	label := []byte("OAEP Encrypted")
 	rng := rand.Reader
 	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, &key, []byte(secretMessage), label)
@@ -87,7 +87,7 @@ func encryptRSAOAEP(secretMessage string, key rsa.PublicKey) string {
 	return base64.StdEncoding.EncodeToString(ciphertext)
 }
 
-func decryptRSAOAEP(cipherText string, privKey rsa.PrivateKey) string {
+func DecryptRSAOAEP(cipherText string, privKey rsa.PrivateKey) string {
 	ct, _ := base64.StdEncoding.DecodeString(cipherText)
 	label := []byte("OAEP Encrypted")
 	rng := rand.Reader
