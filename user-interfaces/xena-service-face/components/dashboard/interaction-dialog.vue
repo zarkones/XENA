@@ -3,16 +3,16 @@
     flat
   >
     <v-card-text
-      v-if = '!clients.length'
+      v-if = '!clients.length && !getBotHost.length'
     >
-      Please, select at least one client.
+      Please, select at least one client or directly connect it.
     </v-card-text>
 
     <!--
       We should ask the user to select clients.
     -->
     <div
-      v-if = 'clients.length'
+      v-if = 'clients.length || getBotHost.length'
       class = '
         ma-4
       '
@@ -41,6 +41,7 @@ import MessageDisplay from '@/components/terminal/message-display.vue'
 import Shell from '@/components/terminal/shell.vue'
 
 import * as Service from '@/src/services'
+import { Message } from '@/src/services/Atila'
 
 import { mapGetters } from 'vuex'
 
@@ -82,16 +83,29 @@ export default Vue.extend({
       'getPrivateKey',
       'getAtilaHost',
       'getAtilaToken',
+      'getBotHost',
     ])
   },
 
   mounted () {
     EventBus.$on('interactionDialogUpdateClients', (clients: any[]) => this.clients = clients)
 
-    EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string) => {
+    EventBus.$on('interactionDialogUpdateSelectedClient', async (clientId: string, viaP2Pmessage?: Message) => {
       // Without this the rendering engine won't update. This needs to be fixed somehow.
-      this.messages = []
 
+      console.log('AAAAAAAAa', clientId)
+      console.log('BBBBBBBBB', viaP2Pmessage)
+
+      if (viaP2Pmessage !== undefined) {
+        this.messages = [viaP2Pmessage]
+        await this.$axios.get('https://duckduckgo.com')
+          .catch(() => {})
+        console.log(this.messages)
+        return
+      }
+      
+      console.log('13213123213213')
+      
       this.selectedClient = this.clients.filter(client => client.id == clientId)[0]
 
       const messages = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken)

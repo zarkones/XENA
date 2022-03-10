@@ -6,6 +6,7 @@
 # Everything meant to be in a pre-publish phase should go in-here.
 rnd
 capture-the-flag-services
+xena-vr-lyoko
 
 # Node artifact files
 node_modules/

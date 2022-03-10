@@ -7,8 +7,7 @@ import (
 	"xena/p2p/domains"
 )
 
-type Peers struct {
-}
+type Peers struct{}
 
 func (controller *Peers) Handshake(response http.ResponseWriter, request *http.Request) {
 	// Read and prepare the body.

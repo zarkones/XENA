@@ -26,6 +26,8 @@ const store = () => {
         XENA_SENSI_HOST: 'http://service.sensi.xena.network/v1',
         XENA_SENSI_TOKEN: '',
       },
+
+      directBotConnection: '',
     }),
 
     plugins: [
@@ -33,6 +35,8 @@ const store = () => {
     ],
 
     getters: {
+      getBotHost: (state) => state.directBotConnection,
+
       getUsername: (state) => state.username,
       getPrivateKey: (state) => state.privateKey,
       
@@ -56,6 +60,8 @@ const store = () => {
     },
 
     mutations: {
+      setBotHost: (state, host: string) => state.directBotConnection = host,
+
       setPrivateKey: (state, key: string) => {
         state.privateKey = key.replaceAll(' ', '\n')
           .replace(`-----BEGIN\nRSA\nPRIVATE\nKEY-----`, '-----BEGIN RSA PRIVATE KEY-----')
@@ -109,6 +115,8 @@ const store = () => {
     },
 
     actions: {
+      setBotHost: ({ commit }, host: string) => commit('setBotHost', host),
+
       setPrivateKey: ({ commit }, key: string) => {
         commit('setPrivateKey', key)
       },

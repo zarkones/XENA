@@ -1,7 +1,7 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import Crypto from './Crypto'
 
-type Message = {
+export type Message = {
   id: string
   from: string | null
   to: string | null
@@ -129,6 +129,6 @@ export default class Atila {
     .catch(err => console.warn(err))
     .then(resp => {
       if (resp)
-        return resp.data
+        return resp.data as Message
     })
 }
