@@ -147,6 +147,14 @@ func initialize() {
 		}
 	}
 
+	if config.DiscordEnabled {
+		var discord = services.Discord{}
+		err = discord.Init()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
 	// Start the P2P server.
 	var p2p p2p.P2P = p2p.P2P{}
 	go p2p.BootServer(config.PeerPort)
