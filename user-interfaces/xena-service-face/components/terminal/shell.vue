@@ -58,23 +58,45 @@ export default Vue.extend({
       'getPrivateKey',
       'getAtilaHost',
       'getAtilaToken',
+      'getBotHost'
     ])
   },
 
   methods: {
     checkForReplies () {
+      if (!this.getBotHost)
+        return
       EventBus.$emit('interactionDialogUpdateSelectedClient', this.clients[0].id)
     },
 
     async issueMessages () {
       const message = await Service.Crypto.sign(this.getPrivateKey, { shell: this.shellCode })
 
-      await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).publishMessage(this.clients[0].id, 'instruction', message)
+      this.getBotHost
+        ? await new Service.Atila(
+          this.$axios,
+          this.getBotHost,
+          this.getAtilaToken
+        )
+          .publishMessage('<nil>', 'instruction', message)
+          .then(reply => EventBus.$emit('interactionDialogUpdateSelectedClient', reply.id, {
+            content: { shell: this.shellCode },
+            replies: [reply],
+          }))
+
+        : await new Service.Atila(
+          this.$axios,
+          this.getAtilaHost,
+          this.getAtilaToken
+        )
+          .publishMessage(this.clients[0].id, 'instruction', message)
+          .then(() => EventBus.$emit('interactionDialogUpdateSelectedClient', this.clients[0].id))
+
       // const createdMessages = await Promise.all(this.clients.map(client => {
       //   return Service.Atila.publishMessage(this.$axios, client.id, 'instruction', message)
       // }))
 
-      EventBus.$emit('interactionDialogUpdateSelectedClient', this.clients[0].id)
+      
 
       this.shellCode = ''
     }

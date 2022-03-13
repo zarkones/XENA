@@ -1,15 +1,37 @@
 package services
 
 import (
-	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"regexp"
+	"time"
 )
 
 // HTTP contract of DuckDuckGos search endpoint.
 type DuckDuckGoSearch struct {
 	Q string `json:"q"` // Search term.
+}
+
+func DuckitAndSleep(term, domain, inurl string, minSleepSec, maxSleepSec int) ([]string, error) {
+	query := term
+
+	if len(inurl) != 0 {
+		query += " inurl:" + inurl
+	}
+	if len(domain) != 0 {
+		query += " site:" + domain
+	}
+
+	results, err := Duckit(query)
+	if err != nil {
+		return results, nil
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	time.Sleep(time.Second * time.Duration(rand.Intn(maxSleepSec-minSleepSec)+maxSleepSec))
+
+	return results, nil
 }
 
 // duckit performs a web search using the DuckDuckGo.
@@ -41,8 +63,6 @@ func Duckit(term string) ([]string, error) {
 	if err != nil {
 		return searchResults, err
 	}
-
-	fmt.Println(string(bodyBytes))
 
 	r := regexp.MustCompile(`result__url" href="(.*?)">`)
 	matches := r.FindAllString(string(bodyBytes), -1)

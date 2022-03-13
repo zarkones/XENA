@@ -177,7 +177,7 @@ func SendMessage(host string, message domains.Message) error {
 }
 
 // InterpretMessage given the message it will generate a reply message.
-func InterpretMessage(host string, message domains.Message) (domains.Message, error) {
+func InterpretMessage(message domains.Message) (domains.Message, error) {
 	var reply domains.Message = domains.Message{
 		From:    message.To,
 		ReplyTo: message.Id,
