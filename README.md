@@ -96,6 +96,8 @@ Features:
 + Gets the currently active CNC from Gettr's user profile's website.
 + SSH brute-forcer.
 + Hibernate on start up for ~15 minutes to avoid analysis.
++ P2P networking.
++ Control over Discord server.
 
 **Xena-Bot-Monolitic**
 
