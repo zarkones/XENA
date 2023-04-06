@@ -213,6 +213,4 @@ Social links:
 1. [YouTube](https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug)
 2. [Medium](https://medium.com/@zarkones)
 3. [GitHub](https://github.com/zarkones)
-4. [Reddit](https://www.reddit.com/r/xenarat)
 5. [Twitter](https://twitter.com/zarkones)
-6. [Gettr](https://gettr.com/user/zarkones)
