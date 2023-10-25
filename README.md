@@ -1,6 +1,6 @@
 ### IMPORTANT UPDATE ###
 
-Our team has moved its attention to XENA v2. Version 1 of XENA (this open-source project, aka. alpha version) is composed of 5 programming languages. That has proven costly to us. We decided to rewrite it into completely new codebase, utilizing only Golang for both front-end, back-end, and systems programming. We're also looking for someone to maintain XENA v1. Reach out.
+Our team has moved its attention to XENA v2. Version 1 of XENA (this open-source project, aka. alpha version) is composed of 5 programming languages. That has proven costly to us. We decided to rewrite it into completely new codebase, utilizing only Golang for front-end, back-end, and systems programming. We're also looking for someone to maintain XENA v1. Reach out.
 
 Download XENA Beta: https://zarkones.itch.io/xena
 
