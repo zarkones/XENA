@@ -1,4 +1,10 @@
-![Logo of the XENA project.](https://raw.githubusercontent.com/zarkones/XENA/production/user-interfaces/xena-service-face/static/xena-logo.png)
+### IMPORTANT UPDATE ###
+
+Our team has moved its attention to XENA v2. Version 1 of XENA (this open-source project, aka. alpha version) is composed of 5 programming languages. That has proven costly to us. We decided to rewrite it into completely new codebase, utilizing only Golang for both front-end, back-end, and systems programming. We're also looking for someone to maintain XENA v1. Reach out.
+
+Download XENA Beta: https://zarkones.itch.io/xena
+
+![Logo of the XENA project.](https://img.itch.zone/aW1nLzExODEwMDI5LnBuZw==/original/fS0sJs.png)
 
 ### CONTENT MAP ###
 
@@ -24,9 +30,7 @@ This software is not allowed to be used for commercial purpose of any kind, shap
 Selling and redistributing this software is not permitted without a written permission.
 This software is not allowed to be used for training of algorithms without a written permission.
 
-### SUPPORT MY RESEARCH ###
-
-Working full-time and developing a hobby project is stressful. Gin-Tonic can ease the pain, consider supporting my blackouts.
+### SUPPORT OUR RESEARCH ###
 
 [BECOME A PATREON](https://www.patreon.com/zarkones)
 
@@ -202,12 +206,6 @@ xena-pyrmid-url  ===  http://127.0.0.1:60667
 xena-ra-url  ===  http://127.0.0.1:60696
 
 xena-sensi-url  ===  http://127.0.0.1:60699
-
-### WHOAMI? ###
-
-Zarkones. Software developer with an accent on back-end services.
-Current solutions are overpriced, when it comes to red-team software.
-I wish to understand the topic and share my knowledge in a appropriate manner.
 
 Social links:
 1. [YouTube](https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug)
