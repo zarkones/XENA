@@ -1,0 +1,2 @@
+GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -buildmode=plugin -ldflags="-s -w" -tags "netgo,linux" .
+GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -buildmode=c-shared -ldflags="-s -w" -tags "netgo,windows" -o offsec.dll .

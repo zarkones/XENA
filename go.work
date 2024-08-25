@@ -1,0 +1,11 @@
+go 1.23
+
+use (
+	./agent
+	./c2
+	./common
+	./modules/offsec
+	./tests
+	./tools/usage
+	./ui
+)

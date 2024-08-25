@@ -1,0 +1,790 @@
+[
+    {
+        "id": "STR_CONTAINS",
+        "name": "String Contains",
+        "description": "Filter text based on if it contains a sub-string.",
+        "toolCategoryName": "Utils",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "Text to be checked if it contains the sub-string"
+            },
+            "subString": {
+                "type": "STRING",
+                "description": "Sub-string to be checked against the text"
+            },
+            "perLine": {
+                "type": "STRING",
+                "description": "If set to 'true' it would perform the check for each line in the text"
+            }
+        }
+    },
+    {
+        "id": "DEDUPLICATE",
+        "name": "Deduplicate",
+        "description": "Deduplicates data on new lines.",
+        "toolCategoryName": "Utils",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "File or string to deduplicate based on new lines"
+            }
+        }
+    },
+    {
+        "id": "FILE",
+        "name": "String From File",
+        "description": "Use content of a file as input.",
+        "toolCategoryName": "Inputs",
+        "inputs": {
+            "file": {
+                "type": "FILE",
+                "description": "File to be loaded from your local file system"
+            }
+        }
+    },
+    {
+        "id": "TRIM_SUFFIX",
+        "name": "Trim Suffix",
+        "description": "Removes suffix from a file or string.",
+        "toolCategoryName": "Utils",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "Text to remove suffix from"
+            },
+            "suffix": {
+                "type": "STRING",
+                "description": "Suffix to remove from text"
+            }
+        }
+    },
+    {
+        "id": "TRIM_PREFIX",
+        "name": "Trim Prefix",
+        "description": "Removes prefix from a file or string.",
+        "toolCategoryName": "Utils",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "Text to to remove prefix from"
+            },
+            "prefix": {
+                "type": "STRING",
+                "description": "Prefix to remove from text"
+            }
+        }
+    },
+    {
+        "id": "EXEC_SHELL",
+        "name": "Exec. Shell",
+        "description": "Execute a shell command.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "command": {
+                "type": "STRING",
+                "description": "Command to be executed"
+            }
+        }
+    },
+    {
+        "id": "READ_FILE",
+        "name": "Read File",
+        "description": "Read a file from the local file system.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "filePath": {
+                "type": "STRING",
+                "description": "Path to the file"
+            }
+        }
+    },
+    {
+        "id": "WRITE_FILE",
+        "name": "Write File",
+        "description": "Write a file to the local file system.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "filePath": {
+                "type": "STRING",
+                "description": "Path to the file"
+            },
+            "fileContent": {
+                "type": "STRING",
+                "description": "Content of file to be written to the local file system"
+            }
+        }
+    },
+    {
+        "id": "READ_DIR",
+        "name": "Read Directory",
+        "description": "Reads content of a directory and returns file paths.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "dirPath": {
+                "type": "STRING",
+                "description": "Path to a directory"
+            }
+        }
+    },
+    {
+        "id": "WALK_DIR",
+        "name": "Walk Directory",
+        "description": "Reads content of a directory, and all sub-directories then it returns file paths.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "dirPath": {
+                "type": "STRING",
+                "description": "Path to a directory"
+            }
+        }
+    },
+    {
+        "id": "OS_SHUTDOWN",
+        "name": "Shutdown",
+        "description": "Powers off the computer.",
+        "toolCategoryName": "System"
+    },
+    {
+        "id": "TLD_ENUM",
+        "name": "TLD Enum.",
+        "description": "Enumerate top-level domains using a wordlist.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "names": {
+                "type": "STRING",
+                "description": "Names to bruteforce domains"
+            },
+            "wordlist": {
+                "type": "FILE",
+                "description": "Wordlist used for bruteforce"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM",
+        "name": "Subdomain Enum.",
+        "description": "Enumerate subdomains using a wordlist.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "wordlist": {
+                "type": "FILE",
+                "description": "Wordlist used for bruteforce"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "DOWNLOAD_FILE",
+        "name": "Download File",
+        "description": "Download a file from URL.",
+        "toolCategoryName": "Network",
+        "inputs": {
+            "url": {
+                "type": "STRING",
+                "description": "File URL"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM_TOP100",
+        "name": "Subdomain Top 100",
+        "description": "Enumerate top 100 subdomains.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            },
+            "threads": {
+                "type": "STRING",
+                "description": "Number of threads",
+                "value": "1"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM_TOP500",
+        "name": "Subdomain Top 500",
+        "description": "Enumerate top 500 subdomains.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            },
+            "threads": {
+                "type": "STRING",
+                "description": "Number of threads",
+                "value": "1"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM_TOP1K",
+        "name": "Subdomain Top 1K",
+        "description": "Enumerate top 1000 subdomains.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            },
+            "threads": {
+                "type": "STRING",
+                "description": "Number of threads",
+                "value": "1"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM_TOP10K",
+        "name": "Subdomain Top 10K",
+        "description": "Enumerate top 10,000 subdomains.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            },
+            "threads": {
+                "type": "STRING",
+                "description": "Number of threads",
+                "value": "1"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_CUSTOM",
+        "name": "Web Directory Enum.",
+        "description": "Enumerate web paths using a wordlist.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "wordlist": {
+                "type": "FILE",
+                "description": "Wordlist used for bruteforce"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_FILE_UPLOAD",
+        "name": "Discover File Upload",
+        "description": "Discover file upload endpoints on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_GIT_DIR",
+        "name": "Discover Git Dir.",
+        "description": "Discover exposed Git directory on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_CRAWL",
+        "name": "Web Crawl",
+        "description": "Crawl a website starting from specified URL.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to crawl"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_BACKUPS",
+        "name": "Discover Backups",
+        "description": "Find backup files on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_ADMIN_PANEL",
+        "name": "Discover Admin Panels",
+        "description": "Find administrative pages on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_LOGS",
+        "name": "Discover Log Files",
+        "description": "Find log files on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_DEV_LEFTOVER",
+        "name": "Discover Leftover Files",
+        "description": "Find development leftover files on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_ENUM_TOP10K",
+        "name": "Discover Top 10K",
+        "description": "Find top 10k common files on a web server.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs to bruteforce paths"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "PORT_SCANNER",
+        "name": "Port Scanner",
+        "description": "Scan for open ports on hosts.",
+        "toolCategoryName": "Network",
+        "inputs": {
+            "hosts": {
+                "type": "STRING",
+                "description": "Hosts to port scan"
+            },
+            "ports": {
+                "type": "STRING",
+                "description": "Comma separated list of ports to scan"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "REVERSE_DNS",
+        "name": "Reverse DNS Lookup",
+        "description": "Find domain names linked to IP address.",
+        "toolCategoryName": "Network",
+        "inputs": {
+            "addresses": {
+                "type": "STRING",
+                "description": "Addresses for reverse DNS analysis"
+            }
+        }
+    },
+    {
+        "id": "GATEWAY_IP_ADDR",
+        "name": "Find Gateway IP",
+        "description": "Get gateway IP address of a local router.",
+        "toolCategoryName": "Network"
+    },
+    {
+        "id": "GEN_RAND_IP",
+        "name": "Random IP",
+        "description": "Generate a random IP address.",
+        "toolCategoryName": "Network"
+    },
+    {
+        "id": "GEN_IP_RANGE",
+        "name": "IP Range",
+        "description": "Generate a range of IP addresses from 1.1.1.1 to 255.255.255.255",
+        "toolCategoryName": "Network",
+        "inputs": {
+            "minAddress": {
+                "type": "STRING",
+                "description": "Min. IP address"
+            },
+            "maxAddress": {
+                "type": "STRING",
+                "description": "Max. IP address"
+            }
+        }
+    },
+    {
+        "id": "HTTP_REQUEST",
+        "name": "HTTP Request",
+        "description": "Issue a HTTP web request.",
+        "toolCategoryName": "Network",
+        "inputs": {
+            "host": {
+                "type": "STRING",
+                "description": "Destination host"
+            },
+            "path": {
+                "type": "STRING",
+                "description": "Web path"
+            },
+            "method": {
+                "type": "STRING",
+                "description": "HTTP method"
+            },
+            "body": {
+                "type": "FILE",
+                "description": "HTTP request body"
+            }
+        }
+    },
+    {
+        "id": "CORS_SCANNER",
+        "name": "CORS Scanner",
+        "description": "Find CORS related misconfigurations.",
+        "toolCategoryName": "Scanner",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "Target URLs"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "HOST_HEADER_INJECTION_SCANNER",
+        "name": "Host Header Injection Scanner",
+        "description": "Find host header injection misconfigurations.",
+        "toolCategoryName": "Scanner",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "Target URLs"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "SSH_BRUTEFORCE",
+        "name": "SSH Bruteforce",
+        "description": "Bruteforce SSH logins.",
+        "toolCategoryName": "Lateral",
+        "inputs": {
+            "hosts": {
+                "type": "STRING",
+                "description": "Target hosts"
+            },
+            "port": {
+                "type": "STRING",
+                "description": "SSH port"
+            },
+            "usernameWordlist": {
+                "type": "FILE",
+                "description": "Username wordlist"
+            },
+            "passwordWordlist": {
+                "type": "FILE",
+                "description": "Password wordlist"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "FIND_SECRETS",
+        "name": "Find Secrets",
+        "description": "Find secrets in text.",
+        "toolCategoryName": "System",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "Text to analyze"
+            }
+        }
+    },
+    {
+        "id": "WEB_BYPASS_403",
+        "name": "Bypass 403",
+        "description": "Bypass 403 endpoints of a web server.",
+        "toolCategoryName": "Scanner",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs which to bypass 403 on."
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "WEB_URL_FUZZER",
+        "name": "URL Fuzzer",
+        "description": "Lightweight URL fuzzer.",
+        "toolCategoryName": "Scanner",
+        "inputs": {
+            "urls": {
+                "type": "STRING",
+                "description": "URLs which to be fuzzed for unusual behavior."
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            },
+            "threads": {
+                "type": "STRING",
+                "description": "Number of threads",
+                "value": "1"
+            }
+        }
+    },
+    {
+        "id": "WEB_SEARCH",
+        "name": "Web Search",
+        "description": "Search the web using a search engine.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "query": {
+                "type": "STRING",
+                "description": "Query to search based on."
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    },
+    {
+        "id": "SUBDOMAIN_ENUM_PASSIVE",
+        "name": "Passive Subdomain Enum.",
+        "description": "Enumerate subdomains of domains without directly interacting with the targets.",
+        "toolCategoryName": "Recon",
+        "inputs": {
+            "domains": {
+                "type": "STRING",
+                "description": "Domains on which to enumerate subdomains"
+            },
+            "timeout": {
+                "type": "STRING",
+                "description": "Request timeout in seconds",
+                "value": "5"
+            },
+            "rpm": {
+                "type": "STRING",
+                "description": "Max requests per minute",
+                "value": "5"
+            }
+        }
+    }
+]

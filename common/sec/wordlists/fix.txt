@@ -1,0 +1,29 @@
+package main
+
+import (
+	"os"
+	"strings"
+)
+
+func main() {
+	files, _ := os.ReadDir(".")
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		if !strings.HasSuffix(file.Name(), ".txt") {
+			continue
+		}
+		f, _ := os.ReadFile(file.Name())
+		newLines := []string{"package wordlists"}
+		newLines = append(newLines, "var XYZ = []string{")
+		for _, line := range strings.Split(string(f), "\n") {
+			newLines = append(newLines, `"`+line+`",`)
+		}
+		newLines = append(newLines, "}")
+		output := strings.Join(newLines, "\n")
+		newFileName := strings.ReplaceAll(file.Name(), ".txt", ".go")
+		os.WriteFile(newFileName, []byte(output), 0777)
+	}
+
+}
