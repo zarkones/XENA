@@ -21,6 +21,12 @@ Example: AUTH_TOKEN=my_api_key_for_ui HOST=127.0.0.1 PORT=8080 GIN_MODE=release 
 
 [Setup Video Tutorial](https://youtu.be/l86krmk-YZs)
 
+![Promo Image 1](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo1.png)
+
+![Promo Image 2](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo2.png)
+
+![Promo Image 3](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo3.png)
+
 ### SOCIAL ###
 
 [Patreon](https://www.patreon.com/zarkones)
