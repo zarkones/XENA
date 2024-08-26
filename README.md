@@ -30,6 +30,7 @@ Example: AUTH_TOKEN=my_api_key_for_ui HOST=127.0.0.1 PORT=8080 GIN_MODE=release 
 ### SOCIAL ###
 
 [Patreon](https://www.patreon.com/zarkones)
+[Discord](https://discord.gg/qjJwSh2TF9)
 [YouTube](https://www.youtube.com/channel/UCn-7I-L-ZpiELb8-6z7z_Ug)
 [X](https://x.com/zarkones)
 [GitHub](https://github.com/zarkones)
