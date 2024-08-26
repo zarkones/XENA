@@ -57,9 +57,9 @@ func BuildAgent(w fyne.Window) fyne.CanvasObject {
 	})
 
 	agentType := "MONOLITH"
-	agentTypeSelect := widget.NewSelect([]string{"MONOLITH", "MODULAR"}, func(value string) {
-		agentType = value
-	})
+	// agentTypeSelect := widget.NewSelect([]string{"MONOLITH", "MODULAR"}, func(value string) {
+	// 	agentType = value
+	// })
 
 	pubsubEnabled := "false"
 	pubsubSelect := widget.NewSelect([]string{"ENABLED", "DISABLED"}, func(value string) {
@@ -88,8 +88,8 @@ func BuildAgent(w fyne.Window) fyne.CanvasObject {
 		widget.NewLabel("CPU Architecture"),
 		archSelect,
 		widget.NewSeparator(),
-		widget.NewLabel("Agent Type (monolith = larger binary size)"),
-		agentTypeSelect,
+		// widget.NewLabel("Agent Type (monolith = larger binary size)"),
+		// agentTypeSelect,
 		widget.NewSeparator(),
 		widget.NewLabel("C2 Host"),
 		c2HostInput,
@@ -156,33 +156,33 @@ func getAgentBin(os, arch, agentType string) ([]byte, error) {
 	arch = strings.ToLower(arch)
 	agentType = strings.ToLower(agentType)
 
-	if agentType == "modular" {
-		if os == "linux" && arch == "amd64" {
-			return static.AgentModularLinuxAmd64, nil
-		}
-		if os == "linux" && arch == "386" {
-			return static.AgentModularLinux386, nil
-		}
-		if os == "linux" && arch == "arm" {
-			return static.AgentModularLinuxArm, nil
-		}
-		if os == "linux" && arch == "arm64" {
-			return static.AgentModularLinuxArm64, nil
-		}
+	// if agentType == "modular" {
+	// 	if os == "linux" && arch == "amd64" {
+	// 		return static.AgentModularLinuxAmd64, nil
+	// 	}
+	// 	if os == "linux" && arch == "386" {
+	// 		return static.AgentModularLinux386, nil
+	// 	}
+	// 	if os == "linux" && arch == "arm" {
+	// 		return static.AgentModularLinuxArm, nil
+	// 	}
+	// 	if os == "linux" && arch == "arm64" {
+	// 		return static.AgentModularLinuxArm64, nil
+	// 	}
 
-		if os == "windows" && arch == "386" {
-			return static.AgentModularWindows386, nil
-		}
-		if os == "windows" && arch == "amd64" {
-			return static.AgentModularWindowsAmd64, nil
-		}
-		if os == "windows" && arch == "arm" {
-			return static.AgentModularWindowsArm, nil
-		}
-		if os == "windows" && arch == "arm64" {
-			return static.AgentModularWindowsArm64, nil
-		}
-	}
+	// 	if os == "windows" && arch == "386" {
+	// 		return static.AgentModularWindows386, nil
+	// 	}
+	// 	if os == "windows" && arch == "amd64" {
+	// 		return static.AgentModularWindowsAmd64, nil
+	// 	}
+	// 	if os == "windows" && arch == "arm" {
+	// 		return static.AgentModularWindowsArm, nil
+	// 	}
+	// 	if os == "windows" && arch == "arm64" {
+	// 		return static.AgentModularWindowsArm64, nil
+	// 	}
+	// }
 
 	if os == "linux" && arch == "amd64" {
 		return static.AgentLinuxAmd64, nil

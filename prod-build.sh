@@ -13,6 +13,18 @@ CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w -extldflags='-sta
 echo "Building Windows Agents"
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static' -H=windowsgui" -tags "netgo,windows,purego" -o common/builder/static/agents/windows_amd64 ./agent
 CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags="-s -w -extldflags='-static' -H=windowsgui" -tags "netgo,windows,purego" -o common/builder/static/agents/windows_386 ./agent
+CGO_ENABLED=0 GOOS=windows GOARCH=arm go build -ldflags="-s -w -extldflags='-static' -H=windowsgui" -tags "netgo,windows,purego" -o common/builder/static/agents/windows_arm ./agent
+CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -ldflags="-s -w -extldflags='-static' -H=windowsgui" -tags "netgo,windows,purego" -o common/builder/static/agents/windows_arm64 ./agent
+echo "Building Mac Agents"
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,darwin,purego" -o common/builder/static/agents/darwin_amd64 ./agent
+CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,darwin,purego" -o common/builder/static/agents/darwin_arm64 ./agent
+echo "Building OpenBSD Agents"
+CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,openbsd,purego" -o common/builder/static/agents/openbsd_amd64 ./agent
+CGO_ENABLED=0 GOOS=openbsd GOARCH=arm64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,openbsd,purego" -o common/builder/static/agents/openbsd_arm64 ./agent
+CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,openbsd,purego" -o common/builder/static/agents/openbsd_386 ./agent
+CGO_ENABLED=0 GOOS=openbsd GOARCH=arm go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,openbsd,purego" -o common/builder/static/agents/openbsd_arm ./agent
+echo "Building Solaris Agents"
+CGO_ENABLED=0 GOOS=solaris GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,solaris,purego" -o common/builder/static/agents/solaris_amd64 ./agent
 
 # Build Agent Builder.
 # echo "Building Linux Agent Builder"
