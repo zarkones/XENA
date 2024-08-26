@@ -14,16 +14,16 @@ var AgentLinuxArm []byte
 //go:embed agents/linux_arm64
 var AgentLinuxArm64 []byte
 
-//go:embed agents/windows_amd64.exe
+//go:embed agents/windows_amd64
 var AgentWindowsAmd64 []byte
 
-//go:embed agents/windows_386.exe
+//go:embed agents/windows_386
 var AgentWindows386 []byte
 
-//go:embed agents/windows_arm.exe
+//go:embed agents/windows_arm
 var AgentWindowsArm []byte
 
-//go:embed agents/windows_arm64.exe
+//go:embed agents/windows_arm64
 var AgentWindowsArm64 []byte
 
 //go:embed agents/solaris_amd64
@@ -47,26 +47,26 @@ var AgentDarwinAmd64 []byte
 //go:embed agents/darwin_arm64
 var AgentDarwinArm64 []byte
 
-//go:embed agents/modular_linux_amd64
-var AgentModularLinuxAmd64 []byte
+// //go:embed agents/modular_linux_amd64
+// var AgentModularLinuxAmd64 []byte
 
-//go:embed agents/modular_linux_386
-var AgentModularLinux386 []byte
+// //go:embed agents/modular_linux_386
+// var AgentModularLinux386 []byte
 
-//go:embed agents/modular_linux_arm
-var AgentModularLinuxArm []byte
+// //go:embed agents/modular_linux_arm
+// var AgentModularLinuxArm []byte
 
-//go:embed agents/modular_linux_arm64
-var AgentModularLinuxArm64 []byte
+// //go:embed agents/modular_linux_arm64
+// var AgentModularLinuxArm64 []byte
 
-//go:embed agents/modular_windows_amd64.exe
-var AgentModularWindowsAmd64 []byte
+// //go:embed agents/modular_windows_amd64
+// var AgentModularWindowsAmd64 []byte
 
-//go:embed agents/modular_windows_386.exe
-var AgentModularWindows386 []byte
+// //go:embed agents/modular_windows_386
+// var AgentModularWindows386 []byte
 
-//go:embed agents/modular_windows_arm.exe
-var AgentModularWindowsArm []byte
+// //go:embed agents/modular_windows_arm
+// var AgentModularWindowsArm []byte
 
-//go:embed agents/modular_windows_arm64.exe
-var AgentModularWindowsArm64 []byte
+// //go:embed agents/modular_windows_arm64
+// var AgentModularWindowsArm64 []byte
