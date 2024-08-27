@@ -26,6 +26,7 @@ Run the C2 server binary in directory "export/c2". You'd need to configure a few
 
 Example: AUTH_TOKEN=my_api_key_for_ui HOST=127.0.0.1 PORT=8080 GIN_MODE=release ./linux_amd64
 
+Value of AUTH_TOKEN also set in the "Settings" page in the UI, along with the C2's host.
 
 [Setup Video Tutorial](https://youtu.be/l86krmk-YZs)
 
