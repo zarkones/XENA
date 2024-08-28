@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/zarkones/xena-client v0.3.3
+	github.com/zarkones/xena-client v0.3.4
 	github.com/zarkones/xena-crypto v0.0.2
 	gorm.io/gorm v1.25.5
 )
