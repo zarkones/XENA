@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/gocolly/colly v1.2.0
-	github.com/zarkones/xena-client v0.3.3
+	github.com/zarkones/xena-client v0.3.4
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
 )
 

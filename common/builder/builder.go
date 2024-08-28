@@ -33,9 +33,20 @@ func BuildAgent(w fyne.Window) fyne.CanvasObject {
 
 	pubKeyPEM, err := xenaC2.GetC2PublicKey()
 	if err != nil {
+		if errors.Is(err, xenaC2.ErrNilAuthToken) {
+			return container.NewScroll(container.NewVBox(
+				widget.NewLabel("API key for C2 server is not set or is invalid, go to 'Settings' page and set it."),
+			))
+		}
 		return container.NewScroll(container.NewVBox(
 			widget.NewLabel("Failed to Get Public Key of the C2"),
 			widget.NewLabel(err.Error()),
+		))
+	}
+
+	if len(pubKeyPEM) == 0 {
+		return container.NewScroll(container.NewVBox(
+			widget.NewLabel("Received no key from the C2 server. C2 API key might be invalid, leading to C2 refusing to serve us its public key."),
 		))
 	}
 
