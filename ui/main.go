@@ -8,18 +8,12 @@ import (
 	"ui/core"
 	"ui/layouts"
 	"ui/state"
-	"ui/views"
 	"usage"
 
 	xenaC2 "github.com/zarkones/xena-client"
-	"golang.design/x/clipboard"
 
 	"fyne.io/fyne/v2"
 )
-
-func failedLicenseCallback() {
-	views.Alert("Invalid license!")
-}
 
 func main() {
 	usage.NewEvent(usage.APP_STARTED, "", nil)
@@ -32,12 +26,6 @@ func main() {
 	}()
 
 	flag.Parse()
-
-	// TODO: Run this code if it's supported platform.
-	err := clipboard.Init()
-	if err != nil {
-		panic(err)
-	}
 
 	// state.AuthToken = os.Getenv("AUTH_TOKEN")
 	// if state.AuthToken == "" {

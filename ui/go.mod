@@ -33,7 +33,6 @@ require (
 	github.com/twpayne/go-geom v1.0.0 // indirect
 	github.com/yuin/goldmark v1.5.5 // indirect
 	github.com/zarkones/xena-crypto v0.0.2 // indirect
-	golang.org/x/exp/shiny v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda // indirect
 	golang.org/x/sys v0.13.0 // indirect
@@ -44,7 +43,6 @@ require (
 
 require (
 	fyne.io/x/fyne v0.0.0-20231018161245-e7104b0942c9
-	golang.design/x/clipboard v0.7.0
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 )
