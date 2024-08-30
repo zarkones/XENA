@@ -15,16 +15,21 @@ func main() {}
 
 //export Init
 func Init(input string) (output string) {
-	debug.Println(PLUGIN_NAME, "interpreting command:", input)
 	var pipeline c2api.Pipeline
+
 	if err := json.Unmarshal([]byte(input), &pipeline); err == nil {
+		debug.Println(PLUGIN_NAME, "interpreting command:", input)
+
 		run := runPipeline(pipeline)
+
 		runJson, err := json.Marshal(&run)
 		if err != nil {
 			return err.Error()
 		}
+
 		return string(runJson)
 	}
+
 	return ""
 }
 

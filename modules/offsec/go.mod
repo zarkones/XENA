@@ -9,7 +9,7 @@ require (
 )
 
 require (
-	fyne.io/fyne/v2 v2.4.2 // indirect
+	fyne.io/fyne/v2 v2.5.1 // indirect
 	github.com/PuerkitoBio/goquery v1.9.0 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/antchfx/htmlquery v1.3.0 // indirect
@@ -22,8 +22,8 @@ require (
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/zarkones/xena-crypto v0.0.2 // indirect
-	golang.org/x/net v0.21.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 )

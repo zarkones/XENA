@@ -27,7 +27,7 @@ var AgentBuildMap = map[string][]string{
 	"solaris": {"amd64"},
 }
 
-func BuildAgent(w fyne.Window) fyne.CanvasObject {
+func BuildAgent(w fyne.Window, successCallback func()) fyne.CanvasObject {
 	buildOS := ""
 	buildArch := ""
 
@@ -152,6 +152,7 @@ func BuildAgent(w fyne.Window) fyne.CanvasObject {
 				}
 
 				uc.Close()
+				successCallback()
 				// w.Close()
 			}, w)
 

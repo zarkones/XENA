@@ -33,10 +33,38 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 	defer debug.Println("Finished running the pipeline")
 	debug.Println("Starting the pipeline")
 
+	// TODO: All these maps need a mutex. Since we can crash due to concurrent map writes.
 	parentSteps := map[string]c2api.PipelineStep{}
+	muxParentSteps := &sync.Mutex{}
+	addParentSteps := func(step *c2api.PipelineStep) {
+		defer muxParentSteps.Unlock()
+		muxParentSteps.Lock()
+		parentSteps[step.ID] = *step
+	}
+
 	convergingSteps := map[string]c2api.PipelineStep{}
+	muxConvergingSteps := &sync.Mutex{}
+	addConvergingSteps := func(step *c2api.PipelineStep) {
+		defer muxConvergingSteps.Unlock()
+		muxConvergingSteps.Lock()
+		convergingSteps[step.ID] = *step
+	}
+
 	allSteps := map[string]c2api.PipelineStep{}
+	muxAllSteps := &sync.Mutex{}
+	addAllSteps := func(step *c2api.PipelineStep) {
+		defer muxAllSteps.Unlock()
+		muxAllSteps.Lock()
+		allSteps[step.ID] = *step
+	}
+
 	executedSteps := map[string]c2api.PipelineStep{}
+	muxExecutedSteps := &sync.Mutex{}
+	addExecutedSteps := func(step *c2api.PipelineStep) {
+		defer muxExecutedSteps.Unlock()
+		muxExecutedSteps.Lock()
+		executedSteps[step.ID] = *step
+	}
 
 	// Categorize steps, so we know which to execute in parallel.
 	stepFrequencyMap := map[string]int{}
@@ -49,14 +77,14 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		}
 	}
 	for _, step := range settings.Steps {
-		allSteps[step.ID] = step
+		addAllSteps(&step)
 		freq := stepFrequencyMap[step.ID]
 		if freq == 0 {
-			parentSteps[step.ID] = step
+			addParentSteps(&step)
 			continue
 		}
 		if freq >= 2 {
-			convergingSteps[step.ID] = step
+			addConvergingSteps(&step)
 			continue
 		}
 	}
@@ -87,7 +115,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 	var executeStep func(currStep c2api.PipelineStep)
 	executeStep = func(currStep c2api.PipelineStep) {
 		defer func() {
-			executedSteps[currStep.ID] = currStep
+			addExecutedSteps(&currStep)
 
 			if len(currStep.LinkedTo) == 0 {
 				return
@@ -106,10 +134,6 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		}()
 
 		debug.Println("Running step:", currStep.Tool.Name)
-
-		if currStep.Tool.ID == "" {
-			println("herer")
-		}
 
 		currStep.Tool.Outputs = map[string]c2api.ToolOutput{}
 

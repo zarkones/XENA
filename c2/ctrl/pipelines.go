@@ -4,6 +4,7 @@ import (
 	"c2/models"
 	messagesRepo "c2/repos/messages"
 	pipelinesRepo "c2/repos/pipelines"
+	"common/slices"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -46,6 +47,24 @@ func UpsertPipeline(c *gin.Context) {
 		fmt.Println("failed to unserialize pipeline:", err)
 		c.JSON(http.StatusBadRequest, nil)
 		return
+	}
+
+	var settings xenaC2.PipelineSettings
+
+	if err := json.Unmarshal([]byte(pipe.Settings), &settings); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+
+	// Deduplicate .LinkedTo, as we cannot have one node being linked multiple times to another.
+	for id := range settings.Steps {
+		settings.Steps[id] = xenaC2.PipelineStep{
+			ID:       settings.Steps[id].ID,
+			Name:     settings.Steps[id].Name,
+			Position: settings.Steps[id].Position,
+			Tool:     settings.Steps[id].Tool,
+			LinkedTo: slices.Deduplicate(settings.Steps[id].LinkedTo),
+		}
 	}
 
 	if err := pipelinesRepo.Upsert(&models.Pipeline{

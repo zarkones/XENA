@@ -18,7 +18,6 @@ import (
 	"path/filepath"
 	"runtime"
 	stdSlices "slices"
-	"strconv"
 	"strings"
 
 	"github.com/shirou/gopsutil/v3/cpu"
@@ -34,16 +33,6 @@ func hashWithAgentID(text string) string {
 
 func Interpret(input string) (output string) {
 	debug.Println("Command Received:", input)
-
-	for index, interpreter := range Modules[MOD_ON_MSG] {
-		output := interpreter(input)
-		if len(output) == 0 {
-			debug.Println("dynamically loaded interpreter #"+strconv.Itoa(index), "returned no output")
-			continue
-		}
-		debug.Println("dynamically loaded interpreter #"+strconv.Itoa(index), "caught the input")
-		return output
-	}
 
 	output = offsec.Init(input)
 	if output != "" {
