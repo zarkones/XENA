@@ -35,3 +35,11 @@ Value of AUTH_TOKEN also set in the "Settings" page in the UI, along with the C2
 ![Promo Image 2](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo2.png)
 
 ![Promo Image 3](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo3.png)
+
+### EXPERIMENTAL GUI ###
+GUI can also be compiled and run in the web using web assembly, [learn more at](https://docs.fyne.io/started/webapp.html). It has some limitations, mainly the dialog for building an agent won't show up.
+
+To compile for web run: cd ui && fyne package -os web --release --icon ./static/xena-avatar.png .
+
+
+![Promo Image 4](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo4.png)
