@@ -260,9 +260,6 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 								return
 							}
 
-							jj, _ := json.Marshal(fileRecord)
-							fmt.Println(string(jj))
-
 							newMsg := xenaC2.Message{
 								ID:      uuid.New().String(),
 								AgentID: agent.ID,
