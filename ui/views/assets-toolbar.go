@@ -16,7 +16,7 @@ func AssetsToolbar() fyne.CanvasObject {
 			go func() {
 				w := core.App.NewWindow("Build Agent")
 				w.Resize(fyne.NewSize(core.WIN_WIDTH, core.WIN_HEIGHT))
-				w.SetContent(container.NewVScroll(builder.BuildAgent(w)))
+				w.SetContent(container.NewVScroll(builder.BuildAgent(w, w.Close)))
 				w.CenterOnScreen()
 				w.Show()
 			}()

@@ -77,20 +77,23 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 
 		i := 0
 		for _, msg := range messages {
-			txt := msg.Request
+			reqTxt := msg.Request
 			if len(msg.FriendlyTitle) != 0 {
-				txt = msg.FriendlyTitle
+				reqTxt = msg.FriendlyTitle
 			}
 
 			messagesTxt.Segments[i] = &widget.TextSegment{
 				Style: widget.RichTextStyleSubHeading,
-				Text:  "_> " + txt,
+				Text:  "_> " + reqTxt,
 			}
 			i++
 
 			respTxt := msg.Response
-			if msg.Request == "/ls" {
+			if reqTxt == "/ls" {
 				respTxt = "[serialized list of file records, raw json not displayed]"
+			}
+			if len(msg.Response) > 512 && strings.HasPrefix(reqTxt, "Executing Pipeline") {
+				respTxt = "[serialized executed pipeline, truncating, output greater than 512 chars]"
 			}
 
 			messagesTxt.Segments[i] = &widget.TextSegment{

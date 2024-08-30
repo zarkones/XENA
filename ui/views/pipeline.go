@@ -2,6 +2,7 @@ package views
 
 import (
 	"bytes"
+	mySlices "common/slices"
 	"encoding/json"
 	"image/png"
 	"slices"
@@ -231,6 +232,10 @@ func pipeline(pipeline xenaC2.Pipeline, w *fyne.Window) fyne.CanvasObject {
 			} else {
 				step.LinkedTo = append(step.LinkedTo, ids[1])
 			}
+
+			// We can "keep track of and not append if exists", however, this is more efficient.
+			step.LinkedTo = mySlices.Deduplicate(step.LinkedTo)
+
 			currPipeSettings.Steps[ids[0]] = step
 		}
 
@@ -511,18 +516,21 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 								analysis = stepCopy.Tool.Outputs["analysis"].Value
 							}
 
-							stdoutView := container.NewHScroll(widget.NewRichText(&widget.TextSegment{
+							stdoutView := widget.NewRichText(&widget.TextSegment{
 								Style: widget.RichTextStyleCodeBlock,
 								Text:  stdout,
-							}))
-							stderrView := container.NewHScroll(widget.NewRichText(&widget.TextSegment{
+							})
+							stdoutView.Wrapping = fyne.TextWrapWord
+							stderrView := widget.NewRichText(&widget.TextSegment{
 								Style: widget.RichTextStyleCodeBlock,
 								Text:  stderr,
-							}))
-							analysisView := container.NewHScroll(widget.NewRichText(&widget.TextSegment{
+							})
+							stderrView.Wrapping = fyne.TextWrapWord
+							analysisView := widget.NewRichText(&widget.TextSegment{
 								Style: widget.RichTextStyleCodeBlock,
 								Text:  analysis,
-							}))
+							})
+							analysisView.Wrapping = fyne.TextWrapWord
 
 							tabs := container.NewAppTabs(
 								container.NewTabItem("STDOUT", container.NewVBox(
