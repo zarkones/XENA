@@ -14,7 +14,6 @@ import (
 
 	"github.com/google/uuid"
 	xenaC2 "github.com/zarkones/xena-client"
-	"golang.design/x/clipboard"
 
 	dia "fyne.io/x/fyne/widget/diagramwidget"
 
@@ -529,7 +528,7 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 								container.NewTabItem("STDOUT", container.NewVBox(
 									container.NewHBox(
 										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											clipboard.Write(clipboard.FmtText, []byte(stdout))
+											core.MainW.Clipboard().SetContent(stdout)
 										}),
 									),
 									stdoutView,
@@ -537,7 +536,7 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 								container.NewTabItem("STDERR", container.NewVBox(
 									container.NewHBox(
 										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											clipboard.Write(clipboard.FmtText, []byte(stderr))
+											core.MainW.Clipboard().SetContent(stderr)
 										}),
 									),
 									stderrView,
@@ -545,7 +544,7 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 								container.NewTabItem("ANALYSIS", container.NewVBox(
 									container.NewHBox(
 										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											clipboard.Write(clipboard.FmtText, []byte(analysis))
+											core.MainW.Clipboard().SetContent(analysis)
 										}),
 									),
 									analysisView,
