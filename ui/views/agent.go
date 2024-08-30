@@ -21,7 +21,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/google/uuid"
 	xenaC2 "github.com/zarkones/xena-client"
-	"golang.design/x/clipboard"
 )
 
 const AGENT_WINDOW_WIDTH = 960
@@ -64,43 +63,50 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 
 	var messages []xenaC2.Message
 
-	var messagesView *widget.List
-	messagesView = widget.NewList(
-		func() int {
-			return len(messages)
-		},
+	messagesTxt := widget.NewRichText()
+	messagesTxt.Wrapping = fyne.TextWrapWord
 
-		func() fyne.CanvasObject {
-			return widget.NewRichText()
-		},
+	messagesTxtScroll := container.NewVScroll(messagesTxt)
 
-		func(i widget.ListItemID, o fyne.CanvasObject) {
-			title := messages[i].Request
-			if messages[i].FriendlyTitle != "" {
-				title = messages[i].FriendlyTitle
-			}
-			o.(*widget.RichText).Segments = []widget.RichTextSegment{
-				&widget.TextSegment{
-					Style: widget.RichTextStyleSubHeading,
-					Text:  title,
-				},
-				&widget.TextSegment{
-					Style: widget.RichTextStyleCodeBlock,
-					Text:  messages[i].Response,
-				},
-			}
-			messagesView.SetItemHeight(i, o.(*widget.RichText).MinSize().Height)
-			o.(*widget.RichText).Refresh()
-		},
-	)
-
-	messagesView.OnSelected = func(id widget.ListItemID) {
-		clipboard.Write(clipboard.FmtText, []byte(messages[id].Response))
-	}
-
+	lastMsgsCount := 0
+	wasRespUpdated := false
 	updateMsg := func() {
 		messages, _ = xenaC2.FetchMessages(agent.ID)
-		messagesView.Refresh()
+
+		messagesTxt.Segments = make([]widget.RichTextSegment, len(messages)*2)
+
+		i := 0
+		for _, msg := range messages {
+			if len(msg.Response) != 0 {
+				wasRespUpdated = true
+			}
+
+			txt := msg.Request
+			if len(msg.FriendlyTitle) != 0 {
+				txt = msg.FriendlyTitle
+			}
+
+			messagesTxt.Segments[i] = &widget.TextSegment{
+				Style: widget.RichTextStyleSubHeading,
+				Text:  "_> " + txt,
+			}
+			i++
+
+			messagesTxt.Segments[i] = &widget.TextSegment{
+				Style: widget.RichTextStyleCodeInline,
+				Text:  msg.Response + "\n",
+			}
+			i++
+		}
+
+		messagesTxt.Refresh()
+		if lastMsgsCount != len(messages) || wasRespUpdated {
+			messagesTxtScroll.ScrollToBottom()
+			lastMsgsCount = len(messages)
+			if wasRespUpdated {
+				wasRespUpdated = false
+			}
+		}
 	}
 
 	agentFileSystemBtn := widget.NewButtonWithIcon("FILE BROWSER", theme.FolderOpenIcon(), func() {
@@ -339,6 +345,7 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 
 	go func() {
 		updateMsg()
+		messagesTxtScroll.ScrollToBottom()
 		for range time.Tick(time.Second * 4) {
 			updateMsg()
 		}
@@ -399,7 +406,7 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 
 			// Primary.
 			effects.Gradient(
-				messagesView,
+				messagesTxtScroll,
 				false,
 				true,
 			),
@@ -407,186 +414,3 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 		),
 	)
 }
-
-// func AgentDisplayInUnified(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
-// 	cmdInput := widget.NewEntry()
-// 	cmdInput.SetPlaceHolder("Enter Command Here")
-
-// 	msgTextWidget := container.NewVBox()
-
-// 	updateMsg := func() {
-// 		msgText := ""
-
-// 		msgs, err := xenaC2.FetchMessages(agent.ID)
-// 		if err != nil {
-// 			Alert("failed to read messages from the database:" + err.Error())
-// 			return
-// 		}
-
-// 		if len(msgs) == 0 {
-// 			return
-// 		}
-
-// 		doubleBufferedCont := container.NewVBox()
-
-// 		// msgTextWidget.RemoveAll()
-
-// 		for _, msg := range msgs {
-// 			if msg.FriendlyTitle != "" {
-// 				msgText += "[ " + msg.FriendlyTitle + " ]:\n"
-// 			} else {
-// 				msgText += "[ " + msg.Request + " ]:\n"
-// 			}
-// 			msgText += msg.Response
-// 			msgText += "\n\n"
-// 			doubleBufferedCont.Add(
-// 				container.NewHBox(
-// 					widget.NewLabel(msgText),
-// 					widget.NewSeparator(),
-// 					widget.NewButton("COPY", func() {
-// 						func(asCmd string) {
-// 							clipboard.Write(clipboard.FmtText, []byte(asCmd))
-// 						}(msg.Request)
-// 					}),
-// 				),
-// 			)
-// 			msgText = ""
-// 		}
-
-// 		// msgTextWidget.SetText(msgText)
-
-// 		msgTextWidget = doubleBufferedCont
-// 	}
-
-// 	go updateMsg()
-
-// 	portScanBtn := widget.NewButton("Port Scan", func() {
-// 		AgentPortScan(func(host string, port int) {
-// 			newMsg := xenaC2.Message{
-// 				ID:            uuid.New().String(),
-// 				AgentID:       agent.ID,
-// 				FriendlyTitle: "Port scan of " + net.JoinHostPort(host, fmt.Sprint(port)),
-// 			}
-
-// 			payload := payload.PortScanCtx{
-// 				Type: payload.TYPE_PORT_SCAN,
-// 				Host: host,
-// 				Port: port,
-// 			}
-
-// 			jsonPayload, err := json.Marshal(&payload)
-// 			if err != nil {
-// 				Alert("Failed To Serialize Message, exception:" + err.Error())
-// 				return
-// 			}
-
-// 			newMsg.Request = string(jsonPayload)
-
-// 			if err := xenaC2.InsertMessage(newMsg); err != nil {
-// 				Alert("Failed To Send Message, exception:" + err.Error())
-// 				return
-// 			}
-
-// 			go updateMsg()
-// 		})
-// 	})
-
-// 	aboutBtn := widget.NewButton("About", func() {
-// 		newMsg := xenaC2.Message{
-// 			ID:      uuid.New().String(),
-// 			AgentID: agent.ID,
-// 			Request: "/about",
-// 		}
-// 		if err := xenaC2.InsertMessage(newMsg); err != nil {
-// 			Alert("Failed To Send Message, exception:" + err.Error())
-// 			return
-// 		}
-// 		go updateMsg()
-// 	})
-
-// 	sendBtn := widget.NewButton("SEND", func() {
-// 		if cmdInput.Text == "" {
-// 			return
-// 		}
-
-// 		if agent.ID == "" {
-// 			Alert("exception: Agent ID Empty")
-// 			return
-// 		}
-
-// 		newMsg := xenaC2.Message{
-// 			ID:      uuid.New().String(),
-// 			AgentID: agent.ID,
-// 			Request: cmdInput.Text,
-// 		}
-
-// 		if err := xenaC2.InsertMessage(newMsg); err != nil {
-// 			Alert("Failed To Send Message, exception:" + err.Error())
-// 		} else {
-// 			go updateMsg()
-// 			cmdInput.SetText("")
-// 		}
-// 	})
-
-// 	runPipelineBtn := widget.NewButton("Run Pipeline", func() {
-// 		if agent.ID == "" {
-// 			Alert("exception: Agent ID Empty")
-// 			return
-// 		}
-
-// 		selectPipeW := core.App.NewWindow("Select Pipeline")
-// 		selectPipeW.Resize(fyne.NewSize(100, 100))
-// 		selectPipeW.SetContent(container.NewVBox())
-// 		selectPipeW.Show()
-// 	})
-
-// 	go func() {
-// 		for range time.Tick(time.Second * 2) {
-// 			go updateMsg()
-// 		}
-// 	}()
-
-// 	return container.NewBorder(
-// 		// Top.
-// 		effects.Gradient(
-// 			container.NewHBox(
-// 				widget.NewLabel("Hostname: "+agent.Hostname),
-// 				widget.NewLabel("OS: "+agent.OS+" "+agent.Arch),
-// 			),
-// 			true,
-// 			true,
-// 		),
-
-// 		// Bottom.
-// 		nil,
-
-// 		// Left.
-// 		nil,
-
-// 		// Right.
-// 		nil,
-
-// 		// Primary.
-// 		container.NewBorder(
-// 			// Top.
-// 			nil,
-
-// 			// Bottom.
-// 			container.NewBorder(nil, nil, nil, sendBtn, cmdInput),
-
-// 			// Left.
-// 			nil,
-
-// 			// Right.
-// 			container.NewVBox(
-// 				portScanBtn,
-// 				aboutBtn,
-// 				runPipelineBtn,
-// 				// runScriptBtn,
-// 			),
-
-// 			// Primary.
-// 			container.NewScroll(msgTextWidget),
-// 		),
-// 	)
-// }
