@@ -1,7 +1,7 @@
 ### INTRODUCTION ###
-XENA is Software for Cyber-Security Automation, Adversary Simulations, and Red Team Operations.
+XENA is Cross-Platform Software for Cyber-Security Automation, Adversary Simulations, and Red Team Operations.
 
-XENA strives to be fully integrated security penetration testing framework. It is equipped with a post-exploitation agent, C2 server, and a dark-themed elegant user interface.
+XENA strives to be fully integrated security penetration testing framework. It is equipped with a post-exploitation agent, C2 server, and a dark-themed elegant user interface running on Desktop, Web, and Mobile.
 
 ### SOCIAL ###
 [Patreon](https://www.patreon.com/zarkones) |
@@ -13,6 +13,10 @@ XENA strives to be fully integrated security penetration testing framework. It i
 
 ### VIDEOS ###
 [Setup & General Usage](https://youtu.be/l86krmk-YZs)
+
+### LIBRARIES ###
+![XENA HTTP Client](https://github.com/zarkones/xena-client) - HTTP Client allowing you to easily make your own agent, orchestrate C2 clusters, and do high-level automation.
+![XENA Crypto](https://github.com/zarkones/xena-crypto) - Helper library wrapping the lower level cryptography functionality of the Golang's standard library.
 
 ### HOW TO SETUP ###
 
@@ -32,7 +36,11 @@ Value of AUTH_TOKEN also set in the "Settings" page in the UI, along with the C2
 
 ![Promo Image 1](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo1.png)
 
+![Promo Image 5](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo5.jpeg)
+
 ![Promo Image 2](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo2.png)
+
+![Promo Image 6](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo6.jpeg)
 
 ![Promo Image 3](https://raw.githubusercontent.com/zarkones/XENA/production/assets/promo/promo3.png)
 
