@@ -51,9 +51,16 @@ func UpsertPipeline(c *gin.Context) {
 
 	var settings xenaC2.PipelineSettings
 
-	if err := json.Unmarshal([]byte(pipe.Settings), &settings); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"err": err})
-		return
+	if len(pipe.Settings) == 0 {
+		settings = xenaC2.PipelineSettings{
+			Input: map[string]string{},
+			Steps: map[string]xenaC2.PipelineStep{},
+		}
+	} else {
+		if err := json.Unmarshal([]byte(pipe.Settings), &settings); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"err": err})
+			return
+		}
 	}
 
 	// Deduplicate .LinkedTo, as we cannot have one node being linked multiple times to another.
