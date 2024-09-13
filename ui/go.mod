@@ -2,10 +2,12 @@ module ui
 
 go 1.23
 
+toolchain go1.23
+
 require (
 	fyne.io/fyne/v2 v2.5.1
 	github.com/google/uuid v1.6.0
-	github.com/zarkones/xena-client v0.3.4
+	github.com/zarkones/xena-client v0.3.5
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
 )
 
@@ -34,7 +36,7 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/twpayne/go-geom v1.0.0 // indirect
 	github.com/yuin/goldmark v1.7.1 // indirect
-	github.com/zarkones/xena-crypto v0.0.2 // indirect
+	github.com/zarkones/xena-crypto v0.0.3 // indirect
 	golang.org/x/image v0.18.0 // indirect
 	golang.org/x/mobile v0.0.0-20231127183840-76ac6878050a // indirect
 	golang.org/x/sys v0.20.0 // indirect

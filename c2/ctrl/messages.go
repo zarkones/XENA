@@ -1,6 +1,7 @@
 package ctrl
 
 import (
+	"c2/core/env"
 	"c2/core/pubsub"
 	"c2/models"
 	agentsRepo "c2/repos/agents"
@@ -13,7 +14,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -127,7 +127,7 @@ func MessagesGetMultiple(c *gin.Context) {
 
 	msgHandler := messagesRepo.GetMultipleForAgent
 	authHeader := c.GetHeader("Authorization")
-	if authHeader != "" && authHeader == os.Getenv("AUTH_TOKEN") {
+	if authHeader != "" && authHeader == env.AUTH_TOKEN {
 		msgHandler = messagesRepo.GetMultiple
 	}
 

@@ -13,6 +13,7 @@ func Default() fyne.CanvasObject {
 		container.NewTabItem("Engagement", pages.Engagement()),
 		container.NewTabItem("Pipelines", pages.Pipelines()),
 		container.NewTabItem("Files", pages.Files()),
+		container.NewTabItem("Http Utils", pages.HttpUtils()),
 		container.NewTabItem("Shop", pages.Shop()),
 		container.NewTabItem("Lab", pages.Lab()),
 		container.NewTabItem("Settings", pages.Settings()),

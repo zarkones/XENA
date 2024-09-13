@@ -13,7 +13,7 @@ import (
 )
 
 func Start() error {
-	var R = gin.Default()
+	R := gin.Default()
 	R.Use(gin.Recovery())
 	R.Use(middleware.CORS())
 
