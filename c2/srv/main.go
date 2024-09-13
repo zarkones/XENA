@@ -20,6 +20,9 @@ func Start() error {
 	authed := R.Group("")
 	authed.Use(middleware.OperatorAuth())
 
+	R.GET("/v1/proxy/cert", ctrl.GetCertificate)
+	R.GET("/v1/proxy/traffic", ctrl.GetProxiedRequests)
+
 	R.POST("/v1/agents", middleware.DecryptAgentReq(), ctrl.AgentInsert)
 	for _, endpointPath := range xenaC2.RouteMap[xenaC2.R_AGENT_IDENTIFY] {
 		R.POST(endpointPath, middleware.DecryptAgentReq(), ctrl.AgentInsert)
@@ -35,7 +38,6 @@ func Start() error {
 		R.GET(endpointPath+"/:agentID", ctrl.MessagesSubscribe)
 	}
 
-	// R.POST("/v1/respond", middleware.DecryptAgentReq(), ctrl.MessagesAddResponse)
 	for _, endpointPath := range xenaC2.RouteMap[xenaC2.R_MESSAGE_RESPOND] {
 		R.POST(endpointPath, middleware.DecryptAgentReq(), ctrl.MessagesAddResponse)
 	}

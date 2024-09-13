@@ -3,14 +3,30 @@ package proxy
 import (
 	"crypto/rsa"
 	"crypto/tls"
+	"encoding/hex"
 	"encoding/pem"
 	"net"
 	"net/http"
+	"net/http/httputil"
 	"os"
 
 	"github.com/elazarl/goproxy"
 	cry "github.com/zarkones/xena-crypto"
 )
+
+type Req struct {
+	ID     int64
+	Host   string
+	Method string
+	Path   string
+	Body   bool
+	Length int
+	RawHex string
+}
+
+var RequestsStream = []Req{}
+
+var RequestsCh = make(chan Req, 999)
 
 func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error) {
 	rawDer, err := os.ReadFile(pathToDerCert)
@@ -41,22 +57,33 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 	goproxy.HTTPMitmConnect = &goproxy.ConnectAction{Action: goproxy.ConnectHTTPMitm, TLSConfig: goproxy.TLSConfigFromCA(&goproxyCA)}
 	goproxy.RejectConnect = &goproxy.ConnectAction{Action: goproxy.ConnectReject, TLSConfig: goproxy.TLSConfigFromCA(&goproxyCA)}
 
+	go func() {
+		for req := range RequestsCh {
+			// TODO: Add more details about the request.
+			RequestsStream = append(RequestsStream, req)
+		}
+	}()
+
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
 	// proxy.Verbose = true
 
-	// proxy.OnRequest().DoFunc(
-	// 	func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-	// 		h, _, _ := time.Now().Clock()
-	// 		if h >= 8 && h <= 17 {
-	// 			return r, goproxy.NewResponse(r,
-	// 				goproxy.ContentTypeText, http.StatusForbidden,
-	// 				"Don't waste your time!")
-	// 		} else {
-	// 			ctx.Warnf("clock: %d, you can waste your time...", h)
-	// 		}
-	// 		return r, nil
-	// 	})
+	proxy.OnRequest().DoFunc(
+		func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+			go func() {
+				rawReq, _ := httputil.DumpRequest(r, true)
+				req := Req{
+					ID:     ctx.Session,
+					Method: r.Method,
+					Host:   r.Host,
+					Path:   r.URL.Path,
+					Length: len(rawReq),
+					RawHex: hex.EncodeToString(rawReq),
+				}
+				RequestsCh <- req
+			}()
+			return r, nil
+		})
 
 	return http.ListenAndServe(net.JoinHostPort(addr, port), proxy)
 }

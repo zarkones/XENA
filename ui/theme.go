@@ -11,6 +11,7 @@ type mainTheme struct{}
 
 var COLOR_PRIMARY = color.RGBA{189, 147, 249, 255}
 var COLOR_BG = color.RGBA{40, 42, 54, 255}
+var COLOR_BG_2 = color.RGBA{68, 71, 90, 255}
 var COLOR_ACTIVE = color.RGBA{68, 71, 90, 255}
 var COLOR_RED = color.RGBA{255, 85, 85, 255}
 
@@ -33,6 +34,9 @@ func (m mainTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) co
 
 	case theme.ColorNamePressed:
 		return COLOR_BG
+
+	case theme.ColorNameHeaderBackground:
+		return COLOR_BG_2
 
 	default:
 		return theme.DefaultTheme().Color(name, variant)

@@ -10,9 +10,9 @@ import (
 
 func HttpUtils() fyne.CanvasObject {
 	tabs := container.NewAppTabs(
-		container.NewTabItem("Editor", views.HttpUtilsEditor()),
 		container.NewTabItem("Logger", views.HttpUtilsLogger()),
-		container.NewTabItem("Settings", views.HttpUtilsSettings()),
+		container.NewTabItem("Editor", views.HttpUtilsEditor()),
+		// container.NewTabItem("Settings", views.HttpUtilsSettings()),
 	)
 
 	tabs.SetTabLocation(container.TabLocationTop)
