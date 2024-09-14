@@ -2,7 +2,7 @@ package ctrl
 
 import (
 	"c2/core"
-	"c2/core/proxy"
+	proxyRepo "c2/repos/proxy"
 	"net/http"
 	"os"
 	"strconv"
@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEFAULT_PROXIED_REQ_PER_PAGE = 100
+	DEFAULT_PROXIED_REQ_PER_PAGE = 28
 )
 
 func GetProxiedRequests(c *gin.Context) {
@@ -19,21 +19,18 @@ func GetProxiedRequests(c *gin.Context) {
 	page, _ := strconv.Atoi(q.Get("page"))
 	offset := DEFAULT_PROXIED_REQ_PER_PAGE * page
 
-	if len(proxy.RequestsStream) == 0 {
+	requests, err := proxyRepo.GetMultiple(offset, DEFAULT_PROXIED_REQ_PER_PAGE)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+		return
+	}
+
+	if len(requests) == 0 {
 		c.Writer.WriteHeader(http.StatusNoContent)
 		return
 	}
 
-	if len(proxy.RequestsStream) < offset {
-		c.Writer.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	if len(proxy.RequestsStream) < offset+DEFAULT_PROXIED_REQ_PER_PAGE {
-		c.JSON(http.StatusOK, proxy.RequestsStream[offset:len(proxy.RequestsStream)-1])
-	}
-
-	c.JSON(http.StatusOK, proxy.RequestsStream[offset:offset+DEFAULT_PROXIED_REQ_PER_PAGE])
+	c.JSON(http.StatusOK, requests)
 }
 
 func GetCertificate(c *gin.Context) {
@@ -43,7 +40,7 @@ func GetCertificate(c *gin.Context) {
 		return
 	}
 
-	c.Writer.Header().Add("Content-Disposition", "attachment; filename=\"xena.cert\"")
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename=\"xena-cert.der\"")
 
 	c.Writer.Write(cert)
 }

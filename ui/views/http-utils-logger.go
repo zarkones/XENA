@@ -1,7 +1,7 @@
 package views
 
 import (
-	"c2/core/proxy"
+	"c2/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -19,31 +19,36 @@ func HttpUtilsLogger() fyne.CanvasObject {
 
 	t := widget.NewTableWithHeaders(
 		func() (int, int) {
-			return len(traffic), 5
+			return len(traffic), 6
 		},
 		func() fyne.CanvasObject {
 			r := widget.NewRichText(&widget.TextSegment{Text: ""})
 			r.Truncation = fyne.TextTruncateEllipsis
-			actionBtn := widget.NewButton("test", func() {})
-			actionBtn.Hide()
-			return container.NewStack(r, actionBtn)
+			// actionBtn := widget.NewButton("test", func() {})
+			// actionBtn.Hide()
+			return container.NewStack(r) // , actionBtn)
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-			if i.Col == 4 {
-				o.Resize(fyne.NewSize(40, o.MinSize().Height))
-				// o.(*fyne.Container).Objects[1].Resize(fyne.NewSize(510, o.(*fyne.Container).Objects[1].MinSize().Height))
-				o.(*fyne.Container).Objects[1].Show()
-				o.(*fyne.Container).Objects[1].Refresh()
-			} else {
+			// if i.Col == 4 {
+			// 	o.Resize(fyne.NewSize(40, o.MinSize().Height))
+			// 	o.(*fyne.Container).Objects[1].Show()
+			// 	o.(*fyne.Container).Objects[1].Refresh()
+			// } else {
+			// if i.Col < 4 {
+			if o.(*fyne.Container).Objects[0].(*widget.RichText).Segments[0].Textual() != traffic[i.Row][i.Col] {
 				o.(*fyne.Container).Objects[0].(*widget.RichText).Segments[0] = &widget.TextSegment{Text: traffic[i.Row][i.Col]}
+				o.Refresh()
 			}
-			o.Refresh()
+			// o.(*fyne.Container).Objects[0].Refresh()
+			// }
 		})
 
 	t.SetColumnWidth(0, 64)
 	t.SetColumnWidth(1, 64)
 	t.SetColumnWidth(2, 80)
-	t.SetColumnWidth(3, 500)
+	t.SetColumnWidth(3, 300)
+	t.SetColumnWidth(4, 300)
+	t.SetColumnWidth(5, 300)
 
 	t.ShowHeaderColumn = false
 
@@ -58,14 +63,18 @@ func HttpUtilsLogger() fyne.CanvasObject {
 			default:
 				return strconv.Itoa(id.Col)
 			case 0:
-				return "METHOD"
+				return "ID"
 			case 1:
-				return "LENGTH"
+				return "METHOD"
 			case 2:
-				return "HOST"
+				return "LENGTH"
 			case 3:
-				return "PATH"
+				return "HOST"
 			case 4:
+				return "PATH"
+			case 5:
+				return "TIME"
+			case 6:
 				return ""
 			}
 		}()
@@ -93,7 +102,7 @@ func HttpUtilsLogger() fyne.CanvasObject {
 			return
 		}
 
-		var reqs []proxy.Req
+		var reqs []models.ProxyReq
 
 		if err := json.NewDecoder(resp.Body).Decode(&reqs); err != nil {
 			fmt.Println("json.NewDecoder:", err)
@@ -108,10 +117,12 @@ func HttpUtilsLogger() fyne.CanvasObject {
 
 		for i := 0; i < len(reqs); i++ {
 			traffic[i] = []string{
+				strconv.Itoa(int(reqs[i].ID)),
 				reqs[i].Method,
 				strconv.Itoa(reqs[i].Length),
 				reqs[i].Host,
 				reqs[i].Path,
+				reqs[i].Time.String(),
 			}
 		}
 
