@@ -60,8 +60,8 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 					Host:      r.Host,
 					Path:      r.URL.Path,
 					Query:     r.URL.RawQuery,
-					Length:    len(rawReq),
-					Raw:       string(rawReq),
+					ReqLength: len(rawReq),
+					RawReq:    string(rawReq),
 					Time:      time.Now(),
 				}
 				if err := proxyRepo.Insert(&req); err != nil {
@@ -72,6 +72,21 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 
 			return r, nil
 		})
+
+	proxy.OnResponse().DoFunc(func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
+		rawResp, err := httputil.DumpResponse(resp, true)
+		if err != nil {
+			fmt.Println("proxy: httputil.DumpResponse:", err)
+		}
+		go func() {
+			sResp := string(rawResp)
+			if err := proxyRepo.UpdateRawResp(ctx.Session, resp.StatusCode, &sResp); err != nil {
+				fmt.Println("proxy: failed to insert request:", ctx.Session)
+				return
+			}
+		}()
+		return resp
+	})
 
 	return http.ListenAndServe(net.JoinHostPort(addr, port), proxy)
 }
