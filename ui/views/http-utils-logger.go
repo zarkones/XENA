@@ -47,7 +47,7 @@ func HttpUtilsLogger() fyne.CanvasObject {
 
 	t := widget.NewTableWithHeaders(
 		func() (int, int) {
-			return len(traffic), 9
+			return len(traffic), 11
 		},
 		func() fyne.CanvasObject {
 			r := NewTableCell("")
@@ -71,8 +71,10 @@ func HttpUtilsLogger() fyne.CanvasObject {
 	t.SetColumnWidth(4, 80)
 	t.SetColumnWidth(5, 150)
 	t.SetColumnWidth(6, 250)
-	t.SetColumnWidth(7, 250)
-	t.SetColumnWidth(8, 250)
+	t.SetColumnWidth(7, 80)
+	t.SetColumnWidth(8, 80)
+	t.SetColumnWidth(9, 80)
+	t.SetColumnWidth(10, 250)
 
 	t.ShowHeaderColumn = false
 
@@ -103,15 +105,19 @@ func HttpUtilsLogger() fyne.CanvasObject {
 			case 7:
 				return "QUERY"
 			case 8:
-				return "TIME"
+				return "RESP_CONTENT_TYPE"
 			case 9:
+				return "REQ_CONTENT_TYPE"
+			case 10:
+				return "TIME"
+			case 11:
 				return ""
 			}
 		}()
 		o.(*widget.Label).SetText(txt)
 	}
 
-	filterSelection := widget.NewSelect([]string{"STATUS", "METHOD", "REQ_LENGTH", "RESP_LENGTH", "HOST", "PATH", "QUERY", "TIME"}, func(s string) {})
+	filterSelection := widget.NewSelect([]string{"STATUS", "METHOD", "REQ_LENGTH", "RESP_LENGTH", "HOST", "PATH", "QUERY", "RESP_CONTENT_TYPE", "REQ_CONTENT_TYPE", "TIME"}, func(s string) {})
 	filterSelection.SetSelected("TIME")
 
 	orderDirection := widget.NewSelect([]string{"ASCENDING", "DESCENDING"}, func(s string) {})
@@ -173,6 +179,8 @@ func HttpUtilsLogger() fyne.CanvasObject {
 				reqs[i].Host,
 				reqs[i].Path,
 				reqs[i].Query,
+				reqs[i].RespContentType,
+				reqs[i].ReqContentType,
 				reqs[i].Time.String(),
 			}
 		}

@@ -28,7 +28,7 @@ func Insert(req *models.ProxyReq) (err error) {
 	return db.ORM.Create(req).Error
 }
 
-func UpdateRawResp(sessionID int64, statusCode int, rawResp *string) (err error) {
+func UpdateRawResp(sessionID int64, statusCode int, respContentType, rawResp *string) (err error) {
 	var req models.ProxyReq
 	if err := db.ORM.Where("session_id = ?", sessionID).First(&req).Error; err != nil {
 		return err
@@ -37,6 +37,7 @@ func UpdateRawResp(sessionID int64, statusCode int, rawResp *string) (err error)
 	req.Status = statusCode
 	req.RawResp = *rawResp
 	req.RespLength = len(*rawResp)
+	req.RespContentType = *respContentType
 
 	return db.ORM.Save(&req).Error
 }

@@ -54,15 +54,17 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 		func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			go func() {
 				rawReq, _ := httputil.DumpRequest(r, true)
+				reqContentType := r.Header.Get("Content-Type")
 				req := models.ProxyReq{
-					SessionID: ctx.Session,
-					Method:    r.Method,
-					Host:      r.Host,
-					Path:      r.URL.Path,
-					Query:     r.URL.RawQuery,
-					ReqLength: len(rawReq),
-					RawReq:    string(rawReq),
-					Time:      time.Now(),
+					SessionID:      ctx.Session,
+					Method:         r.Method,
+					Host:           r.Host,
+					Path:           r.URL.Path,
+					Query:          r.URL.RawQuery,
+					ReqContentType: reqContentType,
+					ReqLength:      len(rawReq),
+					RawReq:         string(rawReq),
+					Time:           time.Now(),
 				}
 				if err := proxyRepo.Insert(&req); err != nil {
 					fmt.Println("proxy: failed to insert request:", req.SessionID)
@@ -78,9 +80,10 @@ func Start(addr, port, pathToDerCert string, privKey *rsa.PrivateKey) (err error
 		if err != nil {
 			fmt.Println("proxy: httputil.DumpResponse:", err)
 		}
+		respContentType := resp.Header.Get("Content-Type")
 		go func() {
 			sResp := string(rawResp)
-			if err := proxyRepo.UpdateRawResp(ctx.Session, resp.StatusCode, &sResp); err != nil {
+			if err := proxyRepo.UpdateRawResp(ctx.Session, resp.StatusCode, &respContentType, &sResp); err != nil {
 				fmt.Println("proxy: failed to insert request:", ctx.Session)
 				return
 			}
