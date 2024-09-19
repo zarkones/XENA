@@ -6,6 +6,10 @@ import (
 	"strings"
 )
 
+func Get(reqID int64) (request models.ProxyReq, err error) {
+	return request, db.ORM.Where("id = ?", reqID).First(&request).Error
+}
+
 func GetMultiple(offset, limit int, orderBy, orderDirection string) (requests []models.ProxyReq, err error) {
 	tx := db.ORM.
 		Offset(offset).

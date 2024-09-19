@@ -4,6 +4,7 @@ import (
 	"c2/core"
 	"c2/models"
 	proxyRepo "c2/repos/proxy"
+	"errors"
 	"net/http"
 	"os"
 	"strconv"
@@ -11,11 +12,32 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 const (
 	DEFAULT_PROXIED_REQ_PER_PAGE = 28
 )
+
+func GetProxiedRequest(c *gin.Context) {
+	reqID, err := strconv.ParseInt(c.Param("reqID"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+
+	request, err := proxyRepo.Get(reqID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"err": err})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, request)
+}
 
 func GetProxiedRequests(c *gin.Context) {
 	q := c.Request.URL.Query()
