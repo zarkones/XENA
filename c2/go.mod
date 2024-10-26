@@ -4,8 +4,8 @@ go 1.23
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/zarkones/xena-client v0.3.4
-	github.com/zarkones/xena-crypto v0.0.2
+	github.com/zarkones/xena-client v0.3.5
+	github.com/zarkones/xena-crypto v0.0.3
 	gorm.io/gorm v1.25.5
 )
 
@@ -36,9 +36,9 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.7.0 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
-	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/crypto v0.24.0 // indirect
+	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
@@ -50,6 +50,7 @@ require (
 )
 
 require (
+	github.com/elazarl/goproxy v0.0.0-20240909085733-6741dbfc16a1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/glebarez/sqlite v1.10.0
 	github.com/jinzhu/inflection v1.0.0 // indirect

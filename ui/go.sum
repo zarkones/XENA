@@ -337,8 +337,8 @@ github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5t
 github.com/yuin/goldmark v1.5.5/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/yuin/goldmark v1.7.1 h1:3bajkSilaCbjdKVsKdZjZCLBNPL9pYzrCakKaf4U49U=
 github.com/yuin/goldmark v1.7.1/go.mod h1:uzxRWxtg69N339t3louHJ7+O03ezfj6PlliRlaOzY1E=
-github.com/zarkones/xena-client v0.3.4 h1:nKWihuNm5wmvVEoH5nPBCYiJIDNR1bsErIxRXEJLEKk=
-github.com/zarkones/xena-client v0.3.4/go.mod h1:9vKKA56Hevr7n4zPPtTV0C3zb6cFsN3nkh9fSYAO0G0=
+github.com/zarkones/xena-client v0.3.5 h1:uVQgXzIiPNhRDQmUsPapLL8iVdaKgwq2j8y3IdiFo6Q=
+github.com/zarkones/xena-client v0.3.5/go.mod h1:Frdjt4bb9FV5qw6LGzH0IwoIWY6H5maWSVqb4EkB8PE=
 github.com/zarkones/xena-crypto v0.0.2 h1:C6wNT5fLcZPG5VSECiKeMN2djdQbqalsRuad10XYWLw=
 github.com/zarkones/xena-crypto v0.0.2/go.mod h1:e8cSGbd+uBgkf0gm4ktF/Jh9NmPca6NaL5Ta8de4+eg=
 go.etcd.io/etcd/api/v3 v3.5.0/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=

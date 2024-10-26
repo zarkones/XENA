@@ -24,6 +24,7 @@ func Init(dbName string) error {
 		&models.Attack{},
 		&models.PipelineRun{},
 		&models.File{},
+		&models.ProxyReq{},
 	); err != nil {
 		return err
 	}

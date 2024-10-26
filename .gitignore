@@ -4,5 +4,6 @@ fyne-cross
 rnd
 **/xena.db
 **/xena.key
+**/cert.der
 oldagent
 export

@@ -8,10 +8,10 @@ import (
 	"fyne.io/fyne/v2/container"
 )
 
-var colorA = color.RGBA{74, 57, 97, 255}
-var colorB = color.RGBA{40, 42, 54, 255} //BG
-
 func Gradient[T fyne.CanvasObject](element T, horizontal, reverseColors bool) *fyne.Container {
+	colorA := color.RGBA{74, 57, 97, 255}
+	colorB := color.RGBA{40, 42, 54, 255} //BG
+
 	if reverseColors {
 		tempColor := colorA
 		colorA = colorB

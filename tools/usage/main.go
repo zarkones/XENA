@@ -29,7 +29,7 @@ func NewEvent(name, details string, maybeErr error) error {
 	defer f.Close()
 	e := ""
 	if maybeErr != nil {
-		e = err.Error()
+		e = maybeErr.Error()
 	}
 	jsonEvent, err := json.Marshal(Event{
 		ID:        uuid.NewString(),

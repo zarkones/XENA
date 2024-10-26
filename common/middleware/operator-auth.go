@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"c2/core/env"
 	"math/rand"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 func OperatorAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.GetHeader("Authorization") != os.Getenv("AUTH_TOKEN") {
+		if c.GetHeader("Authorization") != env.AUTH_TOKEN {
 			rnd := rand.Intn(10)
 			time.Sleep(time.Second * time.Duration(20+rnd))
 			c.Writer.WriteHeader(http.StatusServiceUnavailable)
