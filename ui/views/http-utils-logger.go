@@ -193,14 +193,14 @@ func HttpUtilsLogger() fyne.CanvasObject {
 	}
 
 	filterSelection.OnChanged = func(s string) {
-		updateTraffic(page)
+		go updateTraffic(page)
 	}
 	orderDirection.OnChanged = func(s string) {
-		updateTraffic(page)
+		go updateTraffic(page)
 	}
 
 	search.OnSubmitted = func(s string) {
-		updateTraffic(page)
+		go updateTraffic(page)
 	}
 
 	go updateTraffic(page)

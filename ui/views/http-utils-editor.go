@@ -22,8 +22,10 @@ var requestsCh = make(chan int64, 9)
 func NewProxiedReqView(req models.ProxyReq) fyne.CanvasObject {
 	reqEntry := widget.NewMultiLineEntry()
 	reqEntry.SetText(req.RawReq)
+	reqEntry.Wrapping = fyne.TextWrapWord
 
 	respEntry := widget.NewRichText(&widget.TextSegment{Text: req.RawResp})
+	// respEntry.Wrapping = fyne.TextWrapBreak
 
 	secure := false
 	secureConnCheck := widget.NewCheck("Secure", func(b bool) {
@@ -82,7 +84,7 @@ func NewProxiedReqView(req models.ProxyReq) fyne.CanvasObject {
 		nil,
 		nil,
 		nil,
-		container.NewHSplit(reqEntry, container.NewScroll(respEntry)),
+		container.NewHSplit(container.NewScroll(reqEntry), container.NewScroll(respEntry)),
 	)
 }
 

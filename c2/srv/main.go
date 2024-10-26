@@ -20,9 +20,9 @@ func Start() error {
 	authed := R.Group("")
 	authed.Use(middleware.OperatorAuth())
 
-	authed.GET("/v1/proxy/cert", ctrl.GetCertificate)
-	authed.GET("/v1/proxy/traffic/:reqID", ctrl.GetProxiedRequest)
-	authed.GET("/v1/proxy/traffic", ctrl.GetProxiedRequests)
+	R.GET("/v1/proxy/cert", ctrl.GetCertificate)
+	R.GET("/v1/proxy/traffic/:reqID", ctrl.GetProxiedRequest)
+	R.GET("/v1/proxy/traffic", ctrl.GetProxiedRequests)
 
 	R.POST("/v1/agents", middleware.DecryptAgentReq(), ctrl.AgentInsert)
 	for _, endpointPath := range xenaC2.RouteMap[xenaC2.R_AGENT_IDENTIFY] {
