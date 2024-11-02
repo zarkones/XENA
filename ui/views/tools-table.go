@@ -73,7 +73,9 @@ func NewToolsTableForPipeline(diagram *dia.DiagramWidget) (table fyne.CanvasObje
 				},
 			}
 
-			setStep(currPipeSettings.Steps[newNodeID])
+			ref := currPipeSettings.Steps[newNodeID]
+
+			setStep(&ref)
 		}()
 	}
 

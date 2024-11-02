@@ -4,6 +4,7 @@ import (
 	"bytes"
 	mySlices "common/slices"
 	"encoding/json"
+	"fmt"
 	"image/png"
 	"slices"
 	"strings"
@@ -104,17 +105,64 @@ func (mv *NodeView) TappedSecondary(e *fyne.PointEvent) {
 
 var potentialLinkIDs = []string{}
 
-func setLink(step xenaC2.PipelineStep) {
+func setLink(step *xenaC2.PipelineStep) {
+	if step == nil {
+		fmt.Println("setLink error: step is nil")
+		return
+	}
+
 	for _, linkedTo := range step.LinkedTo {
+		linkedToNode := diagramWidget.GetDiagramNode(linkedTo)
+		if linkedToNode == nil {
+			fmt.Println("error: node not found with ID of:", linkedTo)
+			continue
+		}
+
 		newLinkID := PIPE_LINK_PREFIX + step.ID + PIPE_LINK_POINTER + linkedTo
+
 		newLink := dia.NewDiagramLink(diagramWidget, newLinkID)
-		newLink.SetTargetPad(diagramWidget.GetDiagramNode(step.ID).GetEdgePad())
-		newLink.SetSourcePad(diagramWidget.GetDiagramNode(linkedTo).GetEdgePad())
-		newLink.AddSourceDecoration(dia.NewArrowhead())
+		if newLink == nil {
+			fmt.Println("error: failed to create new link")
+			continue
+		}
+
+		targetNode := diagramWidget.GetDiagramNode(step.ID)
+		if targetNode == nil {
+			fmt.Println("error: failed to find target node:", step.ID)
+			continue
+		}
+
+		targetNodeEdgePad := targetNode.GetEdgePad()
+		if targetNodeEdgePad == nil {
+			fmt.Println("error: failed to get edge pad of target node:", step.ID)
+			continue
+		}
+
+		sourceEdgePad := linkedToNode.GetEdgePad()
+		if sourceEdgePad == nil {
+			fmt.Println("error: failed to get edge pad of source node:", linkedTo)
+			continue
+		}
+
+		newLink.SetTargetPad(targetNodeEdgePad)
+		newLink.SetSourcePad(sourceEdgePad)
+
+		arrowHead := dia.NewArrowhead()
+		if arrowHead == nil {
+			fmt.Println("error: failed to create new arrowhead for step:", step.ID)
+			continue
+		}
+
+		newLink.AddSourceDecoration(arrowHead)
 	}
 }
 
-func setStep(step xenaC2.PipelineStep) {
+func setStep(step *xenaC2.PipelineStep) {
+	if step == nil {
+		fmt.Println("setStep error: step is nil")
+		return
+	}
+
 	targetView := NodeView{}
 
 	newToolNode := dia.NewDiagramNode(
@@ -366,10 +414,10 @@ func pipeline(pipeline xenaC2.Pipeline, w *fyne.Window) fyne.CanvasObject {
 	}
 
 	for _, step := range currPipeSettings.Steps {
-		setStep(step)
+		setStep(&step)
 	}
 	for _, step := range currPipeSettings.Steps {
-		setLink(step)
+		setLink(&step)
 	}
 
 	libraryTabs := container.NewAppTabs(
@@ -572,10 +620,43 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 
 				for _, step := range settings.Steps {
 					for _, linkedTo := range step.LinkedTo {
+						sourceNode := runDiagram.GetDiagramNode(linkedTo)
+						if sourceNode == nil {
+							fmt.Println("error: source node not found with ID of:", linkedTo)
+							continue
+						}
+						targetNode := runDiagram.GetDiagramNode(step.ID)
+						if targetNode == nil {
+							fmt.Println("error: target node not found with ID of:", step.ID)
+							continue
+						}
 						newLink := dia.NewDiagramLink(runDiagram, uuid.NewString())
-						newLink.SetTargetPad(runDiagram.GetDiagramNode(step.ID).GetEdgePad())
-						newLink.SetSourcePad(runDiagram.GetDiagramNode(linkedTo).GetEdgePad())
-						newLink.AddSourceDecoration(dia.NewArrowhead())
+						if newLink == nil {
+							fmt.Println("error: failed to create new node link for nodes:", linkedTo, "and", step.ID)
+							continue
+						}
+
+						targetNodeEdgePad := targetNode.GetEdgePad()
+						if targetNodeEdgePad == nil {
+							fmt.Println("error: failed to get edge pad for target node:", step.ID)
+							continue
+						}
+						newLink.SetTargetPad(targetNodeEdgePad)
+
+						sourceNodeEdgePad := sourceNode.GetEdgePad()
+						if sourceNodeEdgePad == nil {
+							fmt.Println("error: failed to get edge pad for source node:", linkedTo)
+							continue
+						}
+						newLink.SetSourcePad(sourceNodeEdgePad)
+
+						arrowHead := dia.NewArrowhead()
+						if arrowHead == nil {
+							fmt.Println("error: failed to create new arrowhead")
+							continue
+						}
+
+						newLink.AddSourceDecoration(arrowHead)
 					}
 				}
 			}
