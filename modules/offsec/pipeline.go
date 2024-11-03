@@ -19,8 +19,6 @@ import (
 	"sync"
 	"time"
 
-	sliceUtil "golang.org/x/exp/slices"
-
 	c2api "github.com/zarkones/xena-client"
 )
 
@@ -33,7 +31,6 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 	defer debug.Println("Finished running the pipeline")
 	debug.Println("Starting the pipeline")
 
-	// TODO: All these maps need a mutex. Since we can crash due to concurrent map writes.
 	parentSteps := map[string]c2api.PipelineStep{}
 	muxParentSteps := &sync.Mutex{}
 	addParentSteps := func(step *c2api.PipelineStep) {
@@ -89,31 +86,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		}
 	}
 
-	// parseInput gets outputs of other steps and pipeline variables and modifies the input based on that.
-	parseInput := func(input, stepID string) string {
-		// Replacing "__LINK" with output of connected step.
-		if strings.Contains(input, "__LINK") {
-			replacement := ""
-			for _, executedStep := range executedSteps {
-				if !sliceUtil.Contains(executedStep.LinkedTo, stepID) {
-					continue
-				}
-				if stdout, ok := executedStep.Tool.Outputs["stdout"]; ok {
-					replacement += stdout.Value + "\n"
-				}
-			}
-			replacement = strings.TrimSuffix(replacement, "\n")
-			input = strings.ReplaceAll(input, "__LINK", replacement)
-		}
-		for identifier, value := range settings.Input {
-			input = strings.ReplaceAll(input, identifier, value)
-		}
-		return input
-	}
-
 	// TODO: Figure how to handle cnverging steps.
 	var executeStep func(currStep c2api.PipelineStep)
 	executeStep = func(currStep c2api.PipelineStep) {
+		debug.Println("executing step:", currStep.ID, currStep.Name, currStep.Tool.Name)
+
 		defer func() {
 			addExecutedSteps(&currStep)
 
@@ -124,6 +101,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			// Execute linked steps in parallel.
 			subStepsWg := sync.WaitGroup{}
 			for _, linkedTo := range currStep.LinkedTo {
+				if _, ok := allSteps[linkedTo]; !ok {
+					debug.Println("bad link to non-existing step")
+					continue
+				}
 				subStepsWg.Add(1)
 				go func(linkedTo string) {
 					defer subStepsWg.Done()
@@ -144,9 +125,9 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "STR_CONTAINS":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID)
-			subString := parseInput(currStep.Tool.Inputs["subString"].Value, currStep.ID)
-			rawPerLine := parseInput(currStep.Tool.Inputs["perLine"].Value, currStep.ID)
+			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
+			subString := parseInput(currStep.Tool.Inputs["subString"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawPerLine := parseInput(currStep.Tool.Inputs["perLine"].Value, currStep.ID, &executedSteps, &settings.Input)
 			rawPerLine = strings.ToLower(rawPerLine)
 			toTest := []string{text}
 			switch rawPerLine {
@@ -164,8 +145,8 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "DOWNLOAD_FILE":
-			url := parseInput(currStep.Tool.Inputs["url"].Value, currStep.ID)
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
+			url := parseInput(currStep.Tool.Inputs["url"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -188,10 +169,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "SUBDOMAIN_ENUM_PASSIVE":
-			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID)
+			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID, &executedSteps, &settings.Input)
 			domains := strings.Split(rawDomains, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -241,9 +222,9 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_SEARCH":
-			query := parseInput(currStep.Tool.Inputs["query"].Value, currStep.ID)
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			query := parseInput(currStep.Tool.Inputs["query"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -289,11 +270,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 					return &wordlists.SubdomainsTop10000
 				}
 			}()
-			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID)
+			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID, &executedSteps, &settings.Input)
 			domains := strings.Split(rawDomains, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawThreads := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawThreads := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -350,10 +331,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_BYPASS_403":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -390,10 +371,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "HOST_HEADER_INJECTION_SCANNER":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -430,10 +411,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "CORS_SCANNER":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -461,10 +442,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_FILE_UPLOAD":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -492,7 +473,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "FIND_SECRETS":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID)
+			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
 			secrets, err := sec.FindSecret(&text)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -504,10 +485,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_GIT_DIR":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -535,13 +516,13 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "SSH_BRUTEFORCE":
-			rawHosts := parseInput(currStep.Tool.Inputs["hosts"].Value, currStep.ID)
+			rawHosts := parseInput(currStep.Tool.Inputs["hosts"].Value, currStep.ID, &executedSteps, &settings.Input)
 			hosts := strings.Split(rawHosts, "\n")
-			port := parseInput(currStep.Tool.Inputs["port"].Value, currStep.ID)
-			rawUsernames := parseInput(currStep.Tool.Inputs["usernameWordlist"].Value, currStep.ID)
-			rawPasswords := parseInput(currStep.Tool.Inputs["passwordWordlist"].Value, currStep.ID)
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			port := parseInput(currStep.Tool.Inputs["port"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawUsernames := parseInput(currStep.Tool.Inputs["usernameWordlist"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawPasswords := parseInput(currStep.Tool.Inputs["passwordWordlist"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			usernames := strings.Split(rawUsernames, "\n")
 			passwords := strings.Split(rawPasswords, "\n")
 			timeout, err := strconv.Atoi(rawTimeout)
@@ -575,10 +556,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_DEV_LEFTOVER":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -606,10 +587,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_LOGS":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -637,10 +618,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_ADMIN_PANEL":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -668,10 +649,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_TOP10K":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -699,10 +680,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_BACKUPS":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -730,11 +711,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_ENUM_CUSTOM":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
-			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID)
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			wordlist := strings.Split(rawWordlist, "\n")
 			timeout, err := strconv.Atoi(rawTimeout)
 			if err != nil {
@@ -763,7 +744,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "EXEC_SHELL":
-			input := parseInput(currStep.Tool.Inputs["command"].Value, currStep.ID)
+			input := parseInput(currStep.Tool.Inputs["command"].Value, currStep.ID, &executedSteps, &settings.Input)
 			output, err := machine.RunTerminal(input)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -773,7 +754,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "DEDUPLICATE":
-			input := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID)
+			input := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
 			input = strings.TrimPrefix(
 				strings.TrimSuffix(input, "\n"),
 				"\n",
@@ -785,21 +766,21 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "TRIM_SUFFIX":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID)
-			suffix := parseInput(currStep.Tool.Inputs["suffix"].Value, currStep.ID)
+			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
+			suffix := parseInput(currStep.Tool.Inputs["suffix"].Value, currStep.ID, &executedSteps, &settings.Input)
 			output := strings.TrimSuffix(text, suffix)
 			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
 			return
 
 		case "TRIM_PREFIX":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID)
-			prefix := parseInput(currStep.Tool.Inputs["prefix"].Value, currStep.ID)
+			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
+			prefix := parseInput(currStep.Tool.Inputs["prefix"].Value, currStep.ID, &executedSteps, &settings.Input)
 			output := strings.TrimPrefix(text, prefix)
 			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
 			return
 
 		case "READ_FILE":
-			filePath := parseInput(currStep.Tool.Inputs["filePath"].Value, currStep.ID)
+			filePath := parseInput(currStep.Tool.Inputs["filePath"].Value, currStep.ID, &executedSteps, &settings.Input)
 			fileContent, err := os.ReadFile(filePath)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -808,15 +789,15 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WRITE_FILE":
-			filePath := parseInput(currStep.Tool.Inputs["filePath"].Value, currStep.ID)
-			fileContent := parseInput(currStep.Tool.Inputs["fileContent"].Value, currStep.ID)
+			filePath := parseInput(currStep.Tool.Inputs["filePath"].Value, currStep.ID, &executedSteps, &settings.Input)
+			fileContent := parseInput(currStep.Tool.Inputs["fileContent"].Value, currStep.ID, &executedSteps, &settings.Input)
 			if err := os.WriteFile(filePath, []byte(fileContent), 0777); err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
 			}
 			return
 
 		case "READ_DIR":
-			dirPath := parseInput(currStep.Tool.Inputs["dirPath"].Value, currStep.ID)
+			dirPath := parseInput(currStep.Tool.Inputs["dirPath"].Value, currStep.ID, &executedSteps, &settings.Input)
 			dirData, err := os.ReadDir(dirPath)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -830,7 +811,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WALK_DIR":
-			dirPath := parseInput(currStep.Tool.Inputs["dirPath"].Value, currStep.ID)
+			dirPath := parseInput(currStep.Tool.Inputs["dirPath"].Value, currStep.ID, &executedSteps, &settings.Input)
 			filePaths, err := machine.WalkDir(dirPath)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -846,11 +827,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		// 	return
 
 		case "TLD_ENUM":
-			rawNames := parseInput(currStep.Tool.Inputs["names"].Value, currStep.ID)
+			rawNames := parseInput(currStep.Tool.Inputs["names"].Value, currStep.ID, &executedSteps, &settings.Input)
 			names := strings.Split(rawNames, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			rawWordlist = strings.TrimSuffix(rawWordlist, "\n")
 			wordlist := strings.Split(rawWordlist, "\n")
 			timeout, err := strconv.Atoi(rawTimeout)
@@ -880,11 +861,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "SUBDOMAIN_ENUM":
-			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID)
+			rawDomains := parseInput(currStep.Tool.Inputs["domains"].Value, currStep.ID, &executedSteps, &settings.Input)
 			domains := strings.Split(rawDomains, "\n")
-			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID)
-			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawTimeout := parseInput(currStep.Tool.Inputs["timeout"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawWordlist := parseInput(currStep.Tool.Inputs["wordlist"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			rawWordlist = strings.TrimSuffix(rawWordlist, "\n")
 			wordlist := strings.Split(rawWordlist, "\n")
 			timeout, err := strconv.Atoi(rawTimeout)
@@ -916,7 +897,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "WEB_CRAWL":
-			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID)
+			rawUrls := parseInput(currStep.Tool.Inputs["urls"].Value, currStep.ID, &executedSteps, &settings.Input)
 			urls := strings.Split(rawUrls, "\n")
 			output := ""
 			for _, url := range urls {
@@ -929,10 +910,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "PORT_SCANNER":
-			rawHosts := parseInput(currStep.Tool.Inputs["hosts"].Value, currStep.ID)
+			rawHosts := parseInput(currStep.Tool.Inputs["hosts"].Value, currStep.ID, &executedSteps, &settings.Input)
 			hosts := strings.Split(rawHosts, "\n")
-			rawPorts := parseInput(currStep.Tool.Inputs["ports"].Value, currStep.ID)
-			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID)
+			rawPorts := parseInput(currStep.Tool.Inputs["ports"].Value, currStep.ID, &executedSteps, &settings.Input)
+			rawRPM := parseInput(currStep.Tool.Inputs["rpm"].Value, currStep.ID, &executedSteps, &settings.Input)
 			rpm, err := strconv.Atoi(rawRPM)
 			if err != nil {
 				currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
@@ -963,7 +944,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "REVERSE_DNS":
-			rawAddresses := parseInput(currStep.Tool.Inputs["addresses"].Value, currStep.ID)
+			rawAddresses := parseInput(currStep.Tool.Inputs["addresses"].Value, currStep.ID, &executedSteps, &settings.Input)
 			addresses := strings.Split(rawAddresses, "\n")
 			domains := []string{}
 			for _, address := range addresses {
@@ -994,10 +975,10 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 
 	for _, parentStep := range parentSteps {
 		wg.Add(1)
-		go func(step c2api.PipelineStep) {
+		go func(step *c2api.PipelineStep) {
 			defer wg.Done()
-			executeStep(step)
-		}(parentStep)
+			executeStep(*step)
+		}(&parentStep)
 	}
 
 	wg.Wait()
