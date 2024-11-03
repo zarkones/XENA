@@ -45,3 +45,19 @@ func UpdateRawResp(sessionID int64, statusCode int, respContentType, rawResp *st
 
 	return db.ORM.Save(&req).Error
 }
+
+func GetMultipleNonAnalyzed(limit int) (requests []models.ProxyReq, err error) {
+	return requests, db.ORM.
+		Limit(limit).
+		Where("analyzed = ?", false).
+		Find(&requests).Error
+}
+
+func SetAnalyzed(requestID int64) (err error) {
+	req, err := Get(requestID)
+	if err != nil {
+		return err
+	}
+	req.Analyzed = true
+	return db.ORM.Save(&req).Error
+}

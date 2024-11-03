@@ -2,6 +2,7 @@ package main
 
 import (
 	"c2/core"
+	"c2/core/analyzer"
 	"c2/core/env"
 	"c2/core/proxy"
 	"c2/db"
@@ -40,6 +41,8 @@ func main() {
 			return
 		}
 	}()
+
+	go analyzer.Start()
 
 	if err := srv.Start(); err != nil {
 		fmt.Println("failed to initialize the C2 API:", err)

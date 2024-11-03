@@ -18,4 +18,7 @@ type ProxyReq struct {
 	RawReq          string
 	RawResp         string
 	Time            time.Time
+
+	// Analysis flags:
+	Analyzed bool
 }

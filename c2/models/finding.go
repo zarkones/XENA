@@ -6,8 +6,9 @@ import (
 )
 
 type Finding struct {
-	ID         string `json:"id"`
+	ID         string `json:"id" gorm:"primaryKey"`
 	PipelineID string `json:"pipelineId"`
+	RequestID  int64  `json:"requestId"`
 	Tag        string `json:"tag"`
 	Data       string `json:"data"`
 }

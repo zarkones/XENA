@@ -3,10 +3,11 @@ package findingsRepo
 import (
 	"c2/db"
 	"c2/models"
+	"fmt"
 )
 
-func GetMultiple() (findings []models.Finding, err error) {
-	return findings, db.ORM.Find(&findings).Error
+func GetMultiple(offset, limit int) (findings []models.Finding, err error) {
+	return findings, db.ORM.Offset(offset).Limit(limit).Find(&findings).Error
 }
 
 func GetMultipleByTag(tag string) (findings []models.Finding, err error) {
