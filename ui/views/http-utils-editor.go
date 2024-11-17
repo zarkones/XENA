@@ -17,7 +17,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var requestsCh = make(chan int64, 9)
+var editorReqCh = make(chan int64, 9)
 
 func NewProxiedReqView(req models.ProxyReq) fyne.CanvasObject {
 	reqEntry := widget.NewMultiLineEntry()
@@ -93,9 +93,10 @@ func HttpUtilsEditor() fyne.CanvasObject {
 	tabs.SetTabLocation(container.TabLocationTop)
 
 	go func() {
-		for reqID := range requestsCh {
+		for reqID := range editorReqCh {
 			id := fmt.Sprint(reqID)
 
+			// TODO: Use XENA HTTP client.
 			req, err := http.NewRequest(http.MethodGet, "http://127.0.0.1:8080/v1/proxy/traffic/"+id, nil)
 			if err != nil {
 				fmt.Println("http editor: http.NewRequest:", err)

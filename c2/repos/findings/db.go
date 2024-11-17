@@ -3,7 +3,6 @@ package findingsRepo
 import (
 	"c2/db"
 	"c2/models"
-	"fmt"
 )
 
 func GetMultiple(offset, limit int) (findings []models.Finding, err error) {

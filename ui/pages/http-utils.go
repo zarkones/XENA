@@ -12,6 +12,8 @@ func HttpUtils() fyne.CanvasObject {
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Logger", views.HttpUtilsLogger()),
 		container.NewTabItem("Editor", views.HttpUtilsEditor()),
+		container.NewTabItem("Scans", views.HttpUtilsScansTable()),
+		// container.NewTabItem("Findings", views.HttpUtilsFindingsTable()),
 		// container.NewTabItem("Settings", views.HttpUtilsSettings()),
 	)
 

@@ -24,6 +24,9 @@ func Start() error {
 	R.GET("/v1/proxy/traffic/:reqID", ctrl.GetProxiedRequest)
 	R.GET("/v1/proxy/traffic", ctrl.GetProxiedRequests)
 
+	R.GET("/v1/scans/http", ctrl.GetHttpScans)
+	R.POST("/v1/scans/http", ctrl.InsertHttpScan)
+
 	R.POST("/v1/agents", middleware.DecryptAgentReq(), ctrl.AgentInsert)
 	for _, endpointPath := range xenaC2.RouteMap[xenaC2.R_AGENT_IDENTIFY] {
 		R.POST(endpointPath, middleware.DecryptAgentReq(), ctrl.AgentInsert)

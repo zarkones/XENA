@@ -20,6 +20,8 @@ func Start() {
 		}
 
 		for _, req := range traffic {
+
+			// We analyze for common secrets that might have been leaked in the HTTP responses.
 			func() {
 				secrets, err := sec.FindSecret(&req.RawResp)
 				if err != nil {
@@ -40,6 +42,10 @@ func Start() {
 				}
 			}()
 
+			// We look for node_modules references, since that can potentially be used
+			// to locate and takeover currently abandoned node packages.
+			// Inspiration for this feature is:
+			// https://medium.com/@p0lyxena/2-500-bug-bounty-write-up-remote-code-execution-rce-via-unclaimed-node-package-6b9108d10643
 			func() {
 				nodeModuleRefs := sec.FindNodeModulesReference(&req.RawResp)
 				if len(nodeModuleRefs) == 0 {

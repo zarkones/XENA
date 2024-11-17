@@ -31,9 +31,12 @@ func (t *TableCell) Tapped(_ *fyne.PointEvent) {
 
 func (t *TableCell) TappedSecondary(e *fyne.PointEvent) {
 	sendToEditor := fyne.NewMenuItem("Send To Editor", func() {
-		requestsCh <- t.ReqID
+		editorReqCh <- t.ReqID
 	})
-	menu := fyne.NewMenu("Request Menu", sendToEditor)
+	sendToScanner := fyne.NewMenuItem("Send To Scanner", func() {
+		NewHttpScannerDialog(t.ReqID)
+	})
+	menu := fyne.NewMenu("Request Menu", sendToEditor, sendToScanner)
 
 	widget.ShowPopUpMenuAtPosition(
 		menu,
