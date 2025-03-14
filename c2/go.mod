@@ -1,6 +1,6 @@
 module c2
 
-go 1.23
+go 1.24.1
 
 require (
 	github.com/google/uuid v1.6.0
@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	fyne.io/fyne/v2 v2.5.1 // indirect
+	fyne.io/fyne/v2 v2.5.5 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.0 // indirect

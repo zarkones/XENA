@@ -1,5 +1,5 @@
-fyne.io/fyne/v2 v2.5.1 h1:jd2mhQz0ViosZjhgR5l2bdCbc5HFqkYnTzEXX8UOC7I=
-fyne.io/fyne/v2 v2.5.1/go.mod h1:NdxEG8L7EVWo06/cYbXW11uA0X7UG8Q8j5CLebvTZi8=
+fyne.io/fyne/v2 v2.5.5 h1:IhS8Vf1EtSHS94/i41D9Rh4s1rG1habkGN/oISA0kTU=
+fyne.io/fyne/v2 v2.5.5/go.mod h1:0GOXKqyvNwk3DLmsFu9v0oYM0ZcD1ysGnlHCerKoAmo=
 github.com/PuerkitoBio/goquery v1.9.0 h1:zgjKkdpRY9T97Q5DCtcXwfqkcylSFIVCocZmn2huTp8=
 github.com/PuerkitoBio/goquery v1.9.0/go.mod h1:cW1n6TmIMDoORQU5IU/P1T3tGFunOeXEpGP2WHRwkbY=
 github.com/andybalholm/cascadia v1.3.2 h1:3Xi6Dw5lHF15JtdcmAHD3i1+T8plmv7BQ/nsViSLyss=
@@ -39,10 +39,10 @@ github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/temoto/robotstxt v1.1.2 h1:W2pOjSJ6SWvldyEuiFXNxz3xZ8aiWX5LbfDiOFd7Fxg=
 github.com/temoto/robotstxt v1.1.2/go.mod h1:+1AmkuG3IYkh1kv0d2qEB9Le88ehNO0zwOr3ujewlOo=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-github.com/zarkones/xena-client v0.3.4 h1:nKWihuNm5wmvVEoH5nPBCYiJIDNR1bsErIxRXEJLEKk=
-github.com/zarkones/xena-client v0.3.4/go.mod h1:9vKKA56Hevr7n4zPPtTV0C3zb6cFsN3nkh9fSYAO0G0=
-github.com/zarkones/xena-crypto v0.0.2 h1:C6wNT5fLcZPG5VSECiKeMN2djdQbqalsRuad10XYWLw=
-github.com/zarkones/xena-crypto v0.0.2/go.mod h1:e8cSGbd+uBgkf0gm4ktF/Jh9NmPca6NaL5Ta8de4+eg=
+github.com/zarkones/xena-client v0.3.5 h1:uVQgXzIiPNhRDQmUsPapLL8iVdaKgwq2j8y3IdiFo6Q=
+github.com/zarkones/xena-client v0.3.5/go.mod h1:Frdjt4bb9FV5qw6LGzH0IwoIWY6H5maWSVqb4EkB8PE=
+github.com/zarkones/xena-crypto v0.0.3 h1:XmjdxpiT555RaH+m1OU9CNK3ZPuDgI0Xttfp2GHLwFE=
+github.com/zarkones/xena-crypto v0.0.3/go.mod h1:qVvUrKrnsHw9IpQ65K1EzCgOuGGP0xzT2V+WoQIErcw=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
 golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 h1:LfspQV/FYTatPTr/3HzIcmiUFH7PGP+OQ6mgDYo3yuQ=

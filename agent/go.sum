@@ -1,5 +1,5 @@
-fyne.io/fyne/v2 v2.5.1 h1:jd2mhQz0ViosZjhgR5l2bdCbc5HFqkYnTzEXX8UOC7I=
-fyne.io/fyne/v2 v2.5.1/go.mod h1:NdxEG8L7EVWo06/cYbXW11uA0X7UG8Q8j5CLebvTZi8=
+fyne.io/fyne/v2 v2.5.5 h1:IhS8Vf1EtSHS94/i41D9Rh4s1rG1habkGN/oISA0kTU=
+fyne.io/fyne/v2 v2.5.5/go.mod h1:0GOXKqyvNwk3DLmsFu9v0oYM0ZcD1ysGnlHCerKoAmo=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -34,10 +34,10 @@ github.com/tklauser/numcpus v0.6.1 h1:ng9scYS7az0Bk4OZLvrNXNSAO2Pxr1XXRAPyjhIx+F
 github.com/tklauser/numcpus v0.6.1/go.mod h1:1XfjsgE2zo8GVw7POkMbHENHzVg3GzmoZ9fESEdAacY=
 github.com/yusufpapurcu/wmi v1.2.3 h1:E1ctvB7uKFMOJw3fdOW32DwGE9I7t++CRUEMKvFoFiw=
 github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
-github.com/zarkones/xena-client v0.3.4 h1:nKWihuNm5wmvVEoH5nPBCYiJIDNR1bsErIxRXEJLEKk=
-github.com/zarkones/xena-client v0.3.4/go.mod h1:9vKKA56Hevr7n4zPPtTV0C3zb6cFsN3nkh9fSYAO0G0=
-github.com/zarkones/xena-crypto v0.0.2 h1:C6wNT5fLcZPG5VSECiKeMN2djdQbqalsRuad10XYWLw=
-github.com/zarkones/xena-crypto v0.0.2/go.mod h1:e8cSGbd+uBgkf0gm4ktF/Jh9NmPca6NaL5Ta8de4+eg=
+github.com/zarkones/xena-client v0.3.5 h1:uVQgXzIiPNhRDQmUsPapLL8iVdaKgwq2j8y3IdiFo6Q=
+github.com/zarkones/xena-client v0.3.5/go.mod h1:Frdjt4bb9FV5qw6LGzH0IwoIWY6H5maWSVqb4EkB8PE=
+github.com/zarkones/xena-crypto v0.0.3 h1:XmjdxpiT555RaH+m1OU9CNK3ZPuDgI0Xttfp2GHLwFE=
+github.com/zarkones/xena-crypto v0.0.3/go.mod h1:qVvUrKrnsHw9IpQ65K1EzCgOuGGP0xzT2V+WoQIErcw=
 golang.org/x/sys v0.0.0-20190916202348-b4ddaad3f8a3/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201204225414-ed752295db88/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.8.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

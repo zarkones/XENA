@@ -1,5 +1,5 @@
-fyne.io/fyne/v2 v2.4.2 h1:bt6/p/FTpcv0sZIN6msxto32JvKkgwKe/LzYxqv//B8=
-fyne.io/fyne/v2 v2.4.2/go.mod h1:1h3BKxmQYRJlr2g+RGVxedzr6vLVQ/AJmFWcF9CJnoQ=
+fyne.io/fyne/v2 v2.5.5 h1:IhS8Vf1EtSHS94/i41D9Rh4s1rG1habkGN/oISA0kTU=
+fyne.io/fyne/v2 v2.5.5/go.mod h1:0GOXKqyvNwk3DLmsFu9v0oYM0ZcD1ysGnlHCerKoAmo=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
@@ -8,9 +8,9 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/zarkones/xena-client v0.3.4 h1:nKWihuNm5wmvVEoH5nPBCYiJIDNR1bsErIxRXEJLEKk=
-github.com/zarkones/xena-client v0.3.4/go.mod h1:9vKKA56Hevr7n4zPPtTV0C3zb6cFsN3nkh9fSYAO0G0=
-github.com/zarkones/xena-crypto v0.0.2 h1:C6wNT5fLcZPG5VSECiKeMN2djdQbqalsRuad10XYWLw=
-github.com/zarkones/xena-crypto v0.0.2/go.mod h1:e8cSGbd+uBgkf0gm4ktF/Jh9NmPca6NaL5Ta8de4+eg=
+github.com/zarkones/xena-client v0.3.5 h1:uVQgXzIiPNhRDQmUsPapLL8iVdaKgwq2j8y3IdiFo6Q=
+github.com/zarkones/xena-client v0.3.5/go.mod h1:Frdjt4bb9FV5qw6LGzH0IwoIWY6H5maWSVqb4EkB8PE=
+github.com/zarkones/xena-crypto v0.0.3 h1:XmjdxpiT555RaH+m1OU9CNK3ZPuDgI0Xttfp2GHLwFE=
+github.com/zarkones/xena-crypto v0.0.3/go.mod h1:qVvUrKrnsHw9IpQ65K1EzCgOuGGP0xzT2V+WoQIErcw=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=

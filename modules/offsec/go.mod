@@ -1,6 +1,6 @@
 module offsec
 
-go 1.23
+go 1.24.1
 
 require (
 	github.com/gocolly/colly v1.2.0
@@ -9,7 +9,7 @@ require (
 )
 
 require (
-	fyne.io/fyne/v2 v2.5.1 // indirect
+	fyne.io/fyne/v2 v2.5.5 // indirect
 	github.com/PuerkitoBio/goquery v1.9.0 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/antchfx/htmlquery v1.3.0 // indirect
