@@ -22,4 +22,4 @@ jobs:
         go-version: '1.24.1'
 
     - name: Build
-      run: sh build-prod.sh
+      run: sh prod-build.sh
