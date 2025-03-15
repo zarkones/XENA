@@ -24,3 +24,9 @@ jobs:
 
     - name: Build
       run: sh prod-build.sh
+
+    - name: Upload export directory as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: export-files
+        path: export/
