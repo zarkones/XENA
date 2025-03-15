@@ -42,7 +42,7 @@ func Settings() fyne.CanvasObject {
 			widget.NewLabel("Authentication Token:"),
 			authToken,
 			layout.NewSpacer(),
-			widget.NewLabel("XENA Beta v0.2"),
+			widget.NewLabel("XENA (Beta) v0.3.0"),
 		),
 	)
 }
