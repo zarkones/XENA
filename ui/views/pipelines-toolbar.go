@@ -1,8 +1,6 @@
 package views
 
 import (
-	"fmt"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
@@ -17,7 +15,11 @@ func PipelinesToolbar() fyne.CanvasObject {
 		}),
 		widget.NewButtonWithIcon("IMPORT", theme.ContentAddIcon(), func() {
 			PipelineImportDialog(func(pipeline xenaC2.Pipeline) {
-				fmt.Println("pipeline", pipeline)
+				if err := xenaC2.UpsertPipeline(pipeline); err != nil {
+					Notify("Alert", err.Error())
+					return
+				}
+				refreshPipelinesTable()
 			})
 		}),
 	)
