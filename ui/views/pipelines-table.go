@@ -48,6 +48,9 @@ func PipelinesTable() fyne.CanvasObject {
 					widget.NewButtonWithIcon("DELETE", theme.DeleteIcon(), func() {
 						PipelineDeleteDialog(state.Pipelines[i], updatePipelines)
 					}),
+					widget.NewButtonWithIcon("EXPORT", theme.DeleteIcon(), func() {
+						PipelineExportDialog(state.Pipelines[i], updatePipelines)
+					}),
 					widget.NewButtonWithIcon("EDIT", theme.DocumentCreateIcon(), func() {
 						PipelineEditDialog(state.Pipelines[i], updatePipelines)
 					}),
