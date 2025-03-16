@@ -422,9 +422,9 @@ func pipeline(pipeline xenaC2.Pipeline, w *fyne.Window) fyne.CanvasObject {
 
 	libraryTabs := container.NewAppTabs(
 		// Cyber security tools browsing and inspection.
-		container.NewTabItem("Tools", effects.Gradient(toolsTable, true, false)),
+		container.NewTabItem("Tools", effects.Gradient(toolsTable, false, true)),
 		// Inputs/Variables of the pipeline.
-		container.NewTabItem("Inputs", effects.Gradient(container.NewVScroll(cInputs), false, false)),
+		container.NewTabItem("Inputs", effects.Gradient(container.NewVScroll(cInputs), false, true)),
 	)
 
 	diagramScroll := container.NewScroll(diagramWidget)
