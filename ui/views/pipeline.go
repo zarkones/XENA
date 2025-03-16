@@ -459,7 +459,6 @@ func pipeline(pipeline xenaC2.Pipeline, w *fyne.Window) fyne.CanvasObject {
 		// Primary - center.
 		container.NewHSplit(
 			libraryTabs,
-
 			container.NewHSplit(
 				diagramScroll,
 				container.NewVBox(
@@ -470,6 +469,12 @@ func pipeline(pipeline xenaC2.Pipeline, w *fyne.Window) fyne.CanvasObject {
 			),
 		),
 	)
+
+	editorSplit := editorCont.Objects[0].(*container.Split)
+	editorSplit.SetOffset(0.2)
+
+	diagramInspectorSplit := editorSplit.Trailing.(*container.Split)
+	diagramInspectorSplit.SetOffset(0.75)
 
 	historyCont := pipelineRuns(pipeline.ID)
 
