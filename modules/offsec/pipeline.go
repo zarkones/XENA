@@ -86,10 +86,42 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		}
 	}
 
-	// TODO: Figure how to handle cnverging steps.
+	// Track dependencies for each step
+	dependencies := map[string][]string{} // Maps step ID to the IDs of steps it depends on.
+	for _, step := range settings.Steps {
+		for _, linkedTo := range step.LinkedTo {
+			dependencies[linkedTo] = append(dependencies[linkedTo], step.ID)
+		}
+	}
+
 	var executeStep func(currStep c2api.PipelineStep)
 	executeStep = func(currStep c2api.PipelineStep) {
 		debug.Println("executing step:", currStep.ID, currStep.Name, currStep.Tool.Name)
+
+		// Check if this step has dependencies. (i.e., it's a converging step)
+		if deps, ok := dependencies[currStep.ID]; ok && len(deps) > 0 {
+			wg := sync.WaitGroup{}
+			muxExecutedSteps.Lock()
+			for _, depID := range deps {
+				if _, executed := executedSteps[depID]; !executed {
+					wg.Add(1)
+					go func(depID string) {
+						defer wg.Done()
+						executeStep(allSteps[depID])
+					}(depID)
+				}
+			}
+			muxExecutedSteps.Unlock()
+			wg.Wait()
+		}
+
+		// Ensure this step hasn't already been executed.
+		muxExecutedSteps.Lock()
+		if _, alreadyExecuted := executedSteps[currStep.ID]; alreadyExecuted {
+			muxExecutedSteps.Unlock()
+			return
+		}
+		muxExecutedSteps.Unlock()
 
 		defer func() {
 			addExecutedSteps(&currStep)
@@ -320,13 +352,11 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			currStep.Tool.Outputs["analysis"] = c2api.ToolOutput{Type: "STRING", Value: serializedAnalysis}
 			return
 
-			// This node is just an input, no need to process it.
 		case "FILE":
 			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: currStep.Tool.Inputs["file"].Value}
 			return
 
 		case "GEN_IP_RANGE", "HTTP_REQUEST", "FTP_BRUTEFORCE", "SMB_BRUTEFORCE":
-			// TODO
 			currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: "not implemented"}
 			return
 
@@ -819,12 +849,6 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			serializedFilePaths := strings.Join(filePaths, "\n")
 			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: serializedFilePaths}
 			return
-
-		// case "OS_SHUTDOWN":
-		// 	if err := coldfire.Shutdown(); err != nil {
-		// 		currStep.Tool.Outputs["stderr"] = c2api.ToolOutput{Type: "STRING", Value: err.Error()}
-		// 	}
-		// 	return
 
 		case "TLD_ENUM":
 			rawNames := parseInput(currStep.Tool.Inputs["names"].Value, currStep.ID, &executedSteps, &settings.Input)
