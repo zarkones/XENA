@@ -17,6 +17,13 @@ func PipelineImportDialog(callback func(pipeline xenaC2.Pipeline)) {
 			return
 		}
 
+		if reader == nil {
+			return
+		}
+		if reader.URI() == nil {
+			return
+		}
+
 		rawPipeline, err := os.ReadFile(reader.URI().Path())
 		if err != nil {
 			Notify("Alert", err.Error())
