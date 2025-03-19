@@ -32,6 +32,26 @@
         }
     },
     {
+        "id": "REPLACE_ALL",
+        "name": "Replace All",
+        "description": "Replaces specific string from a text with another.",
+        "toolCategoryName": "Utils",
+        "inputs": {
+            "text": {
+                "type": "STRING",
+                "description": "Original text"
+            },
+            "old": {
+                "type": "STRING",
+                "description": "Original string in the text to be replaced"
+            },
+            "new": {
+                "type": "STRING",
+                "description": "String to replace the previous"
+            }
+        }
+    },
+    {
         "id": "FILE",
         "name": "String From File",
         "description": "Use content of a file as input.",

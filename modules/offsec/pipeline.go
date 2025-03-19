@@ -802,6 +802,14 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
 			return
 
+		case "REPLACE_ALL":
+			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
+			old := parseInput(currStep.Tool.Inputs["old"].Value, currStep.ID, &executedSteps, &settings.Input)
+			new := parseInput(currStep.Tool.Inputs["new"].Value, currStep.ID, &executedSteps, &settings.Input)
+			output := strings.ReplaceAll(text, old, new)
+			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
+			return
+
 		case "TRIM_PREFIX":
 			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
 			prefix := parseInput(currStep.Tool.Inputs["prefix"].Value, currStep.ID, &executedSteps, &settings.Input)

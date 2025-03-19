@@ -117,6 +117,7 @@ func NewToolsTableForPipeline(diagram *dia.DiagramWidget) (table fyne.CanvasObje
 
 		if searchText == "" {
 			// If search is empty, show all data.
+			tree.CloseAllBranches()
 			tree.Refresh()
 			return
 		}
@@ -152,7 +153,7 @@ func NewToolsTableForPipeline(diagram *dia.DiagramWidget) (table fyne.CanvasObje
 		}
 
 		// Refresh the tree to reflect the filtered data.
-		tree.CloseAllBranches() // Collapse all for clarity. (maybe not gonna keep it this way... shall see...)
+		tree.OpenAllBranches()
 		tree.Refresh()
 	}
 
