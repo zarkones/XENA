@@ -31,7 +31,7 @@ func NewLargeTextViewer(text string) *LargeTextViewer {
 		},
 		// Create function: creates a template for each item
 		func() fyne.CanvasObject {
-			text := canvas.NewText("", theme.ForegroundColor())
+			text := canvas.NewText("", theme.Color(theme.ColorNameForeground))
 			text.TextSize = theme.TextSize()
 			return text
 		},
