@@ -14,6 +14,7 @@ var COLOR_BG = color.RGBA{40, 42, 54, 255}
 var COLOR_BG_2 = color.RGBA{68, 71, 90, 255}
 var COLOR_ACTIVE = color.RGBA{68, 71, 90, 255}
 var COLOR_RED = color.RGBA{255, 85, 85, 255}
+var TRANSPARENT = color.RGBA{255, 255, 255, 0}
 
 func (m mainTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) color.Color {
 	switch name {
@@ -26,8 +27,11 @@ func (m mainTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) co
 	case theme.ColorNameError:
 		return COLOR_RED
 
-	case theme.ColorNamePrimary, theme.ColorNameSelection, theme.ColorNameInputBorder, theme.ColorNameSeparator, theme.ColorNameScrollBar:
+	case theme.ColorNamePrimary, theme.ColorNameInputBorder, theme.ColorNameScrollBar:
 		return COLOR_PRIMARY
+
+	case theme.ColorNameSeparator, theme.ColorNameSelection, theme.ColorNameHover:
+		return TRANSPARENT
 
 	case theme.ColorNameButton:
 		return COLOR_PRIMARY
@@ -52,15 +56,12 @@ func (m mainTheme) Font(style fyne.TextStyle) fyne.Resource {
 }
 
 func (m mainTheme) Size(name fyne.ThemeSizeName) float32 {
-
 	switch name {
-
 	case "innerPadding":
 		return theme.DefaultTheme().Size(name) - theme.DefaultTheme().Size(name)/4
 
 	case "inputRadius", "selectionRadius":
 		return 0
-
 	}
 
 	return theme.DefaultTheme().Size(name) - theme.DefaultTheme().Size(name)*0.2
