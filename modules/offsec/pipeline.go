@@ -8,7 +8,6 @@ import (
 	"common/slices"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"math/rand"
 	"net"
@@ -25,7 +24,6 @@ import (
 
 func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 	var settings c2api.PipelineSettings
-	fmt.Println("PIPELINE:", pipeline.Settings)
 	if err := json.Unmarshal([]byte(pipeline.Settings), &settings); err != nil {
 		return executedPipeline
 	}
@@ -988,7 +986,6 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		Steps: make(map[string]c2api.PipelineStep, len(executedSteps)),
 	}
 	for key, val := range executedSteps {
-		fmt.Println("step name:", val.Name, val.FriendlyName)
 		newSettings.Steps[key] = val
 	}
 
