@@ -22,7 +22,27 @@ func InspectToolPipeline(nodeID string, inspector *fyne.Container) {
 		return
 	}
 
+	friendlyNameInput := widget.NewEntry()
+	friendlyNameInput.SetText(step.FriendlyName)
+	friendlyNameInput.OnChanged = func(s string) {
+		if len(s) == 0 {
+			setStepName(step.ID, step.Name)
+		} else {
+			setStepName(step.ID, s)
+		}
+
+		currPipeSettings.Steps[nodeID] = xenaC2.PipelineStep{
+			ID:           currPipeSettings.Steps[nodeID].ID,
+			Name:         currPipeSettings.Steps[nodeID].Name,
+			FriendlyName: s,
+			Position:     currPipeSettings.Steps[nodeID].Position,
+			Tool:         currPipeSettings.Steps[nodeID].Tool,
+			LinkedTo:     currPipeSettings.Steps[nodeID].LinkedTo,
+		}
+	}
+
 	inspector.Add(widget.NewLabel("Name: " + step.Tool.Name))
+	inspector.Add(container.NewVBox(widget.NewLabel("Friendly Name:"), friendlyNameInput))
 	inspector.Add(widget.NewLabel("Category: " + step.Tool.ToolCategoryName))
 	inspector.Add(container.NewHScroll(widget.NewLabel("Description: " + step.Tool.Description)))
 

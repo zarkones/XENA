@@ -165,12 +165,20 @@ func setStep(step *xenaC2.PipelineStep) {
 
 	targetView := NodeView{}
 
+	name := step.Name
+	if len(step.FriendlyName) != 0 {
+		name = step.FriendlyName
+	}
+
+	nameWidget := widget.NewLabel(name)
+	namesMap[step.ID] = nameWidget
+
 	newToolNode := dia.NewDiagramNode(
 		diagramWidget,
 		container.NewVBox(
 			container.NewHBox(
 				layout.NewSpacer(),
-				widget.NewLabel(step.Name),
+				nameWidget,
 				layout.NewSpacer(),
 			),
 			container.NewHBox(
@@ -184,11 +192,13 @@ func setStep(step *xenaC2.PipelineStep) {
 		),
 		step.ID,
 	)
+
 	targetView.Node = &newToolNode
 	newToolNode.Move(step.Position)
 	newToolNode.SetProperties(dia.DiagramElementProperties{
 		StrokeWidth: 0,
 	})
+
 	newToolNode.Refresh()
 }
 
@@ -547,8 +557,15 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 				for _, step := range settings.Steps {
 					stepCopy := step
 
+					name := stepCopy.Tool.Name
+					if len(stepCopy.FriendlyName) != 0 {
+						name = stepCopy.FriendlyName
+					}
+
+					fmt.Println(stepCopy)
+
 					newNode := dia.NewDiagramNode(runDiagram, container.NewVBox(
-						widget.NewLabel(stepCopy.Tool.Name),
+						widget.NewLabel(name),
 						pentagonSprite,
 						widget.NewButton("INSPECT", func() {
 							defer console.Refresh()
