@@ -66,11 +66,12 @@ func UpsertPipeline(c *gin.Context) {
 	// Deduplicate .LinkedTo, as we cannot have one node being linked multiple times to another.
 	for id := range settings.Steps {
 		settings.Steps[id] = xenaC2.PipelineStep{
-			ID:       settings.Steps[id].ID,
-			Name:     settings.Steps[id].Name,
-			Position: settings.Steps[id].Position,
-			Tool:     settings.Steps[id].Tool,
-			LinkedTo: slices.Deduplicate(settings.Steps[id].LinkedTo),
+			ID:           settings.Steps[id].ID,
+			Name:         settings.Steps[id].Name,
+			FriendlyName: settings.Steps[id].FriendlyName,
+			Position:     settings.Steps[id].Position,
+			Tool:         settings.Steps[id].Tool,
+			LinkedTo:     slices.Deduplicate(settings.Steps[id].LinkedTo),
 		}
 	}
 
