@@ -562,8 +562,6 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 						name = stepCopy.FriendlyName
 					}
 
-					fmt.Println(stepCopy)
-
 					newNode := dia.NewDiagramNode(runDiagram, container.NewVBox(
 						widget.NewLabel(name),
 						pentagonSprite,

@@ -8,6 +8,7 @@ import (
 	"common/slices"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"net"
@@ -24,6 +25,7 @@ import (
 
 func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 	var settings c2api.PipelineSettings
+	fmt.Println("PIPELINE:", pipeline.Settings)
 	if err := json.Unmarshal([]byte(pipeline.Settings), &settings); err != nil {
 		return executedPipeline
 	}
@@ -157,23 +159,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "STR_CONTAINS":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
-			subString := parseInput(currStep.Tool.Inputs["subString"].Value, currStep.ID, &executedSteps, &settings.Input)
-			rawPerLine := parseInput(currStep.Tool.Inputs["perLine"].Value, currStep.ID, &executedSteps, &settings.Input)
-			rawPerLine = strings.ToLower(rawPerLine)
-			toTest := []string{text}
-			switch rawPerLine {
-			case "true", "1", "yes":
-				toTest = strings.Split(text, "\n")
-			}
-			output := []string{}
-			for _, line := range toTest {
-				if strings.Contains(line, subString) {
-					output = append(output, line)
-				}
-			}
-			serializedOutput := strings.Join(output, "\n")
-			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: serializedOutput}
+			stringContains(&currStep, &executedSteps, &settings)
 			return
 
 		case "DOWNLOAD_FILE":
@@ -784,37 +770,19 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 			return
 
 		case "DEDUPLICATE":
-			input := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
-			input = strings.TrimPrefix(
-				strings.TrimSuffix(input, "\n"),
-				"\n",
-			)
-			lines := strings.Split(input, "\n")
-			uniqueLines := slices.Deduplicate(lines)
-			serializedUniqueLines := strings.Join(uniqueLines, "\n")
-			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: serializedUniqueLines}
+			deduplicate(&currStep, &executedSteps, &settings)
 			return
 
 		case "TRIM_SUFFIX":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
-			suffix := parseInput(currStep.Tool.Inputs["suffix"].Value, currStep.ID, &executedSteps, &settings.Input)
-			output := strings.TrimSuffix(text, suffix)
-			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
+			trimSuffix(&currStep, &executedSteps, &settings)
 			return
 
 		case "REPLACE_ALL":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
-			old := parseInput(currStep.Tool.Inputs["old"].Value, currStep.ID, &executedSteps, &settings.Input)
-			new := parseInput(currStep.Tool.Inputs["new"].Value, currStep.ID, &executedSteps, &settings.Input)
-			output := strings.ReplaceAll(text, old, new)
-			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
+			replaceAll(&currStep, &executedSteps, &settings)
 			return
 
 		case "TRIM_PREFIX":
-			text := parseInput(currStep.Tool.Inputs["text"].Value, currStep.ID, &executedSteps, &settings.Input)
-			prefix := parseInput(currStep.Tool.Inputs["prefix"].Value, currStep.ID, &executedSteps, &settings.Input)
-			output := strings.TrimPrefix(text, prefix)
-			currStep.Tool.Outputs["stdout"] = c2api.ToolOutput{Type: "STRING", Value: output}
+			trimPrefix(&currStep, &executedSteps, &settings)
 			return
 
 		case "READ_FILE":
@@ -1020,6 +988,7 @@ func runPipeline(pipeline c2api.Pipeline) (executedPipeline c2api.Pipeline) {
 		Steps: make(map[string]c2api.PipelineStep, len(executedSteps)),
 	}
 	for key, val := range executedSteps {
+		fmt.Println("step name:", val.Name, val.FriendlyName)
 		newSettings.Steps[key] = val
 	}
 
