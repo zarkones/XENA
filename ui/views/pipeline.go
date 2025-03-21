@@ -165,12 +165,20 @@ func setStep(step *xenaC2.PipelineStep) {
 
 	targetView := NodeView{}
 
+	name := step.Name
+	if len(step.FriendlyName) != 0 {
+		name = step.FriendlyName
+	}
+
+	nameWidget := widget.NewLabel(name)
+	namesMap[step.ID] = nameWidget
+
 	newToolNode := dia.NewDiagramNode(
 		diagramWidget,
 		container.NewVBox(
 			container.NewHBox(
 				layout.NewSpacer(),
-				widget.NewLabel(step.Name),
+				nameWidget,
 				layout.NewSpacer(),
 			),
 			container.NewHBox(
@@ -184,11 +192,13 @@ func setStep(step *xenaC2.PipelineStep) {
 		),
 		step.ID,
 	)
+
 	targetView.Node = &newToolNode
 	newToolNode.Move(step.Position)
 	newToolNode.SetProperties(dia.DiagramElementProperties{
 		StrokeWidth: 0,
 	})
+
 	newToolNode.Refresh()
 }
 
@@ -547,74 +557,93 @@ func pipelineRuns(pipelineID string) *fyne.Container {
 				for _, step := range settings.Steps {
 					stepCopy := step
 
-					newNode := dia.NewDiagramNode(runDiagram, container.NewVBox(
-						widget.NewLabel(stepCopy.Tool.Name),
-						pentagonSprite,
-						widget.NewButton("INSPECT", func() {
-							defer console.Refresh()
-							console.RemoveAll()
+					name := stepCopy.Tool.Name
+					if len(stepCopy.FriendlyName) != 0 {
+						name = stepCopy.FriendlyName
+					}
 
-							toolInputs := container.NewVBox()
-							for name, input := range stepCopy.Tool.Inputs {
-								toolInputs.Add(widget.NewRichTextFromMarkdown("# " + name + "\n### [" + input.Description + "]:\n" + input.Value))
-								toolInputs.Add(widget.NewSeparator())
-							}
+					newNode := dia.NewDiagramNode(
+						runDiagram,
+						container.NewVBox(
+							container.NewHBox(
+								layout.NewSpacer(),
+								widget.NewLabel(name),
+								layout.NewSpacer(),
+							),
+							container.NewHBox(
+								layout.NewSpacer(),
+								container.NewStack(
+									pentagonSprite,
+								),
+								layout.NewSpacer(),
+							),
+							widget.NewButton("INSPECT", func() {
+								defer console.Refresh()
+								console.RemoveAll()
 
-							stdout := ""
-							stderr := ""
-							analysis := ""
-							if stepCopy.Tool.Outputs != nil {
-								stdout = stepCopy.Tool.Outputs["stdout"].Value
-								stderr = stepCopy.Tool.Outputs["stderr"].Value
-								analysis = stepCopy.Tool.Outputs["analysis"].Value
-							}
+								toolInputs := container.NewVBox()
+								for name, input := range stepCopy.Tool.Inputs {
+									toolInputs.Add(widget.NewRichTextFromMarkdown("# " + name + "\n### [" + input.Description + "]:\n" + input.Value))
+									toolInputs.Add(widget.NewSeparator())
+								}
 
-							stdoutView := widget.NewRichText(&widget.TextSegment{
-								Style: widget.RichTextStyleCodeBlock,
-								Text:  stdout,
-							})
-							stdoutView.Wrapping = fyne.TextWrapWord
-							stderrView := widget.NewRichText(&widget.TextSegment{
-								Style: widget.RichTextStyleCodeBlock,
-								Text:  stderr,
-							})
-							stderrView.Wrapping = fyne.TextWrapWord
-							analysisView := widget.NewRichText(&widget.TextSegment{
-								Style: widget.RichTextStyleCodeBlock,
-								Text:  analysis,
-							})
-							analysisView.Wrapping = fyne.TextWrapWord
+								stdout := ""
+								stderr := ""
+								analysis := ""
+								if stepCopy.Tool.Outputs != nil {
+									stdout = stepCopy.Tool.Outputs["stdout"].Value
+									stderr = stepCopy.Tool.Outputs["stderr"].Value
+									analysis = stepCopy.Tool.Outputs["analysis"].Value
+								}
 
-							tabs := container.NewAppTabs(
-								container.NewTabItem("STDOUT", container.NewVBox(
-									container.NewHBox(
-										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											core.MainW.Clipboard().SetContent(stdout)
-										}),
-									),
-									stdoutView,
-								)),
-								container.NewTabItem("STDERR", container.NewVBox(
-									container.NewHBox(
-										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											core.MainW.Clipboard().SetContent(stderr)
-										}),
-									),
-									stderrView,
-								)),
-								container.NewTabItem("ANALYSIS", container.NewVBox(
-									container.NewHBox(
-										widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
-											core.MainW.Clipboard().SetContent(analysis)
-										}),
-									),
-									analysisView,
-								)),
-								container.NewTabItem("PROPERTIES", toolInputs),
-							)
-							console.Add(tabs)
-						}),
-					), stepCopy.ID)
+								stdoutView := widget.NewRichText(&widget.TextSegment{
+									Style: widget.RichTextStyleCodeBlock,
+									Text:  stdout,
+								})
+								stdoutView.Wrapping = fyne.TextWrapWord
+								stderrView := widget.NewRichText(&widget.TextSegment{
+									Style: widget.RichTextStyleCodeBlock,
+									Text:  stderr,
+								})
+								stderrView.Wrapping = fyne.TextWrapWord
+								analysisView := widget.NewRichText(&widget.TextSegment{
+									Style: widget.RichTextStyleCodeBlock,
+									Text:  analysis,
+								})
+								analysisView.Wrapping = fyne.TextWrapWord
+
+								tabs := container.NewAppTabs(
+									container.NewTabItem("STDOUT", container.NewVBox(
+										container.NewHBox(
+											widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
+												core.MainW.Clipboard().SetContent(stdout)
+											}),
+										),
+										stdoutView,
+									)),
+									container.NewTabItem("STDERR", container.NewVBox(
+										container.NewHBox(
+											widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
+												core.MainW.Clipboard().SetContent(stderr)
+											}),
+										),
+										stderrView,
+									)),
+									container.NewTabItem("ANALYSIS", container.NewVBox(
+										container.NewHBox(
+											widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
+												core.MainW.Clipboard().SetContent(analysis)
+											}),
+										),
+										analysisView,
+									)),
+									container.NewTabItem("PROPERTIES", toolInputs),
+								)
+								console.Add(tabs)
+							}),
+						),
+						stepCopy.ID,
+					)
 
 					newNode.Move(stepCopy.Position)
 					newNode.SetProperties(dia.DiagramElementProperties{

@@ -2,12 +2,10 @@ module ui
 
 go 1.23
 
-toolchain go1.23
-
 require (
 	fyne.io/fyne/v2 v2.5.1
 	github.com/google/uuid v1.6.0
-	github.com/zarkones/xena-client v0.3.5
+	github.com/zarkones/xena-client v0.3.9
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
 )
 

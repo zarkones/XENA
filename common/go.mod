@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/jackpal/gateway v1.0.7
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/zarkones/xena-client v0.3.5
+	github.com/zarkones/xena-client v0.3.9
 	github.com/zarkones/xena-crypto v0.0.3
 	golang.org/x/crypto v0.23.0
 	golang.org/x/sys v0.20.0
