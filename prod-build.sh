@@ -43,6 +43,7 @@ echo "Building Linux UI"
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/XENA_Linux_amd64 ./ui
 # CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/XENA_Linux_arm64 ./ui
 cp -r ui/xena-tools export/
-cp modules/offsec/default-pipelines.json export/c2/
+mkdir export/c2/default_pipelines
+cp modules/offsec/default-pipelines.json export/c2/default_pipelines/
 # echo "Building Windows UI"
 # CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -tags "netgo,windows"  -o export/XENA.exe ./ui
