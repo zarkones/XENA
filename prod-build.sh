@@ -26,16 +26,6 @@ CGO_ENABLED=0 GOOS=openbsd GOARCH=arm go build -ldflags="-s -w -extldflags='-sta
 echo "Building Solaris Agents"
 CGO_ENABLED=0 GOOS=solaris GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,solaris,purego" -o common/builder/static/agents/solaris_amd64 ./agent
 
-# Build Agent Builder.
-# echo "Building Linux Agent Builder"
-# CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/builder/linux_amd64 ./agent-builder
-# CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -ldflags="-s -w" -tags "netgo,linux" -o export/builder/linux_386 ./agent-builder
-# CGO_ENABLED=1 GOOS=linux GOARCH=arm go build -ldflags="-s -w" -tags "netgo,linux" -o export/builder/linux_arm ./agent-builder
-# CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/builder/linux_arm64 ./agent-builder
-# echo "Building Windows Agent Builder"
-# CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -tags "netgo,windows" -o export/builder/windows_amd64.exe ./agent-builder
-# CGO_ENABLED=1 GOOS=windows GOARCH=386 go build -ldflags="-s -w" -tags "netgo,windows" -o export/builder/windows_386.exe ./agent-builder
-
 # Build C2.
 echo "Building Linux C2"
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -extldflags='-static'" -tags "netgo,linux,purego" -o export/c2/linux_amd64 ./c2
@@ -53,5 +43,6 @@ echo "Building Linux UI"
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/XENA_Linux_amd64 ./ui
 # CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags "netgo,linux" -o export/XENA_Linux_arm64 ./ui
 cp -r ui/xena-tools export/
+cp modules/offsec/default-pipelines.json export/c2/
 # echo "Building Windows UI"
 # CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -tags "netgo,windows"  -o export/XENA.exe ./ui
