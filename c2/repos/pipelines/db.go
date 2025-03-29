@@ -3,6 +3,8 @@ package pipelinesRepo
 import (
 	"c2/db"
 	"c2/models"
+
+	"github.com/google/uuid"
 )
 
 func Get(pipelineID string) (pipeline models.Pipeline, err error) {
@@ -18,6 +20,9 @@ func GetMultiple() (pipelines []models.Pipeline, err error) {
 }
 
 func Upsert(pipeline *models.Pipeline) (err error) {
+	if len(pipeline.ID) == 0 {
+		pipeline.ID = uuid.NewString()
+	}
 	return db.ORM.Save(&pipeline).Error
 }
 

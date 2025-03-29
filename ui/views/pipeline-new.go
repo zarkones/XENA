@@ -8,7 +8,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	"github.com/google/uuid"
 	xenaC2 "github.com/zarkones/xena-client"
 )
 
@@ -31,7 +30,6 @@ func NewPipeline() {
 
 		widget.NewButton("CREATE", func() {
 			newPipeline := xenaC2.Pipeline{
-				ID:   uuid.NewString(),
 				Name: pipelineNameInput.Text,
 				Desc: pipelineDescInput.Text,
 			}
