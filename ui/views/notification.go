@@ -20,7 +20,7 @@ func Notify(title, msg string) {
 	w.Show()
 }
 
-func Into(msg string) {
+func Info(msg string) {
 	Notify("XENA: New Notification", msg)
 }
 
