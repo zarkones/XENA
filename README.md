@@ -3,7 +3,7 @@ XENA is Cross-Platform Software for Cyber-Security Automation, Adversary Simulat
 
 XENA strives to be fully integrated security penetration testing framework. It is equipped with a post-exploitation agent, C2 server, and a dark-themed elegant user interface running on Desktop, Web, and Mobile.
 
-This is the Community Edition.
+This is the Community Edition. To acquire premium edition with XENA hacker AI visit: https://zarkones.itch.io/xena
 
 ### SOCIAL ###
 [Patreon](https://www.patreon.com/zarkones) |
